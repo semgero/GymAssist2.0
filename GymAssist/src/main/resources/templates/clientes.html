@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/Imagenes/logo_icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Gym Management</title>
+    <link rel="stylesheet" href="/Styles/server.css">
+    <link rel="stylesheet" href="/Styles/clientes.css">
+</head>
+<body>
+    <div class="hamburger" id="hamburger">&#9776;</div>
+
+    <div class="sidebar" id="sidebar">
+        <h2>Gym Management</h2>
+        <ul>
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+            <li><a href="/clientes">👥 Clientes</a></li>
+            <li><a href="/pagos">💵 Pagos</a></li>
+            <li><a href="/configuracion">⚙️ Configuración</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Clientes Registrados</h1>
+        </header>
+        
+        <div class="add-client-form">  
+            <form th:action="@{/clientes}" method="post">
+                <h2>Agregar Cliente</h2>
+                <input type="text" th:name="nombreCompleto" placeholder="Nombre Completo" id="clientName">
+                <input type="email" th:name="correoElectronico" placeholder="Correo Electrónico" id="clientEmail">
+                <input type="tel" th:name="numeroTelefono" placeholder="Número de Teléfono" id="clientPhone">
+                <select th:name="clientPlan">
+                    <option value="Plan Mensual">Plan Mensual</option>
+                </select>
+                <button type="submit">Añadir Cliente</button>
+            </form>
+        </div>
+
+        <div class="client-list">           
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Plan</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cliente : ${clientes}">
+                        <td th:text="${cliente.nombreCompleto}"></td>
+                        <td th:text="${cliente.correoElectronico}"></td>
+                        <td th:text="${cliente.numeroTelefono}"></td>
+                        <td th:text="${cliente.clientPlan}"></td>
+                        <td>
+                            <a class="action-btn" th:href="@{/clientes/edit/{id}(id=${cliente.id})}">Editar</a>
+                            <a class="action-btn delete-btn" th:href="@{/clientes/delete/{id}(id=${cliente.id})}">Borrar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+   
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+
+        
+        hamburger.addEventListener('click', (event) => {
+            event.stopPropagation(); 
+            sidebar.classList.toggle('active');
+        });
+
+        
+        document.body.addEventListener('click', (event) => {
+            
+            if (!sidebar.contains(event.target) && !hamburger.contains(event.target) && sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        
+        sidebar.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    </script>
+
+</body>
+</html>

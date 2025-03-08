@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/Imagenes/logo_icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Cliente - Gym Management</title>
+    <link rel="stylesheet" href="/Styles/server.css">
+    <link rel="stylesheet" href="/Styles/editarcliente.css">
+</head>
+<body>
+    
+    <div class="hamburger" id="hamburger">&#9776;</div>
+
+    <div class="sidebar" id="sidebar">
+        <h2>Gym Management</h2>
+        <ul>
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+            <li><a href="/clientes">👥 Clientes</a></li>
+            <li><a href="/pagos">💵 Pagos</a></li>
+            <li><a href="/configuracion">⚙️ Configuración</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Editar Cliente</h1>
+        </header>
+        
+        <div class="edit-client-form">
+            <form th:action="@{/clientes/update/{id}(id=${cliente.id})}" method="post">
+                <h2>Actualizar Información</h2>
+                <input type="text" th:name="nombreCompleto" th:value="${cliente.nombreCompleto}" placeholder="Nombre Completo" id="clientName" required>
+                <input type="email" th:name="correoElectronico" th:value="${cliente.correoElectronico}" placeholder="Correo Electrónico" id="clientEmail" required>
+                <input type="tel" th:name="numeroTelefono" th:value="${cliente.numeroTelefono}" placeholder="Número de Teléfono" id="clientPhone" required>
+                <select th:name="clientPlan">
+                    <option value="Plan Mensual" th:selected="${cliente.clientPlan == 'Plan Mensual'}">Plan Mensual</option>
+                </select>
+                <div class="form-actions">
+                    <button type="submit" class="action-btn">Guardar Cambios</button>
+                    <a href="/clientes" class="delete-btn">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+
+        hamburger.addEventListener('click', (event) => {
+            event.stopPropagation();
+            sidebar.classList.toggle('active');
+        });
+
+        document.body.addEventListener('click', (event) => {
+            if (!sidebar.contains(event.target) && !hamburger.contains(event.target) && sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        sidebar.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+.payments-section {
+    background-color: #2d2d2d;
+    border-radius: 10px;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 30px;
+}
+
+.payments-section h2,
+.payments-section h3 {
+    color: #0058cc;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.payments-section p,
+.payments-section ul li {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.revenue-value {
+    font-weight: bold;
+    color: #0058cc;
+}
+
+.total-revenue {
+    margin-bottom: 20px; 
+}
+
+#toggle-revenue {
+    background-color: #0058cc;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.4s;
+}
+
+#toggle-revenue:hover {
+    background-color: #021b79;
+    transform: scale(1.05);
+    transition: 0.4s;
+}
+
+.revenue-details ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.revenue-details li {
+    font-size: 18px;
+}
+
+.revenue-details li strong {
+    color: #ffffff;
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Anual - GYMASSIST</title>
+    <link rel="stylesheet" href="/Styles/plan1.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div class="compra-container">
+    <div class="purchase-template">
+        <h2>DETALLES DEL PLAN ANUAL</h2>
+        <p>Precio: <span>$99.99 USD</span></p>
+        <p>La mejor opcion para grandes empresas.Acceso a todas las funciones por un año completo, ideal para gimnasios comprometidos con el crecimiento y la mejor experiencia para sus clientes.</p>
+        <div class="payment-form">
+            <h3>Información de Pago</h3>
+            <form action="/planes/form" method="post">
+                <input type="hidden" name="planType" value="Plan Anual">
+                <input type="text" name="name" placeholder="Nombre Completo" required>
+                <input type="email" name="email" placeholder="Correo Electrónico" required>
+                <input type="number" name="cardNumber" placeholder="Número de Tarjeta" required>
+                <input type="text" name="expirationDate" placeholder="MM/AA Expiración" required>
+                <input type="number" name="cvv" placeholder="CVV" required>
+                <button type="submit" class="buy-button" id="btn_pagos">Pagar Ahora</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="alerts.js"></script>
+</body>
+</html>

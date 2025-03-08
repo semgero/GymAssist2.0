@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/Imagenes/logo_icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear tu Gimnasio - Gym Management</title>
+    <link rel="stylesheet" href="/Styles/crear-gimnasio.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Gym Management</h2>
+        <ul>
+           
+            <li><a href="/crearserver" id="crear-gimnasio-btn">🏋️‍♂️ Crear Gimnasio</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+       
+        <div id="hamburger" class="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <header>
+            <h1><span role="img" aria-label="Gimnasio">🏋️‍♂️</span>¡Crea tu Gimnasio!</h1>
+        </header>
+        
+        <div class="create-gym-section">
+            <h2>¡Bienvenido a la plataforma de gestión de gimnasios!</h2>
+            <p>Antes de poder gestionar clientes, pagos y más, necesitamos que configures tu gimnasio.</p>
+            <p><strong>Haz clic en el botón a continuación para empezar a crear tu gimnasio.</strong></p>
+            <button id="create-gym-btn" onclick="location.href='/crearserver'">¡Crear Mi Gimnasio!</button>
+        </div>
+    </div>
+
+    <script>
+        
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+
+       
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        
+        document.addEventListener('click', (event) => {
+            if (!sidebar.contains(event.target) && !hamburger.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

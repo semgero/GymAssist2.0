@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/Imagenes/logo_icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Gym Management</title>
+    <link rel="stylesheet" href="/Styles/server.css">
+    <link rel="stylesheet" href="/Styles/dashboard.css">
+</head>
+<body>
+    
+    <div class="sidebar">
+        <h2>Gym Management</h2>
+        <ul>
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+            <li><a href="/clientes">👥 Clientes</a></li>
+            <li><a href="/pagos">💵 Pagos</a></li>
+            <li><a href="/configuracion">⚙️ Configuración</a></li>
+        </ul>
+    </div>
+
+    
+    <div class="main-content">
+        <header>
+            <h1>Dashboard</h1>
+        </header>
+
+        
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <img src="https://cdn.icon-icons.com/icons2/212/PNG/256/Users256_25013.png" alt="Usuarios Activos" class="stat-icon">
+                <div>
+                    <h2>Usuarios Activos</h2>
+                    <p>Total de Usuarios Activos: <span th:text="${usuariosActivos}">0</span></p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <img src="https://static.vecteezy.com/system/resources/previews/015/129/898/non_2x/lock-user-icon-png.png" alt="Usuarios Retirados" class="stat-icon">
+                <div>
+                    <h2>Usuarios Retirados</h2>
+                    <p>Total de Usuarios Retirados: <span th:text="${usuariosRetirados}">0</span></p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <img src="https://cdn-icons-png.freepik.com/512/6708/6708989.png" alt="Usuarios Ingresados" class="stat-icon">
+                <div>
+                    <h2>Usuarios totales ingresados</h2>
+                    <p>Total de Usuarios Ingresados: <span th:text="${usuariosTotales}">0</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <div class="hamburger" id="hamburger">&#9776;</div>
+
+    
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+
+        
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        
+        document.addEventListener('click', (event) => {
+            if (!sidebar.contains(event.target) && !hamburger.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="icon" href="/Imagenes/logo_icon.png">
+    <title>Register - GYMASSIST</title>
+    <link rel="stylesheet" href="/Styles/styles.css">
+    <link rel="stylesheet" href="/Styles/signup.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo-container">
+            <img src="/Imagenes/logo_icon.png" alt="Logo" class="logo-img">
+            <div class="logo-text">GYMASSIST</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/index">Beneficios</a></li>
+                <li><a href="/rutinas">Rutinas</a></li>
+                <li><a href="/planes">Planes</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/signup" class="active">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="register-container">
+            <div class="register-form">
+                <form th:action="@{/signup}" method="post">
+                    <h1>Register</h1>
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+                    <button type="submit" class="btn">Register</button>
+                    <a href="/login" class="forgot-password">Already have an account? Login</a>
+                    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo-container">
+                <img src="/Imagenes/logo_icon.png" alt="Logo" class="footer-logo">
+            </div>
+            <div class="footer-info">
+                <div class="footer-section">
+                    <h4>Sobre mí</h4>
+                    <ul>
+                        <li><a href="#sobre-mi">Quién soy</a></li>
+                        <li><a href="#proyectos">Mis Proyectos</a></li>
+                        <li><a href="#contacto">Contáctame</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Historia</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="servicios.html">Configuración de Servidores</a></li>
+                        <li><a href="servicios.html">Creación de Contenido</a></li>
+                        <li><a href="servicios.html">Soporte en Discord</a></li>
+                        <li><a href="#">Desarrollo Web</a></li>
+                        <li><a href="#">Consultoría</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Útiles</h4>
+                    <ul>
+                        <li><a href="#">Política de Privacidad</a></li>
+                        <li><a href="#">Términos de Uso</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Soporte Técnico</a></li>
+                        <li><a href="#">Mapa del Sitio</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Redes Sociales</h4>
+                    <ul>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 GYMASSIST | Todos los derechos reservados..</p>
+        </div>
+    </footer>
+</body>
+</html>

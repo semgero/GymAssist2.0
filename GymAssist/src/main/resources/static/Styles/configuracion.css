@@ -1,0 +1,68 @@
+
+.config-form {
+    background-color: #333; 
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.config-form h2 {
+    font-size: 28px;
+    color: #0058cc;
+    margin-bottom: 20px;
+}
+
+.config-form .form-group {
+    margin-bottom: 20px;
+}
+
+.config-form label {
+    font-size: 18px;
+    color: #fff; 
+    display: block;
+    margin-bottom: 8px;
+}
+
+.config-form input, .config-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444; 
+    border-radius: 5px;
+    font-size: 16px;
+    color: #a1a1a1; 
+    background-color: #444; 
+}
+
+.config-form textarea {
+    resize: vertical;
+}
+
+.config-form .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.config-form .submit-btn {
+    background-color: #0058cc;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.4s
+}
+
+.config-form .submit-btn:hover {
+    background-color: #021b79;
+    transition: 0.4s;
+}
+
+.config-form input:focus, .config-form textarea:focus {
+    border-color: #00adb5;
+    outline: none;
+}
+
+

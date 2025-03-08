@@ -1,0 +1,103 @@
+#menu {
+    margin-left: 20px;
+}
+
+#titulo {
+    color: black;
+    text-align: center;
+    font-size: 45px;
+    margin-top: 20px;
+}
+
+
+#gtitulo {
+    display: block;
+    width: 400px;
+    margin: 40px auto;
+}
+
+#texto, #subti, #reps {
+    color: black;
+    text-align: center;
+    margin: 20px auto;
+    max-width: 800px;
+    font-size: 18px;
+}
+
+#subti {
+    font-size: 35px;
+    margin-top: 40px;
+}
+
+#menu {
+    margin-left: 120px;
+}
+
+#titulo {
+    color: black;
+    text-align: center;
+    font-size: 45px;
+}
+
+#texto {
+    color: black;
+    text-align: center;
+    margin: 60px auto;
+    width: 70%;
+}
+
+#subti {
+    color: black;
+    text-align: center;
+    margin-top: 100px;
+    font-size: 35px;
+}
+
+
+.ejercicio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 80%;
+    margin: 40px auto;
+}
+
+.ejercicio-item {
+    text-align: center;
+    
+}
+
+.ejercicio-item img {
+    width: 400px; 
+    height: 300px; 
+}
+
+.ejercicio-item p {
+    font-weight: bold;
+    margin-top: 10px;
+    color: black;
+}
+
+
+#reps {
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 100px;
+    padding-bottom: 1in;
+}
+
+
+@media (max-width: 768px) {
+    .ejercicio-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    #titulo, #subti {
+        font-size: 30px;
+    }
+
+    #gtitulo {
+        width: 90%;
+    }
+}

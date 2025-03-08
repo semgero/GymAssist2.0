@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/Imagenes/logo_icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos - Gym Management</title>
+    <link rel="stylesheet" href="/Styles/server.css">
+    <link rel="stylesheet" href="/Styles/pagos.css">
+</head>
+<body>
+    
+    <div class="hamburger" id="hamburger">&#9776;</div>
+
+    <div class="sidebar" id="sidebar">
+        <h2>Gym Management</h2>
+        <ul>
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+            <li><a href="/clientes">👥 Clientes</a></li>
+            <li><a href="/pagos">💵 Pagos</a></li>
+            <li><a href="/configuracion">⚙️ Configuración</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1><span role="img" aria-label="Dinero">💰</span> Flujo de Dinero</h1>
+        </header>
+
+        <div class="payments-section">
+            <div class="total-revenue">
+                <h2><span role="img" aria-label="Billetes">💵</span> Total Recaudado</h2>
+                
+                <p><span id="total-all">Total General: </span><span class="revenue-value" id="total-revenue-all" th:text="${totalRecaudado}"></span></p>
+                <button id="toggle-revenue" onclick="toggleRevenue()">🔒 Ocultar/Mostrar Dinero</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+
+        
+        hamburger.addEventListener('click', (event) => {
+            event.stopPropagation(); 
+            sidebar.classList.toggle('active');
+        });
+
+        
+        document.body.addEventListener('click', (event) => {
+           
+            if (!sidebar.contains(event.target) && !hamburger.contains(event.target) && sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        
+        sidebar.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    </script>
+    
+    <script>
+        function toggleRevenue() {
+            const revenueElements = document.querySelectorAll('.revenue-value');
+            revenueElements.forEach(element => {
+                if (element.innerText === "****") {
+                    element.innerText = element.dataset.value;
+                } else {
+                    element.innerText = "****";
+                }
+            });
+        }
+
+        
+        document.querySelectorAll('.revenue-value').forEach(element => {
+            element.dataset.value = element.innerText; 
+        });
+    </script>
+</body>
+</html>
