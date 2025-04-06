@@ -38,4 +38,6 @@ public class ClientEntity extends UserEntity {
     @NotBlank
     @Column(name = "correo", nullable = false)
     private String correo;
+
+    // faltan insertar la base de datos noSQL chamo 
 }
