@@ -1,23 +1,18 @@
 package com.ProyectoAula.GymAssist.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name = "plan")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "plan")
 public class PlanEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -27,18 +22,25 @@ public class PlanEntity {
     private String username;
 
     @NotBlank
-    @Column(name = "username", nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @NotBlank
-    @Column(name = "username", nullable = false)
+    @Column(name = "id_tarjeta", nullable = false)
     private int id_tarjeta;
 
-    @NotBlank
-    @Column(name = "username", nullable = false)
+    @Column(name = "id_expiracion", nullable = false)
     private int id_expiracion;
 
-    @NotBlank
-    @Column(name = "username", nullable = false)
+    @Column(name = "id_CVV", nullable = false)
     private int id_CVV;
+
+    // Relación con gimnasio (Muchos planes pueden pertenecer a un gimnasio)
+    @ManyToOne
+    @JoinColumn(name = "gimnasio_id")
+    private GimEntity gimnasio;
+
+    // Relación 1:1 con cliente (Un plan es pagado por un cliente)
+    @OneToOne
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+    private ClientEntity cliente;
 }

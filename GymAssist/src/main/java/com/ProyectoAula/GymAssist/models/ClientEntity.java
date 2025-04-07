@@ -1,9 +1,6 @@
 package com.ProyectoAula.GymAssist.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -39,5 +36,15 @@ public class ClientEntity extends UserEntity {
     @Column(name = "correo", nullable = false)
     private String correo;
 
-    // faltan insertar la base de datos noSQL chamo 
+    @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private PlanEntity plan;
+
+    @ManyToOne
+    @JoinColumn(name = "gimnasio_id")
+    private GimEntity gimnasio;
+
+    @ManyToOne
+    @JoinColumn(name = "admin_id")
+    private AdminEntity administrador;
+
 }

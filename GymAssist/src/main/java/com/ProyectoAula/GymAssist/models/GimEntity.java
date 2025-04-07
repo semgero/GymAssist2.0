@@ -1,17 +1,14 @@
 package com.ProyectoAula.GymAssist.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,7 +21,6 @@ public class GimEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Email
     @NotBlank
     @Column(name = "nombre_gimnasio", nullable = false)
     private String nombre_gimnasio;
@@ -33,16 +29,25 @@ public class GimEntity {
     @Column(name = "direccion", nullable = false)
     private String direccion;
 
-    @NotBlank
+    @Min(1)
     @Column(name = "RUT", nullable = false)
     private int RUT;
 
     @Lob
-    @Column(columnDefinition = "fotos") // para MySQL; si usas otra BD, puede cambiar
+    @Column(name = "fotos") // para MySQL; si usas otra BD, puede cambiar
     private byte[] fotos;
 
     @NotBlank
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
+    @OneToOne
+    @JoinColumn(name = "admin_id")
+    private AdminEntity adminEntity;
+
+    @OneToMany(mappedBy = "gimnasio")
+    private List<ClientEntity> clientEntityList;
+
+    @OneToMany(mappedBy = "gimnasio")
+    private List<PlanEntity> planEntityList;
 }

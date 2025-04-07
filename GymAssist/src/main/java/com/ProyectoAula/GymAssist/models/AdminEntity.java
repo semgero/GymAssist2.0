@@ -1,14 +1,13 @@
 package com.ProyectoAula.GymAssist.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,5 +29,15 @@ public class AdminEntity extends UserEntity {
     @NotBlank
     @Column(name = "password", nullable = false)
     private String password;
+
+    @OneToOne(mappedBy = "adminEntity", cascade = CascadeType.ALL)
+    private GimEntity gimnasio;
+
+    @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
+    private List<RutinaEntity> rutinas;
+
+    @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
+    private List<ClientEntity> clientes;
+
 
 }
