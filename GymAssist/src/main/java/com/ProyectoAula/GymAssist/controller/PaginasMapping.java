@@ -1,10 +1,28 @@
 package com.ProyectoAula.GymAssist.controller;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.ProyectoAula.GymAssist.controller.request.CreateUserDTO;
+import com.ProyectoAula.GymAssist.models.ERole;
+import com.ProyectoAula.GymAssist.models.RoleEntity;
+import com.ProyectoAula.GymAssist.models.UserEntity;
+import com.ProyectoAula.GymAssist.repositories.UserRepository;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class PaginasMapping {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/index")
     public String index() {
@@ -21,9 +39,25 @@ public class PaginasMapping {
         return "login"; 
     }
 
-    @GetMapping("/signup")
-    public String signup() {
-        return "signup"; 
+    @PostMapping("/signup")
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) { 
+    
+        Set<RoleEntity> roles = createUserDTO.getRoles().stream()
+                .map(role -> RoleEntity.builder()
+                        .name(ERole.valueOf(role))
+                        .build())
+                .collect(Collectors.toSet());
+
+        UserEntity userEntity = UserEntity.builder()
+                .username(createUserDTO.getUsername())
+                .password(createUserDTO.getPassword())
+                .email(createUserDTO.getEmail())
+                .roles(roles)
+                .build();
+
+        userRepository.save(userEntity);
+
+        return ResponseEntity.ok(userEntity);
     }
 
     @GetMapping("/rutinas")
