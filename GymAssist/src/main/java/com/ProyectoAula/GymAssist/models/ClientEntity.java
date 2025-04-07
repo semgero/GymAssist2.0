@@ -41,7 +41,7 @@ public class ClientEntity extends UserEntity {
 
     @ManyToOne
     @JoinColumn(name = "gimnasio_id")
-    private GimEntity gimnasio;
+    private GymEntity gimnasio;
 
     @ManyToOne
     @JoinColumn(name = "admin_id")

@@ -1,7 +1,6 @@
 package com.ProyectoAula.GymAssist.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -15,15 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "gimnasios")
-public class GimEntity {
+public class GymEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @NotBlank
-    @Column(name = "nombre_gimnasio", nullable = false)
-    private String nombre_gimnasio;
+    @Column(name = "nombre_gymnasio", nullable = false)
+    private String nombre_gymnasio;
 
     @NotBlank
     @Column(name = "direccion", nullable = false)

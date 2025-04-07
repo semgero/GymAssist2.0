@@ -31,7 +31,7 @@ public class AdminEntity extends UserEntity {
     private String password;
 
     @OneToOne(mappedBy = "adminEntity", cascade = CascadeType.ALL)
-    private GimEntity gimnasio;
+    private GymEntity gymnasio;
 
     @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
     private List<RutinaEntity> rutinas;

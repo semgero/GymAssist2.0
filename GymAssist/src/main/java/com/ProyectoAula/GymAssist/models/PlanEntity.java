@@ -36,8 +36,8 @@ public class PlanEntity {
 
     // Relación con gimnasio (Muchos planes pueden pertenecer a un gimnasio)
     @ManyToOne
-    @JoinColumn(name = "gimnasio_id")
-    private GimEntity gimnasio;
+    @JoinColumn(name = "gymnasio_id")
+    private GymEntity gymnasio;
 
     // Relación 1:1 con cliente (Un plan es pagado por un cliente)
     @OneToOne
