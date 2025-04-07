@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "gimnasios")
-public class GimEntity {
+public class GymEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
