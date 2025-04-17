@@ -6,5 +6,4 @@ import com.ProyectoAula.GymAssist.models.ClientEntity;
 
 @Repository
 public interface ClientRepository extends JpaRepository<ClientEntity, Long>{
-
 }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,11 +41,10 @@ public class ClientEntity extends UserEntity {
     private PlanEntity plan;
 
     @ManyToOne
-    @JoinColumn(name = "gimnasio_id")
+    @JoinColumn(name = "gym_id")
     private GymEntity gimnasio;
 
     @ManyToOne
     @JoinColumn(name = "admin_id")
     private AdminEntity administrador;
-
 }

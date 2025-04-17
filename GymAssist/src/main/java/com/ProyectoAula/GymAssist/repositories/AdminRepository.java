@@ -6,5 +6,4 @@ import com.ProyectoAula.GymAssist.models.AdminEntity;
 
 @Repository
 public interface AdminRepository extends JpaRepository<AdminEntity, Long>{
-
 }
