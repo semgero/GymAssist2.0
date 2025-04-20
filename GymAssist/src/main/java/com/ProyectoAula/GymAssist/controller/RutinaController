@@ -1,0 +1,48 @@
+package com.ProyectoAula.GymAssist.controller;
+
+import com.ProyectoAula.GymAssist.models.RutinaEntity;
+import com.ProyectoAula.GymAssist.services.RutinaService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/rutinas")
+@RequiredArgsConstructor
+public class RutinaController {
+
+    private final RutinaService rutinaService;
+
+    @PostMapping
+    public ResponseEntity<RutinaEntity> crearRutina(@RequestBody RutinaEntity rutina) {
+        RutinaEntity rutinaCreada = rutinaService.crearRutina(rutina);
+        return new ResponseEntity<>(rutinaCreada, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RutinaEntity>> obtenerRutinas() {
+        List<RutinaEntity> rutinas = rutinaService.obtenerRutinas();
+        return ResponseEntity.ok(rutinas);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RutinaEntity> obtenerRutinaPorId(@PathVariable Long id) {
+        RutinaEntity rutina = rutinaService.obtenerRutinaPorId(id);
+        return ResponseEntity.ok(rutina);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RutinaEntity> actualizarRutina(@PathVariable Long id, @RequestBody RutinaEntity rutinaActualizada) {
+        RutinaEntity rutina = rutinaService.actualizarRutina(id, rutinaActualizada);
+        return ResponseEntity.ok(rutina);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarRutina(@PathVariable Long id) {
+        rutinaService.eliminarRutina(id);
+        return ResponseEntity.noContent().build();
+    }
+}

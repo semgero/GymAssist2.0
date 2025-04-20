@@ -18,7 +18,7 @@ public class GymEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @NotBlank
     @Column(name = "nombre_gymnasio", nullable = false)
