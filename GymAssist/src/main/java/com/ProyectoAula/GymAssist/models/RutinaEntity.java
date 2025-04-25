@@ -34,7 +34,7 @@ public class RutinaEntity {
     private String repeticiones;
 
     @ManyToOne
-    @JoinColumn(name = "admin_id")
-    private AdminEntity administrador;
+    @JoinColumn(name = "gym_id")
+    private GymEntity gimnasio;
 }
 

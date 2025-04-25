@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import com.ProyectoAula.GymAssist.models.UserEntity;
-import com.ProyectoAula.GymAssist.repositories.UserRepository;
+import com.ProyectoAula.GymAssist.repositories.UserRepositoryy;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService{
 
-    private final UserRepository userRepository;
+    private final UserRepositoryy userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

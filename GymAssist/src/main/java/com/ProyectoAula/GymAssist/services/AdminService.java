@@ -2,7 +2,7 @@ package com.ProyectoAula.GymAssist.services;
 
 import org.springframework.stereotype.Service;
 
-import com.ProyectoAula.GymAssist.repositories.AdminRepository;
+import com.ProyectoAula.GymAssist.repositories.AdminRepositoryy;
 import com.ProyectoAula.GymAssist.models.AdminEntity;
 
 import jakarta.transaction.Transactional;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AdminService {
 
-    private final AdminRepository adminRepository;
+    private final AdminRepositoryy adminRepository;
 
     @Transactional
     public AdminEntity guardarAdmin(AdminEntity admin) {
@@ -27,10 +27,6 @@ public class AdminService {
 
         if (admin.getClientes() != null) {
             admin.getClientes().forEach(cliente -> cliente.setAdministrador(admin));
-        }
-
-        if (admin.getRutinas() != null) {
-            admin.getRutinas().forEach(rutina -> rutina.setAdministrador(admin));
         }
 
         return adminRepository.save(admin);

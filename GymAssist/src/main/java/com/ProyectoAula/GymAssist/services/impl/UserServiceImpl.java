@@ -9,26 +9,26 @@ import com.ProyectoAula.GymAssist.models.ClientEntity;
 import com.ProyectoAula.GymAssist.models.ERole;
 import com.ProyectoAula.GymAssist.models.RoleEntity;
 import com.ProyectoAula.GymAssist.models.UserEntity;
-import com.ProyectoAula.GymAssist.repositories.AdminRepository;
-import com.ProyectoAula.GymAssist.repositories.ClientRepository;
+import com.ProyectoAula.GymAssist.repositories.AdminRepositoryy;
+import com.ProyectoAula.GymAssist.repositories.ClientRepositoryy;
 import com.ProyectoAula.GymAssist.repositories.RoleRepository;
-import com.ProyectoAula.GymAssist.repositories.UserRepository;
+import com.ProyectoAula.GymAssist.repositories.UserRepositoryy;
 import com.ProyectoAula.GymAssist.services.UserService;
 import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService{
     
-    private final UserRepository userRepository;
+    private final UserRepositoryy userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AdminRepository adminRepository;
-    private final ClientRepository clientRepository;
+    private final AdminRepositoryy adminRepository;
+    private final ClientRepositoryy clientRepository;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
+    public UserServiceImpl(UserRepositoryy userRepository, RoleRepository roleRepository,
         PasswordEncoder passwordEncoder,
-        AdminRepository adminRepository,
-        ClientRepository clientRepository) {
+        AdminRepositoryy adminRepository,
+        ClientRepositoryy clientRepository) {
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
     this.passwordEncoder = passwordEncoder;

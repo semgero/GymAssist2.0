@@ -2,8 +2,8 @@ package com.ProyectoAula.GymAssist.services;
 
 import com.ProyectoAula.GymAssist.models.ClientEntity;
 import com.ProyectoAula.GymAssist.models.PlanEntity;
-import com.ProyectoAula.GymAssist.repositories.ClientRepository;
-import com.ProyectoAula.GymAssist.repositories.PlanRepository;
+import com.ProyectoAula.GymAssist.repositories.ClientRepositoryy;
+import com.ProyectoAula.GymAssist.repositories.PlanRepositoryy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +16,8 @@ import java.util.Optional;
 @Transactional
 public class ClientService {
 
-    private final ClientRepository clientRepository;
-    private final PlanRepository planRepository;
+    private final ClientRepositoryy clientRepository;
+    private final PlanRepositoryy planRepository;
 
     public ClientEntity crearCliente(ClientEntity cliente) {
         if (cliente.getPlan() != null) {

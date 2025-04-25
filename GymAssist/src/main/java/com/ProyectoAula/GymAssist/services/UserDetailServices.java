@@ -12,13 +12,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.ProyectoAula.GymAssist.models.UserEntity;
-import com.ProyectoAula.GymAssist.repositories.UserRepository;
+import com.ProyectoAula.GymAssist.repositories.UserRepositoryy;
 
 @Service
 public class UserDetailServices implements UserDetailsService{
     
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryy userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

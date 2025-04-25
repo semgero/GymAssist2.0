@@ -3,7 +3,7 @@ package com.ProyectoAula.GymAssist.services;
 import com.ProyectoAula.GymAssist.models.GymEntity;
 import com.ProyectoAula.GymAssist.models.PlanEntity;
 import com.ProyectoAula.GymAssist.repositories.GymRepository;
-import com.ProyectoAula.GymAssist.repositories.PlanRepository;
+import com.ProyectoAula.GymAssist.repositories.PlanRepositoryy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PlanService {
 
-    private final PlanRepository planRepository;
+    private final PlanRepositoryy planRepository;
     private final GymRepository gymRepository;
 
     public PlanEntity crearPlan(PlanEntity plan) {

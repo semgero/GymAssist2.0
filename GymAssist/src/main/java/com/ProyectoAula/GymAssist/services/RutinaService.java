@@ -1,7 +1,7 @@
 package com.ProyectoAula.GymAssist.services;
 
 import com.ProyectoAula.GymAssist.models.RutinaEntity;
-import com.ProyectoAula.GymAssist.repositories.RutinaRepository;
+import com.ProyectoAula.GymAssist.repositories.RutinaRepositoryy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.List;
 @Transactional
 public class RutinaService {
 
-    private final RutinaRepository rutinaRepository;
+    private final RutinaRepositoryy rutinaRepository;
 
     // Crea una nueva rutina y la guarda en la base de datos.
     public RutinaEntity crearRutina(RutinaEntity rutina) {
@@ -42,7 +42,6 @@ public class RutinaService {
                 rutina.setFotos(rutinaActualizada.getFotos());
                 rutina.setSeries(rutinaActualizada.getSeries());
                 rutina.setRepeticiones(rutinaActualizada.getRepeticiones());
-                rutina.setAdministrador(rutinaActualizada.getAdministrador());
                 return rutinaRepository.save(rutina);
             })
             .orElseThrow(() -> new ResponseStatusException(

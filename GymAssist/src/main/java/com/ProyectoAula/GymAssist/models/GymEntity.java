@@ -49,4 +49,7 @@ public class GymEntity {
 
     @OneToMany(mappedBy = "gimnasio")
     private List<PlanEntity> planEntityList;
+
+    @OneToMany(mappedBy = "gimnasio", cascade = CascadeType.ALL)
+    private List<RutinaEntity> rutinas;
 }

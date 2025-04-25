@@ -1,5 +1,7 @@
 package com.ProyectoAula.GymAssist.models;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -47,4 +49,8 @@ public class ClientEntity extends UserEntity {
     @ManyToOne
     @JoinColumn(name = "admin_id")
     private AdminEntity administrador;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MedicionEntity> mediciones;
+
 }

@@ -19,9 +19,5 @@ public class AdminEntity extends UserEntity {
     private GymEntity gimnasio;
 
     @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
-    private List<RutinaEntity> rutinas;
-
-    @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
     private List<ClientEntity> clientes;
-
 }
