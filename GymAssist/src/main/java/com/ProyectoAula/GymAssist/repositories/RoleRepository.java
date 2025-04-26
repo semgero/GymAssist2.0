@@ -7,10 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.ProyectoAula.GymAssist.models.RoleEntity;
 import com.ProyectoAula.GymAssist.models.ERole;
 
-
-
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity, Long>{
-
     Optional<RoleEntity> findByName(ERole name);
 }
