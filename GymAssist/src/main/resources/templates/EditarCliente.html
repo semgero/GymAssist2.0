@@ -28,17 +28,32 @@
         </header>
         
         <div class="edit-client-form">
-            <form th:action="@{/clientes/update/{id}(id=${cliente.id})}" method="post">
+            <form th:action="@{/Api/Admin/update/{id}(id=${cliente.mongoId})}" method="post">
                 <h2>Actualizar Información</h2>
-                <input type="text" th:name="nombreCompleto" th:value="${cliente.nombreCompleto}" placeholder="Nombre Completo" id="clientName" required>
-                <input type="email" th:name="correoElectronico" th:value="${cliente.correoElectronico}" placeholder="Correo Electrónico" id="clientEmail" required>
-                <input type="tel" th:name="numeroTelefono" th:value="${cliente.numeroTelefono}" placeholder="Número de Teléfono" id="clientPhone" required>
-                <select th:name="clientPlan">
-                    <option value="Plan Mensual" th:selected="${cliente.clientPlan == 'Plan Mensual'}">Plan Mensual</option>
+                
+                <!-- Campo para el nombre -->
+                <input type="text" th:name="nombre" th:value="${cliente.nombre}" placeholder="Nombre Completo" id="clientName" required>
+            
+                <!-- Campo para el correo electrónico -->
+                <input type="email" th:name="correo" th:value="${cliente.correo}" placeholder="Correo Electrónico" id="clientEmail" required>
+            
+                <!-- Campo para el número de teléfono -->
+                <input type="tel" th:name="telefono" th:value="${cliente.telefono}" placeholder="Número de Teléfono" id="clientPhone" required>
+            
+                <!-- Campo para seleccionar la mensualidad -->
+                <select th:name="mensualidad" required>
+                    <option value="Plan Mensual" th:selected="${cliente.mensualidad == 'Plan Mensual'}">Plan Mensual</option>
                 </select>
+            
+                <!-- Campo para el username -->
+                <input type="text" th:name="username" th:value="${cliente.username}" placeholder="Nombre de Usuario" id="clientUsername" required>
+            
+                <!-- Campo para el password (puedes dejarlo vacío si no deseas modificar la contraseña) -->
+                <input type="password" th:name="password" placeholder="Contraseña" id="clientPassword">
+            
                 <div class="form-actions">
                     <button type="submit" class="action-btn">Guardar Cambios</button>
-                    <a href="/clientes" class="delete-btn">Cancelar</a>
+                    <a href="/Api/Admin/Home" class="delete-btn">Cancelar</a>
                 </div>
             </form>
         </div>

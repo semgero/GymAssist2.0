@@ -2,10 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/Imagenes/logo_icon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdminHome</title>
+    <title>AdminHome - Gym Management</title>
+    <link rel="stylesheet" href="/Styles/server.css">
+    <link rel="stylesheet" href="/Styles/AdminHome.css">
 </head>
 <body>
-    <h1> desde el admin home</h1>
+    <div class="hamburger" id="hamburger">&#9776;</div>
+
+    <div class="sidebar" id="sidebar">
+        <h2>Gym Management</h2>
+        <ul>
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+            <li><a href="/AdminHome">👥 AdminHome</a></li>
+            <li><a href="/pagos">💵 Pagos</a></li>
+            <li><a href="/configuracion">⚙️ Configuración</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>AdminHome Registrados</h1>
+        </header>
+        
+        <div class="add-client-form">  
+            <form th:action="@{/Api/Admin/Home}" method="post">
+                <h2>Agregar Cliente</h2>
+                <input type="text" th:name="nombre" placeholder="Nombre Completo" id="clientName" required>
+                <input type="email" th:name="correo" placeholder="Correo Electrónico" id="clientEmail" required>
+                <input type="tel" th:name="telefono" placeholder="Número de Teléfono" id="clientPhone" required>
+                <select th:name="mensualidad" required>
+                    <option value="Plan Mensual">Plan Mensual</option>
+                </select>
+                <!-- Nuevo campo para el username -->
+                <input type="text" th:name="username" placeholder="Username" id="clientUsername" required>
+                <!-- Nuevo campo para la contraseña -->
+                <input type="password" th:name="password" placeholder="Password" id="clientPassword" required>
+                <button type="submit">Añadir Cliente</button>
+            </form>
+        </div>
+
+        <div class="client-list">           
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Plan</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cliente : ${AdminHome}">
+                        <td th:text="${cliente.nombre}"></td>
+                        <td th:text="${cliente.correo}"></td>
+                        <td th:text="${cliente.telefono}"></td>
+                        <td th:text="${cliente.mensualidad}"></td>
+                        <td th:text="${cliente.username}"></td>  <!-- Columna para el username -->
+                        <td th:text="${cliente.password}"></td>  <!-- Columna para el password -->
+                        <td>
+                            <a class="action-btn" th:href="@{/Api/Admin/edit/{id}(id=${cliente.mongoId})}">Editar</a>
+                            <a class="action-btn delete-btn" th:href="@{/Api/Admin/delete/{id}(id=${cliente.mongoId})}">Borrar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+   
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+
+        
+        hamburger.addEventListener('click', (event) => {
+            event.stopPropagation(); 
+            sidebar.classList.toggle('active');
+        });
+
+        
+        document.body.addEventListener('click', (event) => {
+            
+            if (!sidebar.contains(event.target) && !hamburger.contains(event.target) && sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        
+        sidebar.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    </script>
+
 </body>
 </html>

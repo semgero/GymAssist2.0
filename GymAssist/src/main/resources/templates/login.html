@@ -18,8 +18,8 @@
                 <li><a href="/index">Beneficios</a></li>
                 <li><a href="/rutinas">Rutinas</a></li>
                 <li><a href="/planes">Planes</a></li>
-                <li><a href="/login" class="active">Login</a></li>
-                <li><a href="/register" class="signup">Register</a></li>
+                <li><a href="/Api/Auth/login" class="active">Login</a></li>
+                <li><a href="/Api/Auth/register" class="signup">Register</a></li>
             </ul>
         </nav>
     </header>
@@ -27,12 +27,12 @@
     <main class="main-content">
         <div class="login-container">
             <div class="login-form">
-                <form th:action="@{/Login}" method="post">
+                <form th:action="@{/Api/Auth/login}" method="post">
                     <h1>Login</h1>
-                    <input type="username" name="username" placeholder="username" required>
+                    <input type="text" name="username" placeholder="username" required>
                     <input type="password" name="password" placeholder="Password" required>
                     <button type="submit" class="btn">Login</button>
-                    <a href="/register" class="forgot-password">Don't have an account? Register</a>
+                    <a href="/Api/Auth/register" class="forgot-password">Don't have an account? Register</a>
                     <p th:if="${error}" th:text="${error}" style="color: red;"></p>
                 </form>
             </div>

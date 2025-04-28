@@ -1,29 +1,23 @@
-package com.ProyectoAula.GymAssist.Security;
-
-import java.util.stream.Collectors;
+package com.ProyectoAula.GymAssist.mongoServices;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.ProyectoAula.GymAssist.models.UserEntity;
-
-import lombok.AllArgsConstructor;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Collections;
+import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
 
-@AllArgsConstructor
-public class CustomUserDetails implements UserDetails {
-    
+public class CustomUserDetails implements UserDetails{
+
     private final UserEntity user;
+
+    public CustomUserDetails(UserEntity user) {
+        this.user = user;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> roles = user.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
-                .collect(Collectors.toSet());
-        return roles;
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
     }
 
     @Override

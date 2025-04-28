@@ -1,56 +1,72 @@
 package com.ProyectoAula.GymAssist.controller;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.ui.Model;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.ProyectoAula.GymAssist.Dto.RegisterDto;
-import com.ProyectoAula.GymAssist.models.ERole;
-import com.ProyectoAula.GymAssist.services.UserService;
-
-import lombok.RequiredArgsConstructor;
-
-
+import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
+import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
 
 @Controller
-@RequiredArgsConstructor
+@RequestMapping("/Api/Auth")
 public class AuthController {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @GetMapping("/login")
-    public String showLoginPage(@RequestParam(value = "error", required = false) String error,
-                                 @RequestParam(value = "logout", required = false) String logout,
-                                 Model model) {
-        if (error != null) {
-            model.addAttribute("error", "Credenciales incorrectas");
+    public String mostrarLoginForm() {
+        return "login"; // <-- tu vista de login
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestParam String username, @RequestParam String password) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Redirige según el rol del usuario
+            if (authentication.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+                return "redirect:/Api/Admin/AdminHome";  // Admin es redirigido a su panel
+            } else if (authentication.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_CLIENTE"))) {
+                return "redirect:/Api/Cliente/ClienteHome";  // Cliente es redirigido a su panel
+            }
         }
-        if (logout != null) {
-            model.addAttribute("message", "Has cerrado sesión correctamente.");
-        }
-        return "/login"; // thymeleaf: templates/auth/login.html
+    
+        // Si no está autenticado correctamente, vuelve a la página de login
+        return "redirect:/Api/Auth/login";
     }
 
     @GetMapping("/register")
-    public String showRegisterForm(Model model) {
-        model.addAttribute("registerDto", new RegisterDto());
-        model.addAttribute("roles", ERole.values());
-        return "/register"; // thymeleaf: templates/auth/register.html
+    public String mostrarRegistroForm() {
+        return "register"; // <-- tu vista de registro
     }
 
     @PostMapping("/register")
-    public String processRegister(@ModelAttribute RegisterDto dto, Model model) {
-        try {
-            userService.registerUser(dto);
-            return "redirect:/login";
-        } catch (Exception e) {
-            model.addAttribute("registerDto", dto);
-            model.addAttribute("roles", ERole.values());
-            model.addAttribute("error", e.getMessage());
-            return "/register";
-        }
+    public String registrarUsuario(@RequestParam String username,
+                                    @RequestParam String email,
+                                    @RequestParam String password) {
+        // Verifica que el usuario no exista previamente
+    if (userRepository.findByUsername(username).isPresent()) {
+        return "redirect:/Api/Auth/register?error=usuarioYaExiste"; // Redirige si el usuario ya existe
+    }
+        UserEntity user = new UserEntity();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole("ADMIN"); // Al registrarse es administrador
+        userRepository.save(user);
+        return "redirect:/Api/Auth/login";
     }
 }

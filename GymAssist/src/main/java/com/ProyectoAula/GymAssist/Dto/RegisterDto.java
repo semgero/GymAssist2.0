@@ -1,6 +1,5 @@
 package com.ProyectoAula.GymAssist.Dto;
 
-import com.ProyectoAula.GymAssist.models.ERole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
