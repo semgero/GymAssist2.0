@@ -18,12 +18,19 @@ import org.springframework.security.config.Customizer;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
 import com.ProyectoAula.GymAssist.mongoServices.CustomUserDetailsService;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final UserRepository userRepository;
+
+    public SecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     /**
      * Configura las reglas de seguridad de la aplicación.
+     * 
      * @param http La configuración de seguridad HTTP.
      * @return El filtro de seguridad configurado.
      * @throws Exception Si ocurre un error al configurar la seguridad.
@@ -31,42 +38,44 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securedFilterChain(final HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Deshabilita CSRF
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/Api/Auth/login", "/Api/Auth/logout", "/Api/Auth/register").permitAll() // Permite acceso público
-                        .requestMatchers("/Css/**", "/Img/**", "/Js/**").permitAll() // Permite acceso público
+                        .requestMatchers("/Api/Auth/login", "/Api/Auth/logout", "/Api/Auth/register").permitAll()
+                        .requestMatchers("/Css/**", "/Img/**", "/Js/**").permitAll()
                         .requestMatchers("/Error/**", "/Error").permitAll()
-                        .requestMatchers("/Api/Admin/**").hasRole("ADMIN") // Requiere rol de administrador
-                        .requestMatchers("/Api/Cliente/**").hasRole("CLIENTE") // Requiere rol de usuario
-                        .anyRequest().authenticated() // Autenticación para otras rutas
-                )
+                        .requestMatchers("/Api/Admin/**").hasRole("ADMIN")
+                        .requestMatchers("/Api/Cliente/**").hasRole("CLIENTE")
+                        .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .loginPage("/Api/Auth/login") // Página de inicio de sesión personalizada
-                        .loginProcessingUrl("/Api/Auth/login") // URL de procesamiento de inicio de sesión
-                        .usernameParameter("username") // Parámetro de nombre de usuario
-                        .passwordParameter("password") // Parámetro de contraseña
-                        .successHandler(authenticationSuccessHandler()) // Manejador de éxito personalizado
-                        .permitAll() // Permitir acceso a la página de login
-                )
+                        .loginPage("/Api/Auth/login")
+                        .loginProcessingUrl("/Api/Auth/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .successHandler(authenticationSuccessHandler())
+                        .permitAll())
                 .logout(logout -> logout
-                        .logoutUrl("/Api/Auth/Logout") // URL de cierre de sesión
-                        .logoutSuccessUrl("/Api/Auth/login?logout") // Redirige tras cerrar sesión
-                        .invalidateHttpSession(true) // Invalida completamente la sesión
-                        .clearAuthentication(true) // Borra la autenticación actual
-                        .deleteCookies("JSESSIONID") // Borra la cookie de sesión
-                        .permitAll() // Permitir acceso a la página de logout
-                )
+                        .logoutUrl("/Api/Auth/Logout")
+                        .logoutSuccessUrl("/Api/Auth/login?logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // Crea nueva sesión al autenticarse
-                        .invalidSessionUrl("/Api/Auth/Login") // Redirige si la sesión es inválida
-                        .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::newSession) // Nueva sesión tras autenticarse
-                )
-                .httpBasic(Customizer.withDefaults()); // Habilita autenticación básica
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .invalidSessionUrl("/Api/Auth/Login")
+                        .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::newSession))
+                .authenticationProvider(authenticationProvider(userDetailsService(userRepository), passwordEncoder())) // SOLO
+                                                                                                                       // ESTA
+                                                                                                                       // LÍNEA
+                                                                                                                       // AQUÍ
+                .httpBasic(Customizer.withDefaults());
+
         return http.build();
     }
 
     /**
      * Configura el servicio de usuarios personalizados.
+     * 
      * @param userRepository El repositorio de usuarios.
      * @return El servicio de usuarios para autenticación.
      */
@@ -77,6 +86,7 @@ public class SecurityConfig {
 
     /**
      * Configura el codificador de contraseñas.
+     * 
      * @return Codificador BCrypt para contraseñas.
      */
     @Bean
@@ -86,12 +96,14 @@ public class SecurityConfig {
 
     /**
      * Configura el proveedor de autenticación.
+     * 
      * @param userDetailsService El servicio de usuarios.
-     * @param passwordEncoder El codificador de contraseñas.
+     * @param passwordEncoder    El codificador de contraseñas.
      * @return El proveedor de autenticación.
      */
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
@@ -100,23 +112,28 @@ public class SecurityConfig {
 
     /**
      * Configura el manejador de autenticación.
+     * 
      * @param authenticationConfiguration La configuración de autenticación.
      * @return El manejador de autenticación.
      * @throws Exception Si ocurre un error al configurar.
      */
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     /**
      * Configura el manejador de éxito al autenticarse.
      * Redirige al usuario según su rol.
+     * 
      * @return El manejador de éxito personalizado.
      */
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (_, response, authentication) -> {
+            System.out.println("SUCCES HANDLER: " + authentication.getName()); // Log de depuración
+            // Obtiene el rol del usuario autenticado
             String role = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .findFirst()

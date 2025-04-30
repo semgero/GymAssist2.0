@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
 
-
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
- 
+
     private final UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository userRepository) {
@@ -20,10 +19,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("Intentando autenticar: " + username);
         UserEntity user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
-        
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), 
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+        System.out.println("Usuario encontrado: " + user.getUsername() + ", rol: " + user.getRole());
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
                 AuthorityUtils.createAuthorityList("ROLE_" + user.getRole()));
     }
 }

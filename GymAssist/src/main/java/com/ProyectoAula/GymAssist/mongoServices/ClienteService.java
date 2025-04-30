@@ -40,6 +40,8 @@ public class ClienteService {
         cliente.setCorreo(correo);
         cliente.setTelefono(Integer.valueOf(telefono)); 
         cliente.setMensualidad(mensualidad);
+        cliente.setUsername(username); // Usamos el username proporcionado
+        cliente.setPassword(passwordEncoder.encode(password)); // Encriptamos la contraseña
         clientRepository.save(cliente);
     
         // Crear su usuario con el rol CLIENTE y encriptar su contraseña
@@ -66,27 +68,36 @@ public class ClienteService {
     // Actualizar cliente
     public void actualizarCliente(ObjectId id, String nombre, String correo, String telefono, String mensualidad, String username, String password) {
         ClientEntity cliente = buscarClientePorId(id);
-        
+    
+        // Buscar el usuario asociado usando el username original del cliente
+        UserEntity existingUser = userRepository.findByUsername(cliente.getUsername())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con el nombre de usuario: " + cliente.getUsername()));
+    
         // Actualizamos los atributos del cliente
         cliente.setNombre(nombre);
         cliente.setCorreo(correo);
-        cliente.setTelefono(Integer.valueOf(telefono));  // Convertimos a Integer
+        cliente.setTelefono(Integer.valueOf(telefono));
         cliente.setMensualidad(mensualidad);
+        cliente.setUsername(username); // Actualiza el username en el cliente
         clientRepository.save(cliente);
     
-        // Buscar el usuario asociado
-        UserEntity existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con el nombre de usuario: " + id));
-    
         // Actualizar el usuario con los nuevos datos
-        existingUser.setEmail(correo);  // Actualizamos el correo electrónico
-        existingUser.setUsername(username);  // Verificamos el nombre de usuario
-        existingUser.setPassword(passwordEncoder.encode(password));  // Actualizamos la contraseña encriptada
-        userRepository.save(existingUser);  // Guardamos el usuario actualizado
+        existingUser.setEmail(correo);
+        existingUser.setUsername(username); // Actualiza el username en el usuario
+        if (password != null && !password.isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(password));
+        }
+        userRepository.save(existingUser);
     }
 
-    // Eliminar cliente
     public void eliminarCliente(ObjectId id) {
+        ClientEntity cliente = buscarClientePorId(id);
+    
+        // Eliminar el usuario asociado si existe
+        userRepository.findByUsername(cliente.getUsername())
+            .ifPresent(userRepository::delete);
+    
+        // Eliminar el cliente
         clientRepository.deleteById(id);
     }
 }
