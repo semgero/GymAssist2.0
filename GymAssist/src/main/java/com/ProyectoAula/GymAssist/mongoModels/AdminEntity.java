@@ -1,5 +1,5 @@
 package com.ProyectoAula.GymAssist.mongoModels;
-
+//
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.bson.codecs.pojo.annotations.BsonProperty;

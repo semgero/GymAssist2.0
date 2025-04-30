@@ -14,12 +14,9 @@ import jakarta.persistence.Id;
 @Generated(value = "com.mongodb.migrator.application.codegen.config.java.JavaSpringCodegenConfig", date = "2025-04-23T20:27:33.022640-05:00[America/Bogota]", comments = "Generator version: 7.10.0")@Document("gimnasios")
 public class GimnasiosEntity {
 
-  @BsonProperty("_id")
-  private ObjectId mongoId = null;
-
   @Id
-  @BsonProperty("id")
-  private Long id;
+  @BsonProperty("_id")
+  private ObjectId id = null;
 
   @BsonProperty("rut")
   private Integer rut;
@@ -39,26 +36,7 @@ public class GimnasiosEntity {
   @BsonProperty("adminId")
   private Long adminId;
 
-  public GimnasiosEntity mongoId(ObjectId mongoId) {
-    this.mongoId = mongoId;
-    return this;
-  }
-
-  /**
-   * Get id
-   * @return id
-   */
-  
-  @JsonProperty("_id")
-  public ObjectId getMongoId() {
-    return mongoId;
-  }
-
-  public void setMongoId(ObjectId mongoId) {
-    this.mongoId = mongoId;
-  }
-
-  public GimnasiosEntity id(Long id) {
+  public GimnasiosEntity id(ObjectId id) {
     this.id = id;
     return this;
   }
@@ -68,12 +46,12 @@ public class GimnasiosEntity {
    * @return id
    */
   
-  @JsonProperty("id")
-  public Long getId() {
+  @JsonProperty("_id")
+  public ObjectId getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(ObjectId id) {
     this.id = id;
   }
 
@@ -199,8 +177,7 @@ public class GimnasiosEntity {
       return false;
     }
     GimnasiosEntity gimnasios = (GimnasiosEntity) o;
-    return Objects.equals(this.mongoId, gimnasios.mongoId) &&
-        Objects.equals(this.id, gimnasios.id) &&
+    return Objects.equals(this.id, gimnasios.id) &&
         Objects.equals(this.rut, gimnasios.rut) &&
         Objects.equals(this.descripcion, gimnasios.descripcion) &&
         Objects.equals(this.direccion, gimnasios.direccion) &&
@@ -211,14 +188,13 @@ public class GimnasiosEntity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(mongoId, id, rut, descripcion, direccion, Arrays.hashCode(fotos), nombreGymnasio, adminId);
+    return Objects.hash(id, rut, descripcion, direccion, Arrays.hashCode(fotos), nombreGymnasio, adminId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GimnasiosEntity {\n");
-    sb.append("    mongoId: ").append(toIndentedString(mongoId)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    rut: ").append(toIndentedString(rut)).append("\n");
     sb.append("    descripcion: ").append(toIndentedString(descripcion)).append("\n");

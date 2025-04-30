@@ -1,5 +1,6 @@
 package com.ProyectoAula.GymAssist.mongoModels;
 
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -7,171 +8,132 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.annotation.Generated;
-import jakarta.persistence.Id;
 
 @JsonTypeName("plan")
-@Generated(value = "com.mongodb.migrator.application.codegen.config.java.JavaSpringCodegenConfig", date = "2025-04-23T20:29:40.526823800-05:00[America/Bogota]", comments = "Generator version: 7.10.0")@Document("plan")
+@Generated(value = "com.mongodb.migrator.application.codegen.config.java.JavaSpringCodegenConfig", date = "2025-04-23T20:29:40.526823800-05:00[America/Bogota]", comments = "Generator version: 7.10.0")
+@Document("plan")
 public class PlanEntity {
 
   @BsonProperty("_id")
-  private ObjectId mongoId = null;
+  private ObjectId id = null;
 
-  @Id
-  @BsonProperty("id")
-  private Long id;
+  @BsonProperty("nombre")
+  private String nombre;
 
-  @BsonProperty("email")
-  private String email;
+  @BsonProperty("descripcion")
+  private String descripcion;
 
-  @BsonProperty("idCvv")
-  private Integer idCvv;
+  @BsonProperty("precio")
+  private Double precio;
 
-  @BsonProperty("idExpiracion")
-  private Integer idExpiracion;
+  @BsonProperty("duracion")
+  private Integer duracion; // en días
 
-  @BsonProperty("idTarjeta")
-  private Integer idTarjeta;
-
-  @BsonProperty("username")
-  private String username;
-
-  @BsonProperty("clienteId")
-  private Long clienteId;
+  @BsonProperty("beneficios")
+  private List<String> beneficios;
 
   @BsonProperty("gimnasioId")
   private Long gimnasioId;
 
-  public PlanEntity mongoId(ObjectId mongoId) {
-    this.mongoId = mongoId;
-    return this;
-  }
+  @BsonProperty("clienteId")
+  private Long clienteId;
 
-  /**
-   * Get id
-   * @return id
-   */
-  
-  @JsonProperty("_id")
-  public ObjectId getMongoId() {
-    return mongoId;
-  }
-
-  public void setMongoId(ObjectId mongoId) {
-    this.mongoId = mongoId;
-  }
-
-  public PlanEntity id(Long id) {
+  public PlanEntity id(ObjectId id) {
     this.id = id;
     return this;
   }
 
-  /**
-   * Get id
-   * @return id
-   */
-  
-  @JsonProperty("id")
-  public Long getId() {
+  @JsonProperty("_id")
+  public ObjectId getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(ObjectId id) {
     this.id = id;
   }
 
-  public PlanEntity email(String email) {
-    this.email = email;
+  public PlanEntity nombre(String nombre) {
+    this.nombre = nombre;
     return this;
   }
 
-  /**
-   * Get email
-   * @return email
-   */
-  
-  @JsonProperty("email")
-  public String getEmail() {
-    return email;
+  @JsonProperty("nombre")
+  public String getNombre() {
+    return nombre;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
   }
 
-  public PlanEntity idCvv(Integer idCvv) {
-    this.idCvv = idCvv;
+  public PlanEntity descripcion(String descripcion) {
+    this.descripcion = descripcion;
     return this;
   }
 
-  /**
-   * Get idCvv
-   * @return idCvv
-   */
-  
-  @JsonProperty("idCvv")
-  public Integer getIdCvv() {
-    return idCvv;
+  @JsonProperty("descripcion")
+  public String getDescripcion() {
+    return descripcion;
   }
 
-  public void setIdCvv(Integer idCvv) {
-    this.idCvv = idCvv;
+  public void setDescripcion(String descripcion) {
+    this.descripcion = descripcion;
   }
 
-  public PlanEntity idExpiracion(Integer idExpiracion) {
-    this.idExpiracion = idExpiracion;
+  public PlanEntity precio(Double precio) {
+    this.precio = precio;
     return this;
   }
 
-  /**
-   * Get idExpiracion
-   * @return idExpiracion
-   */
-  
-  @JsonProperty("idExpiracion")
-  public Integer getIdExpiracion() {
-    return idExpiracion;
+  @JsonProperty("precio")
+  public Double getPrecio() {
+    return precio;
   }
 
-  public void setIdExpiracion(Integer idExpiracion) {
-    this.idExpiracion = idExpiracion;
+  public void setPrecio(Double precio) {
+    this.precio = precio;
   }
 
-  public PlanEntity idTarjeta(Integer idTarjeta) {
-    this.idTarjeta = idTarjeta;
+  public PlanEntity duracion(Integer duracion) {
+    this.duracion = duracion;
     return this;
   }
 
-  /**
-   * Get idTarjeta
-   * @return idTarjeta
-   */
-  
-  @JsonProperty("idTarjeta")
-  public Integer getIdTarjeta() {
-    return idTarjeta;
+  @JsonProperty("duracion")
+  public Integer getDuracion() {
+    return duracion;
   }
 
-  public void setIdTarjeta(Integer idTarjeta) {
-    this.idTarjeta = idTarjeta;
+  public void setDuracion(Integer duracion) {
+    this.duracion = duracion;
   }
 
-  public PlanEntity username(String username) {
-    this.username = username;
+  public PlanEntity beneficios(List<String> beneficios) {
+    this.beneficios = beneficios;
     return this;
   }
 
-  /**
-   * Get username
-   * @return username
-   */
-  
-  @JsonProperty("username")
-  public String getUsername() {
-    return username;
+  @JsonProperty("beneficios")
+  public List<String> getBeneficios() {
+    return beneficios;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setBeneficios(List<String> beneficios) {
+    this.beneficios = beneficios;
+  }
+
+  public PlanEntity gimnasioId(Long gimnasioId) {
+    this.gimnasioId = gimnasioId;
+    return this;
+  }
+
+  @JsonProperty("gimnasioId")
+  public Long getGimnasioId() {
+    return gimnasioId;
+  }
+
+  public void setGimnasioId(Long gimnasioId) {
+    this.gimnasioId = gimnasioId;
   }
 
   public PlanEntity clienteId(Long clienteId) {
@@ -179,11 +141,6 @@ public class PlanEntity {
     return this;
   }
 
-  /**
-   * Get clienteId
-   * @return clienteId
-   */
-  
   @JsonProperty("clienteId")
   public Long getClienteId() {
     return clienteId;
@@ -193,24 +150,6 @@ public class PlanEntity {
     this.clienteId = clienteId;
   }
 
-  public PlanEntity gimnasioId(Long gimnasioId) {
-    this.gimnasioId = gimnasioId;
-    return this;
-  }
-
-  /**
-   * Get gimnasioId
-   * @return gimnasioId
-   */
-  
-  @JsonProperty("gimnasioId")
-  public Long getGimnasioId() {
-    return gimnasioId;
-  }
-
-  public void setGimnasioId(Long gimnasioId) {
-    this.gimnasioId = gimnasioId;
-  }
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -220,43 +159,37 @@ public class PlanEntity {
       return false;
     }
     PlanEntity plan = (PlanEntity) o;
-    return Objects.equals(this.mongoId, plan.mongoId) &&
-        Objects.equals(this.id, plan.id) &&
-        Objects.equals(this.email, plan.email) &&
-        Objects.equals(this.idCvv, plan.idCvv) &&
-        Objects.equals(this.idExpiracion, plan.idExpiracion) &&
-        Objects.equals(this.idTarjeta, plan.idTarjeta) &&
-        Objects.equals(this.username, plan.username) &&
-        Objects.equals(this.clienteId, plan.clienteId) &&
-        Objects.equals(this.gimnasioId, plan.gimnasioId);
+    return Objects.equals(this.id, plan.id) &&
+        Objects.equals(this.nombre, plan.nombre) &&
+        Objects.equals(this.descripcion, plan.descripcion) &&
+        Objects.equals(this.precio, plan.precio) &&
+        Objects.equals(this.duracion, plan.duracion) &&
+        Objects.equals(this.beneficios, plan.beneficios) &&
+        Objects.equals(this.gimnasioId, plan.gimnasioId) &&
+        Objects.equals(this.clienteId, plan.clienteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(mongoId, id, email, idCvv, idExpiracion, idTarjeta, username, clienteId, gimnasioId);
+    return Objects.hash(id, nombre, descripcion, precio, duracion, beneficios, gimnasioId, clienteId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PlanEntity {\n");
-    sb.append("    mongoId: ").append(toIndentedString(mongoId)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    idCvv: ").append(toIndentedString(idCvv)).append("\n");
-    sb.append("    idExpiracion: ").append(toIndentedString(idExpiracion)).append("\n");
-    sb.append("    idTarjeta: ").append(toIndentedString(idTarjeta)).append("\n");
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    clienteId: ").append(toIndentedString(clienteId)).append("\n");
+    sb.append("    nombre: ").append(toIndentedString(nombre)).append("\n");
+    sb.append("    descripcion: ").append(toIndentedString(descripcion)).append("\n");
+    sb.append("    precio: ").append(toIndentedString(precio)).append("\n");
+    sb.append("    duracion: ").append(toIndentedString(duracion)).append("\n");
+    sb.append("    beneficios: ").append(toIndentedString(beneficios)).append("\n");
     sb.append("    gimnasioId: ").append(toIndentedString(gimnasioId)).append("\n");
+    sb.append("    clienteId: ").append(toIndentedString(clienteId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
   private String toIndentedString(Object o) {
     if (o == null) {
       return "null";

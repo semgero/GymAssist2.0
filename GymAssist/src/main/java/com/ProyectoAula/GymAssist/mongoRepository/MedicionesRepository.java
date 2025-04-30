@@ -1,5 +1,6 @@
 package com.ProyectoAula.GymAssist.mongoRepository;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.ProyectoAula.GymAssist.mongoModels.MedicionesEntity;
@@ -12,5 +13,5 @@ import com.ProyectoAula.GymAssist.mongoModels.MedicionesEntity;
  * Template: Spring Data
  * Generated on 2025-04-25
  */
-public interface MedicionesRepository extends MongoRepository<MedicionesEntity, Long> {
+public interface MedicionesRepository extends MongoRepository<MedicionesEntity, ObjectId> {
 }

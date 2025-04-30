@@ -15,10 +15,7 @@ import jakarta.annotation.Generated;
 public class MedicionesEntity {
 
   @BsonProperty("_id")
-  private ObjectId mongoId = null;
-
-  @BsonProperty("id")
-  private Long id;
+  private ObjectId id = null;
 
   @BsonProperty("estatura")
   private Double estatura;
@@ -33,26 +30,7 @@ public class MedicionesEntity {
   @BsonProperty("clienteId")
   private Long clienteId;
 
-  public MedicionesEntity mongoId(ObjectId mongoId) {
-    this.mongoId = mongoId;
-    return this;
-  }
-
-  /**
-   * Get id
-   * @return id
-   */
-  
-  @JsonProperty("_id")
-  public ObjectId getMongoId() {
-    return mongoId;
-  }
-
-  public void setMongoId(ObjectId mongoId) {
-    this.mongoId = mongoId;
-  }
-
-  public MedicionesEntity id(Long id) {
+  public MedicionesEntity id(ObjectId id) {
     this.id = id;
     return this;
   }
@@ -62,12 +40,12 @@ public class MedicionesEntity {
    * @return id
    */
   
-  @JsonProperty("id")
-  public Long getId() {
+  @JsonProperty("_id")
+  public ObjectId getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(ObjectId id) {
     this.id = id;
   }
 
@@ -155,8 +133,7 @@ public class MedicionesEntity {
       return false;
     }
     MedicionesEntity mediciones = (MedicionesEntity) o;
-    return Objects.equals(this.mongoId, mediciones.mongoId) &&
-        Objects.equals(this.id, mediciones.id) &&
+    return Objects.equals(this.id, mediciones.id) &&
         Objects.equals(this.estatura, mediciones.estatura) &&
         Objects.equals(this.fechaRegistro, mediciones.fechaRegistro) &&
         Objects.equals(this.peso, mediciones.peso) &&
@@ -165,14 +142,13 @@ public class MedicionesEntity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(mongoId, id, estatura, fechaRegistro, peso, clienteId);
+    return Objects.hash(id, estatura, fechaRegistro, peso, clienteId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class MedicionesEntity {\n");
-    sb.append("    mongoId: ").append(toIndentedString(mongoId)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    estatura: ").append(toIndentedString(estatura)).append("\n");
     sb.append("    fechaRegistro: ").append(toIndentedString(fechaRegistro)).append("\n");
