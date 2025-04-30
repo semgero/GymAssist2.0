@@ -1,5 +1,6 @@
 package com.ProyectoAula.GymAssist.mongoServices;
 
+import org.bson.types.ObjectId;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
@@ -57,13 +58,13 @@ public class ClienteService {
     }
 
     // Buscar cliente por ID
-    public ClientEntity buscarClientePorId(String id) {
+    public ClientEntity buscarClientePorId(ObjectId id) {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + id));
     }
 
     // Actualizar cliente
-    public void actualizarCliente(String id, String nombre, String correo, String telefono, String mensualidad, String username, String password) {
+    public void actualizarCliente(ObjectId id, String nombre, String correo, String telefono, String mensualidad, String username, String password) {
         ClientEntity cliente = buscarClientePorId(id);
         
         // Actualizamos los atributos del cliente
@@ -74,18 +75,18 @@ public class ClienteService {
         clientRepository.save(cliente);
     
         // Buscar el usuario asociado
-        UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con el nombre de usuario: " + username));
+        UserEntity existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con el nombre de usuario: " + id));
     
         // Actualizar el usuario con los nuevos datos
-        user.setEmail(correo);  // Actualizamos el correo electrónico
-        user.setUsername(username);  // Verificamos el nombre de usuario
-        user.setPassword(passwordEncoder.encode(password));  // Actualizamos la contraseña encriptada
-        userRepository.save(user);  // Guardamos el usuario actualizado
+        existingUser.setEmail(correo);  // Actualizamos el correo electrónico
+        existingUser.setUsername(username);  // Verificamos el nombre de usuario
+        existingUser.setPassword(passwordEncoder.encode(password));  // Actualizamos la contraseña encriptada
+        userRepository.save(existingUser);  // Guardamos el usuario actualizado
     }
 
     // Eliminar cliente
-    public void eliminarCliente(String id) {
+    public void eliminarCliente(ObjectId id) {
         clientRepository.deleteById(id);
     }
 }

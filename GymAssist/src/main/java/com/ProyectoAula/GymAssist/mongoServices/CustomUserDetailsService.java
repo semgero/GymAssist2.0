@@ -1,4 +1,4 @@
-package com.ProyectoAula.GymAssist.services;
+package com.ProyectoAula.GymAssist.mongoServices;
 
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;

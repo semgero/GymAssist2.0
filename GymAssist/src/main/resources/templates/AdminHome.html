@@ -63,8 +63,8 @@
                         <td th:text="${cliente.username}"></td>  <!-- Columna para el username -->
                         <td th:text="${cliente.password}"></td>  <!-- Columna para el password -->
                         <td>
-                            <a class="action-btn" th:href="@{/Api/Admin/edit/{id}(id=${cliente.mongoId})}">Editar</a>
-                            <a class="action-btn delete-btn" th:href="@{/Api/Admin/delete/{id}(id=${cliente.mongoId})}">Borrar</a>
+                            <a class="action-btn" th:href="@{/Api/Admin/edit/{id}(id=${cliente.id})}">Editar</a>
+                            <a class="action-btn delete-btn" th:href="@{/Api/Admin/delete/{id}(id=${cliente.id})}">Borrar</a>
                         </td>
                     </tr>
                 </tbody>

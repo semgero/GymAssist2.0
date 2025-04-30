@@ -1,5 +1,6 @@
-package com.ProyectoAula.GymAssist.controller;
+package com.ProyectoAula.GymAssist.mongoControllers;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -52,7 +53,7 @@ public class AdminController {
 
     // Mostrar formulario de edición de cliente
     @GetMapping("/edit/{id}")
-    public String mostrarEditarCliente(@PathVariable String id, Model model) {
+    public String mostrarEditarCliente(@PathVariable ObjectId id, Model model) {
         ClientEntity cliente = clienteService.buscarClientePorId(id);
         model.addAttribute("cliente", cliente);
         return "EditarCliente"; // Página de edición de cliente
@@ -60,24 +61,24 @@ public class AdminController {
 
     // Actualizar cliente
     @PostMapping("/update/{id}")
-    public String actualizarCliente(@PathVariable String id,
-                                     @RequestParam String nombreCompleto,
-                                     @RequestParam String correoElectronico,
-                                     @RequestParam String numeroTelefono,
-                                     @RequestParam String clientPlan,
+    public String actualizarCliente(@PathVariable ObjectId id,
+                                     @RequestParam String nombre,
+                                     @RequestParam String correo,
+                                     @RequestParam String telefono,
+                                     @RequestParam String mensualidad,
                                      @RequestParam(required = false) String username,
                                      @RequestParam(required = false) String password) {
 
         // Si la contraseña fue proporcionada, cifrarla
         String encodedPassword = (password != null && !password.isEmpty()) ? passwordEncoder.encode(password) : null;
         
-        clienteService.actualizarCliente(id, nombreCompleto, correoElectronico, numeroTelefono, clientPlan, username, encodedPassword);
+        clienteService.actualizarCliente(id, nombre, correo, telefono, mensualidad, username, encodedPassword);
         return "redirect:/Api/Admin/AdminHome"; // Regresar a AdminHome
     }
 
     // Eliminar cliente
     @GetMapping("/delete/{id}")
-    public String eliminarCliente(@PathVariable String id) {
+    public String eliminarCliente(@PathVariable ObjectId id) {
         clienteService.eliminarCliente(id);
         return "redirect:/Api/Admin/AdminHome"; // Regresar a AdminHome
     }

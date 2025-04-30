@@ -17,7 +17,7 @@ public class ClientEntity {
 
   @Id
   @BsonProperty("_id")
-  private ObjectId mongoId = null;
+  private ObjectId id = null;
 
   @BsonProperty("correo")
   private String correo;
@@ -48,12 +48,12 @@ public class ClientEntity {
 
   // --- Getters and Setters ---
 
-  public ObjectId getMongoId() {
-    return mongoId;
+  public ObjectId getId() {
+    return id;
   }
 
-  public void setMongoId(ObjectId mongoId) {
-    this.mongoId = mongoId;
+  public void setId(ObjectId id) {
+    this.id = id;
   }
 
   public String getCorreo() {
@@ -135,7 +135,7 @@ public class ClientEntity {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ClientEntity client = (ClientEntity) o;
-    return Objects.equals(mongoId, client.mongoId) &&
+    return Objects.equals(id, client.id) &&
         Objects.equals(correo, client.correo) &&
         Objects.equals(idDocumento, client.idDocumento) &&
         Objects.equals(mensualidad, client.mensualidad) &&
@@ -149,7 +149,7 @@ public class ClientEntity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(mongoId, correo, idDocumento, mensualidad, nombre, telefono, adminId, gymId, username, password);
+    return Objects.hash(id, correo, idDocumento, mensualidad, nombre, telefono, adminId, gymId, username, password);
   }
 
   // --- ToString ---
@@ -158,7 +158,7 @@ public class ClientEntity {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ClientEntity {\n");
-    sb.append("    mongoId: ").append(toIndentedString(mongoId)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    correo: ").append(toIndentedString(correo)).append("\n");
     sb.append("    idDocumento: ").append(toIndentedString(idDocumento)).append("\n");
     sb.append("    mensualidad: ").append(toIndentedString(mensualidad)).append("\n");

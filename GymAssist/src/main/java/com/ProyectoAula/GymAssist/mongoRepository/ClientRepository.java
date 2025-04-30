@@ -2,12 +2,13 @@ package com.ProyectoAula.GymAssist.mongoRepository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
+import org.bson.types.ObjectId;
 
 import java.util.Optional;
 import java.util.List;
 
-public interface ClientRepository extends MongoRepository<ClientEntity, String> {
+public interface ClientRepository extends MongoRepository<ClientEntity, ObjectId> {
     Optional<ClientEntity> findByCorreo(String correo);
-    ClientEntity findByUsername(String username);
+    ClientEntity findUsernameById(Long id);
     List<ClientEntity> findByAdminId(Long adminId);
 }

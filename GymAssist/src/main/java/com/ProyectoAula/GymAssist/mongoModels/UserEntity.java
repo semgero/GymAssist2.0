@@ -19,7 +19,7 @@ public class UserEntity {
 
     @Id
     @BsonProperty("_id")
-    private ObjectId mongoId; // Identificador principal de MongoDB
+    private ObjectId id; // Identificador principal de MongoDB
 
     @BsonProperty("email")
     private String email;
@@ -38,12 +38,12 @@ public class UserEntity {
 
     // Getters y Setters
 
-    public ObjectId getMongoId() {
-        return mongoId;
+    public ObjectId getId() {
+        return id;
     }
 
-    public void setMongoId(ObjectId mongoId) {
-        this.mongoId = mongoId;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
 
@@ -106,7 +106,7 @@ public class UserEntity {
             return false;
         }
         UserEntity user = (UserEntity) o;
-        return Objects.equals(this.mongoId, user.mongoId) &&
+        return Objects.equals(this.id, user.id) &&
                Objects.equals(this.email, user.email) &&
                Objects.equals(this.password, user.password) &&
                Objects.equals(this.role, user.role) &&
@@ -116,14 +116,14 @@ public class UserEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(mongoId, email, password, role, username, userRoles);
+        return Objects.hash(id, email, password, role, username, userRoles);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class UserEntity {\n")
-          .append("    mongoId: ").append(toIndentedString(mongoId)).append("\n")
+          .append("    id: ").append(toIndentedString(id)).append("\n")
           .append("    email: ").append(toIndentedString(email)).append("\n")
           .append("    password: ").append(toIndentedString(password)).append("\n")
           .append("    role: ").append(toIndentedString(role)).append("\n")

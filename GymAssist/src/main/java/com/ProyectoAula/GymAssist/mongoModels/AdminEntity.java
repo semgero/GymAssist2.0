@@ -2,6 +2,9 @@ package com.ProyectoAula.GymAssist.mongoModels;
 //
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import jakarta.persistence.Id;
+
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,71 +13,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("admin")
 public class AdminEntity {
 
+    @Id
     @BsonProperty("_id")
-    private ObjectId mongoId = null;
+    private ObjectId id = null;
 
-    @BsonProperty("id")
-    private Long id;
-
-    @BsonProperty("username")
-    private String username;
-
-    @BsonProperty("email")
-    private String email;
-
-    @BsonProperty("password")
-    private String password;
-
-    @BsonProperty("role")
-    private String role;
-
-    // Getters y Setters
-    public ObjectId getMongoId() {
-        return mongoId;
-    }
-
-    public void setMongoId(ObjectId mongoId) {
-        this.mongoId = mongoId;
-    }
-
-    public Long getId() {
+    // Getter y Setter solo para id
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     @Override
@@ -86,24 +35,19 @@ public class AdminEntity {
             return false;
         }
         AdminEntity admin = (AdminEntity) o;
-        return Objects.equals(this.mongoId, admin.mongoId) &&
-                Objects.equals(this.id, admin.id);
+        return Objects.equals(this.id, admin.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mongoId, id);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class AdminEntity {\n");
-        sb.append("    mongoId: ").append(toIndentedString(mongoId)).append("\n");
         sb.append("    id: ").append(toIndentedString(id)).append("\n");
-        sb.append("    username: ").append(toIndentedString(username)).append("\n");
-        sb.append("    email: ").append(toIndentedString(email)).append("\n");
-        sb.append("    role: ").append(toIndentedString(role)).append("\n");
         sb.append("}");
         return sb.toString();
     }

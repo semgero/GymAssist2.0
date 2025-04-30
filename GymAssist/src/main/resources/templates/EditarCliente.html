@@ -28,7 +28,7 @@
         </header>
         
         <div class="edit-client-form">
-            <form th:action="@{/Api/Admin/update/{id}(id=${cliente.mongoId})}" method="post">
+            <form th:action="@{/Api/Admin/update/{id}(id=${cliente.id})}" method="post">
                 <h2>Actualizar Información</h2>
                 
                 <!-- Campo para el nombre -->
@@ -49,11 +49,11 @@
                 <input type="text" th:name="username" th:value="${cliente.username}" placeholder="Nombre de Usuario" id="clientUsername" required>
             
                 <!-- Campo para el password (puedes dejarlo vacío si no deseas modificar la contraseña) -->
-                <input type="password" th:name="password" placeholder="Contraseña" id="clientPassword">
+                <input type="password" th:name="password"  placeholder="Contraseña" id="clientPassword">
             
                 <div class="form-actions">
                     <button type="submit" class="action-btn">Guardar Cambios</button>
-                    <a href="/Api/Admin/Home" class="delete-btn">Cancelar</a>
+                    <a href="/Api/Admin/AdminHome" class="delete-btn">Cancelar</a>
                 </div>
             </form>
         </div>

@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.config.Customizer;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
-import com.ProyectoAula.GymAssist.services.CustomUserDetailsService;
+import com.ProyectoAula.GymAssist.mongoServices.CustomUserDetailsService;
 
 
 @Configuration

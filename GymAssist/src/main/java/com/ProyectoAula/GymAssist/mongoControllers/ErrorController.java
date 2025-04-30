@@ -1,4 +1,4 @@
-package com.ProyectoAula.GymAssist.controller;
+package com.ProyectoAula.GymAssist.mongoControllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
