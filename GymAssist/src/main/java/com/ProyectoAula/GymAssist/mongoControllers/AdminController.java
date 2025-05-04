@@ -43,11 +43,8 @@ public class AdminController {
                                  @RequestParam String username,
                                  @RequestParam String password) {
 
-        // Cifrar la contraseña antes de guardarla
-        String encodedPassword = passwordEncoder.encode(password);
-        
         // Crear el cliente con el servicio
-        clienteService.crearCliente(nombre, correo, telefono, mensualidad, username, encodedPassword);
+        clienteService.crearCliente(nombre, correo, telefono, mensualidad, username, password);
         return "redirect:/Api/Admin/AdminHome"; // Regresar a AdminHome
     }
 

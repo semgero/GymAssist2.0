@@ -34,6 +34,7 @@ public class ClienteService {
             throw new RuntimeException("El nombre de usuario ya está en uso.");
         }
     
+        String encodedPassword = passwordEncoder.encode(password);
         // Crear cliente
         ClientEntity cliente = new ClientEntity();             
         cliente.setNombre(nombre);
@@ -41,14 +42,14 @@ public class ClienteService {
         cliente.setTelefono(Integer.valueOf(telefono)); 
         cliente.setMensualidad(mensualidad);
         cliente.setUsername(username); // Usamos el username proporcionado
-        cliente.setPassword(passwordEncoder.encode(password)); // Encriptamos la contraseña
+        cliente.setPassword(encodedPassword); // Encriptamos la contraseña
         clientRepository.save(cliente);
     
         // Crear su usuario con el rol CLIENTE y encriptar su contraseña
         UserEntity user = new UserEntity(); 
         user.setUsername(username); // Usamos el username proporcionado
         user.setEmail(correo);
-        user.setPassword(passwordEncoder.encode(password)); // Encriptamos la contraseña
+        user.setPassword(encodedPassword); // setemas la contraseña que encriptamos en cliente
         user.setRole("CLIENTE");
         userRepository.save(user);
 
