@@ -74,6 +74,7 @@ public class AuthController {
 
         AdminEntity admin = new AdminEntity();
         admin.setId(new org.bson.types.ObjectId());
+        admin.setUserId(user.getId()); // Asocia el ID del usuario al admin
         adminService.save(admin); // Guarda el nuevo admin en la base de datos
 
         return "redirect:/Api/Auth/login";

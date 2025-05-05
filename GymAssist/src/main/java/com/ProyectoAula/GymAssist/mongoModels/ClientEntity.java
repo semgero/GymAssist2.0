@@ -19,6 +19,9 @@ public class ClientEntity {
   @BsonProperty("_id")
   private ObjectId id = null;
 
+  @BsonProperty("activo")
+  private Boolean activo = true;
+
   @BsonProperty("correo")
   private String correo;
 
@@ -35,10 +38,10 @@ public class ClientEntity {
   private Integer telefono;
 
   @BsonProperty("adminId")
-  private Long adminId;
+  private ObjectId adminId;
 
   @BsonProperty("gymId")
-  private Long gymId;
+  private ObjectId gymId;
 
   @BsonProperty("username")
   private String username;
@@ -62,6 +65,15 @@ public class ClientEntity {
 
   public void setCorreo(String correo) {
     this.correo = correo;
+  }
+
+  public Boolean getActivo() {
+    return activo;
+  }
+
+  public Boolean setActivo(Boolean activo) {
+    this.activo = activo;
+    return activo;
   }
 
   public String getIdDocumento() {
@@ -96,19 +108,19 @@ public class ClientEntity {
     this.telefono = telefono;
   }
 
-  public Long getAdminId() {
+  public ObjectId getAdminId() {
     return adminId;
   }
 
-  public void setAdminId(Long adminId) {
+  public void setAdminId(ObjectId adminId) {
     this.adminId = adminId;
   }
 
-  public Long getGymId() {
+  public ObjectId getGymId() {
     return gymId;
   }
 
-  public void setGymId(Long gymId) {
+  public void setGymId(ObjectId gymId) {
     this.gymId = gymId;
   }
 
@@ -136,6 +148,7 @@ public class ClientEntity {
     if (o == null || getClass() != o.getClass()) return false;
     ClientEntity client = (ClientEntity) o;
     return Objects.equals(id, client.id) &&
+        Objects.equals(activo, client.activo) &&
         Objects.equals(correo, client.correo) &&
         Objects.equals(idDocumento, client.idDocumento) &&
         Objects.equals(mensualidad, client.mensualidad) &&
@@ -159,6 +172,7 @@ public class ClientEntity {
     StringBuilder sb = new StringBuilder();
     sb.append("class ClientEntity {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    activo: ").append(toIndentedString(activo)).append("\n");
     sb.append("    correo: ").append(toIndentedString(correo)).append("\n");
     sb.append("    idDocumento: ").append(toIndentedString(idDocumento)).append("\n");
     sb.append("    mensualidad: ").append(toIndentedString(mensualidad)).append("\n");

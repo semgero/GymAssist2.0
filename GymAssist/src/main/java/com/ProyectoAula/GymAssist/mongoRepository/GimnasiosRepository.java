@@ -16,6 +16,6 @@ import org.bson.types.ObjectId;
  * Generated on 2025-04-25
  */
 public interface GimnasiosRepository extends MongoRepository<GimnasiosEntity, ObjectId> {
-    Optional<GimnasiosEntity> findByAdminId(Long adminId);
-    void deleteByAdminId(Long adminId);
+    Optional<GimnasiosEntity> findByAdminId(ObjectId adminId);
+    void deleteByAdminId(ObjectId adminId);
 }

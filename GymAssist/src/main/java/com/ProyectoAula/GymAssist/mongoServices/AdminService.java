@@ -1,5 +1,6 @@
 package com.ProyectoAula.GymAssist.mongoServices;
 
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
 import com.ProyectoAula.GymAssist.mongoRepository.AdminRepository;
@@ -13,5 +14,9 @@ public class AdminService {
 
     public AdminEntity save(AdminEntity admin) {
         return adminRepository.save(admin);
+    }
+
+    public AdminEntity findById(ObjectId id) {
+        return adminRepository.findById(id).orElse(null);
     }
 }

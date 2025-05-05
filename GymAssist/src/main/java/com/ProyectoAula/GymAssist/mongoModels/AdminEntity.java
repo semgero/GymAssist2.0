@@ -17,6 +17,9 @@ public class AdminEntity {
     @BsonProperty("_id")
     private ObjectId id = null;
 
+    @BsonProperty("userId")
+    private ObjectId userId;
+
     // Getter y Setter solo para id
     public ObjectId getId() {
         return id;
@@ -24,6 +27,14 @@ public class AdminEntity {
 
     public void setId(ObjectId id) {
         this.id = id;
+    }
+
+    public ObjectId getUserId() {
+        return userId;
+    }
+
+    public void setUserId(ObjectId userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -35,7 +46,8 @@ public class AdminEntity {
             return false;
         }
         AdminEntity admin = (AdminEntity) o;
-        return Objects.equals(this.id, admin.id);
+        return Objects.equals(this.id, admin.id)&&
+                Objects.equals(this.userId, admin.userId);
     }
 
     @Override
@@ -48,6 +60,7 @@ public class AdminEntity {
         StringBuilder sb = new StringBuilder();
         sb.append("class AdminEntity {\n");
         sb.append("    id: ").append(toIndentedString(id)).append("\n");
+        sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
         sb.append("}");
         return sb.toString();
     }

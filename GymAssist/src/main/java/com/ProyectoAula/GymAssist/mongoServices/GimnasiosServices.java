@@ -2,6 +2,8 @@ package com.ProyectoAula.GymAssist.mongoServices;
 
 import com.ProyectoAula.GymAssist.mongoModels.GimnasiosEntity;
 import com.ProyectoAula.GymAssist.mongoRepository.GimnasiosRepository;
+
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -19,11 +21,11 @@ public class GimnasiosServices {
         return gimnasiosRepository.save(gimnasio);
     }
 
-    public Optional<GimnasiosEntity> getGymByAdminId(Long adminId) {
+    public Optional<GimnasiosEntity> getGymByAdminId(ObjectId adminId) {
         return gimnasiosRepository.findByAdminId(adminId);
     }
 
-    public GimnasiosEntity updateGym(Long adminId, GimnasiosEntity gimnasio) {
+    public GimnasiosEntity updateGym(ObjectId adminId, GimnasiosEntity gimnasio) {
         GimnasiosEntity existingGimnasio = gimnasiosRepository.findByAdminId(adminId)
                 .orElseThrow(() -> new RuntimeException("Gimnasio no encontrado."));
                 existingGimnasio.setNombreGymnasio(gimnasio.getNombreGymnasio());
@@ -34,7 +36,11 @@ public class GimnasiosServices {
         return gimnasiosRepository.save(existingGimnasio);
     }
 
-    public void deleteGymByAdminId(Long adminId) {
+    public void deleteGymByAdminId(ObjectId adminId) {
         gimnasiosRepository.deleteByAdminId(adminId);
+    }
+
+    public boolean adminHasGym(ObjectId adminId) {
+        return gimnasiosRepository.findByAdminId(adminId).isPresent();
     }
 }

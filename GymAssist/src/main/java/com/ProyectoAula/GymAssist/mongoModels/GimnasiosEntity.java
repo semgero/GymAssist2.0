@@ -34,7 +34,7 @@ public class GimnasiosEntity {
   private String nombreGymnasio;
 
   @BsonProperty("adminId")
-  private Long adminId;
+  private ObjectId adminId;
 
   public GimnasiosEntity id(ObjectId id) {
     this.id = id;
@@ -150,7 +150,7 @@ public class GimnasiosEntity {
     this.nombreGymnasio = nombreGymnasio;
   }
 
-  public GimnasiosEntity adminId(Long adminId) {
+  public GimnasiosEntity adminId(ObjectId adminId) {
     this.adminId = adminId;
     return this;
   }
@@ -161,11 +161,11 @@ public class GimnasiosEntity {
    */
   
   @JsonProperty("adminId")
-  public Long getAdminId() {
+  public ObjectId getAdminId() {
     return adminId;
   }
 
-  public void setAdminId(Long adminId) {
+  public void setAdminId(ObjectId adminId) {
     this.adminId = adminId;
   }
   @Override

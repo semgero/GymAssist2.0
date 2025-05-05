@@ -15,6 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.config.Customizer;
+
+import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
+import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
+import com.ProyectoAula.GymAssist.mongoRepository.AdminRepository;
+import com.ProyectoAula.GymAssist.mongoRepository.GimnasiosRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
 import com.ProyectoAula.GymAssist.mongoServices.CustomUserDetailsService;
 
@@ -23,9 +28,14 @@ import com.ProyectoAula.GymAssist.mongoServices.CustomUserDetailsService;
 public class SecurityConfig {
 
     private final UserRepository userRepository;
+    private final AdminRepository adminRepository;
+    private final GimnasiosRepository gimnasiosRepository;
 
-    public SecurityConfig(UserRepository userRepository) {
+    public SecurityConfig(UserRepository userRepository, AdminRepository adminRepository,
+            GimnasiosRepository gimnasiosRepository) {
+        this.gimnasiosRepository = gimnasiosRepository;
         this.userRepository = userRepository;
+        this.adminRepository = adminRepository;
     }
 
     /**
@@ -43,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/Api/Auth/login", "/Api/Auth/logout", "/Api/Auth/register").permitAll()
                         .requestMatchers("/Styles/**", "/Imagenes/**", "/Js/**").permitAll()
                         .requestMatchers("/Error/**", "/Error").permitAll()
+                        .requestMatchers("/gimnasios/register").authenticated()
                         .requestMatchers("/Api/Admin/**").hasRole("ADMIN")
                         .requestMatchers("/Api/Cliente/**").hasRole("CLIENTE")
                         .anyRequest().authenticated())
@@ -131,32 +142,35 @@ public class SecurityConfig {
      */
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return (_, response, authentication) -> {
-            System.out.println("SUCCES HANDLER: " + authentication.getName()); // Log de depuración
-            // Obtiene el rol del usuario autenticado
+        return (request, response, authentication) -> {
+            String username = authentication.getName();
             String role = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .findFirst()
                     .orElse("");
 
-            // Log de depuración
-            System.out.println("Autenticado con el rol: " + role);
+            String redirectUrl = "/Api/Auth/login"; // Default
 
-            String redirectUrl;
-            switch (role) {
-                case "ROLE_ADMIN":
-                    redirectUrl = "/Api/Admin/AdminHome";
-                    break;
-                case "ROLE_CLIENTE":
-                    redirectUrl = "/Api/Cliente/ClienteHome";
-                    break;
-                default:
-                    redirectUrl = "/Api/Auth/login"; // En caso de que el rol no sea válido
-                    break;
+            if ("ROLE_ADMIN".equals(role)) {
+                // Inyecta los servicios necesarios aquí o usa un @Component externo si
+                // prefieres
+                UserEntity user = userRepository.findByUsername(username).orElse(null);
+                if (user != null) {
+                    AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+                    if (admin != null) {
+                        boolean tieneGym = gimnasiosRepository.findByAdminId(admin.getId()).isPresent();
+                        if (!tieneGym) {
+                            redirectUrl = "/gimnasios/register";
+                        } else {
+                            redirectUrl = "/Api/Admin/AdminHome";
+                        }
+                    }
+                }
+            } else if ("ROLE_CLIENTE".equals(role)) {
+                redirectUrl = "/Api/Cliente/ClienteHome";
             }
 
-            System.out.println("Redirigiendo a: " + redirectUrl);
-            response.sendRedirect(redirectUrl); // Redirige al URL correspondiente
+            response.sendRedirect(redirectUrl);
         };
     }
 }

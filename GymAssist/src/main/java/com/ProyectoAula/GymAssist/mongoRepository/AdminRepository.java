@@ -5,8 +5,11 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
 import org.bson.types.ObjectId;
+import java.util.List;
+
 
 public interface AdminRepository extends MongoRepository<AdminEntity, ObjectId> {
     // Ya no es necesario este método personalizado, puedes usar el findById de MongoRepository
     Optional<AdminEntity> findById(ObjectId id);
+    Optional<AdminEntity> findByUserId(ObjectId userId);
 }

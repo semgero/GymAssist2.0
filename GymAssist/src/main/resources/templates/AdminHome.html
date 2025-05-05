@@ -39,6 +39,8 @@
                 <input type="text" th:name="username" placeholder="Username" id="clientUsername" required>
                 <!-- Nuevo campo para la contraseña -->
                 <input type="password" th:name="password" placeholder="Password" id="clientPassword" required>
+                <input type="hidden" name="adminId" th:value="${adminId}" />
+                <input type="hidden" name="gymId" th:value="${gymId}" />
                 <button type="submit">Añadir Cliente</button>
             </form>
         </div>

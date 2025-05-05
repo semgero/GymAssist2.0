@@ -23,7 +23,7 @@ public class ClienteService {
     }
 
     // Guardar un cliente nuevo (cuando el admin crea uno)
-    public void crearCliente(String nombre, String correo, String telefono, String mensualidad, String username, String password) {
+    public void crearCliente(String nombre, String correo, String telefono, String mensualidad, String username, String password, ObjectId adminId, ObjectId gymId) {
         // Verificar si el correo electrónico ya está registrado
         if (userRepository.existsByEmail(correo)) {
             throw new RuntimeException("El correo electrónico ya está en uso.");
@@ -42,7 +42,10 @@ public class ClienteService {
         cliente.setTelefono(Integer.valueOf(telefono)); 
         cliente.setMensualidad(mensualidad);
         cliente.setUsername(username); // Usamos el username proporcionado
-        cliente.setPassword(encodedPassword); // Encriptamos la contraseña
+        cliente.setPassword(encodedPassword);
+        cliente.setActivo(false); // Por defecto, el cliente está activo
+        cliente.setAdminId(adminId);
+        cliente.setGymId(gymId); // Encriptamos la contraseña
         clientRepository.save(cliente);
     
         // Crear su usuario con el rol CLIENTE y encriptar su contraseña
@@ -56,8 +59,8 @@ public class ClienteService {
     }
 
     // Listar todos los clientes
-    public List<ClientEntity> listarClientes() {
-        return clientRepository.findAll();
+    public List<ClientEntity> listarClientesPorGym(ObjectId gymId) {
+        return clientRepository.findByGymId(gymId);
     }
 
     // Buscar cliente por ID
