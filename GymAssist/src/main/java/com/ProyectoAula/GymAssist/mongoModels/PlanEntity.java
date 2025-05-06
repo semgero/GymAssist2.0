@@ -29,13 +29,13 @@ public class PlanEntity {
   private Double precio;
 
   @BsonProperty("duracion")
-  private Integer duracion; // en días
+  private Integer duracion;
 
   @BsonProperty("beneficios")
   private List<String> beneficios;
 
-  @BsonProperty("gimnasioId")
-  private Long gimnasioId;
+  @BsonProperty("gymId")
+  private ObjectId gymId;
 
   @BsonProperty("clienteId")
   private Long clienteId;
@@ -124,18 +124,22 @@ public class PlanEntity {
     this.beneficios = beneficios;
   }
 
-  public PlanEntity gimnasioId(Long gimnasioId) {
-    this.gimnasioId = gimnasioId;
+  public PlanEntity gymId(ObjectId gymId) {
+    this.gymId = gymId;
     return this;
   }
 
-  @JsonProperty("gimnasioId")
-  public Long getGimnasioId() {
-    return gimnasioId;
+  @JsonProperty("gymId")
+  public ObjectId gymId() {
+    return gymId;
   }
 
-  public void setGimnasioId(Long gimnasioId) {
-    this.gimnasioId = gimnasioId;
+  public ObjectId getGymId() {
+    return gymId;
+  }
+
+  public void setGymId(ObjectId gymId) {
+    this.gymId = gymId;
   }
 
   public PlanEntity clienteId(Long clienteId) {
@@ -167,13 +171,13 @@ public class PlanEntity {
         Objects.equals(this.precio, plan.precio) &&
         Objects.equals(this.duracion, plan.duracion) &&
         Objects.equals(this.beneficios, plan.beneficios) &&
-        Objects.equals(this.gimnasioId, plan.gimnasioId) &&
+        Objects.equals(this.gymId, plan.gymId) &&
         Objects.equals(this.clienteId, plan.clienteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nombre, descripcion, precio, duracion, beneficios, gimnasioId, clienteId);
+    return Objects.hash(id, nombre, descripcion, precio, duracion, beneficios, gymId, clienteId);
   }
 
   @Override
@@ -186,7 +190,7 @@ public class PlanEntity {
     sb.append("    precio: ").append(toIndentedString(precio)).append("\n");
     sb.append("    duracion: ").append(toIndentedString(duracion)).append("\n");
     sb.append("    beneficios: ").append(toIndentedString(beneficios)).append("\n");
-    sb.append("    gimnasioId: ").append(toIndentedString(gimnasioId)).append("\n");
+    sb.append("    gimnasioId: ").append(toIndentedString(gymId)).append("\n");
     sb.append("    clienteId: ").append(toIndentedString(clienteId)).append("\n");
     sb.append("}");
     return sb.toString();

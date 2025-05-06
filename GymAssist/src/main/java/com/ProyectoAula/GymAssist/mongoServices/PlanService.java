@@ -18,8 +18,8 @@ public class PlanService {
         return planRepository.save(plan);
     }
 
-    public List<PlanEntity> getPlanesByGimnasioId(Long gimnasioId) {
-        return planRepository.findByGimnasioId(gimnasioId);
+    public List<PlanEntity> getPlanesByGimnasioId(ObjectId gymId) {
+        return planRepository.findByGymId(gymId);
     }
 
     public List<PlanEntity> getPlanesByClienteId(Long clienteId) {
@@ -38,7 +38,7 @@ public class PlanService {
         existingPlan.setPrecio(planDetails.getPrecio());
         existingPlan.setDuracion(planDetails.getDuracion());
         existingPlan.setBeneficios(planDetails.getBeneficios());
-        existingPlan.setGimnasioId(planDetails.getGimnasioId());
+        existingPlan.setGymId(planDetails.getGymId());
         existingPlan.setClienteId(planDetails.getClienteId());
         return planRepository.save(existingPlan);
     }

@@ -37,6 +37,7 @@
                 </select>
                 <!-- Nuevo campo para el username -->
                 <input type="text" th:name="username" placeholder="Username" id="clientUsername" required>
+                <input type="text" th:name="idDocumento" placeholder="ID Documento" id="clientIdDocument" required>
                 <!-- Nuevo campo para la contraseña -->
                 <input type="password" th:name="password" placeholder="Password" id="clientPassword" required>
                 <input type="hidden" name="adminId" th:value="${adminId}" />
@@ -63,10 +64,15 @@
                         <td th:text="${cliente.telefono}"></td>
                         <td th:text="${cliente.mensualidad}"></td>
                         <td th:text="${cliente.username}"></td>  <!-- Columna para el username -->
-                        <td th:text="${cliente.password}"></td>  <!-- Columna para el password -->
+                        <td th:text="${cliente.idDocumento}"></td>  <!-- Columna para el password -->
                         <td>
                             <a class="action-btn" th:href="@{/Api/Admin/edit/{id}(id=${cliente.id})}">Editar</a>
                             <a class="action-btn delete-btn" th:href="@{/Api/Admin/delete/{id}(id=${cliente.id})}">Borrar</a>
+                        </td>
+                        <td>
+                            <span th:if="${cliente.activo}" class="badge badge-success">Activo</span>
+                            <span th:if="${!cliente.activo}" class="badge badge-danger">Inactivo</span>
+                            <!-- Si tienes más estados, puedes agregar más condiciones aquí -->
                         </td>
                     </tr>
                 </tbody>

@@ -20,5 +20,5 @@ public interface PlanRepository extends MongoRepository<PlanEntity, ObjectId> {
     // Custom query methods can be defined here if needed
     // For example, to find by clienteId:
     List<PlanEntity> findByClienteId(Long clienteId);
-    List<PlanEntity> findByGimnasioId(Long gimnasioId);
+    List<PlanEntity> findByGymId(ObjectId gymId);
 }

@@ -61,6 +61,7 @@ public class AdminController {
     @PostMapping("/Home")
     public String agregarCliente(@RequestParam String nombre,
             @RequestParam String correo,
+            @RequestParam String idDocumento,
             @RequestParam String telefono,
             @RequestParam String mensualidad,
             @RequestParam String username,
@@ -69,7 +70,7 @@ public class AdminController {
             @RequestParam ObjectId gymId) {
 
         // Crear el cliente con el servicio
-        clienteService.crearCliente(nombre, correo, telefono, mensualidad, username, password, adminId, gymId);
+        clienteService.crearCliente(nombre, correo, telefono, mensualidad, username, password, adminId, gymId, idDocumento);
         return "redirect:/Api/Admin/AdminHome"; // Regresar a AdminHome
     }
 

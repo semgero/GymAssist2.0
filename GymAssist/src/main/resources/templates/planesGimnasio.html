@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Planes del Gimnasio</title>
+    <link rel="stylesheet" href="/Styles/server.css">
+    <link rel="stylesheet" href="/Styles/AdminHome.css">
+</head>
+<body>
+    <div class="main-content">
+        <header>
+            <h1>Planes del Gimnasio</h1>
+        </header>
+
+        <!-- Formulario para agregar un nuevo plan -->
+        <div class="add-plan-form">
+            <form th:action="@{/planes/gimnasio/{gymId}/guardar(gymId=${gymId})}" method="post">
+                <h2>Agregar Plan</h2>
+                <input type="text" name="nombre" placeholder="Nombre del Plan" required>
+                <input type="text" name="descripcion" placeholder="Descripción" required>
+                <input type="number" name="precio" placeholder="Precio" min="0" required>
+                <input type="number" name="duracion" placeholder="Duración (meses)" min="1" required>
+                <input type="text" name="beneficios" placeholder="Beneficios (separados por coma)" required>
+                <button type="submit">Añadir Plan</button>
+            </form>
+        </div>
+
+        <!-- Lista de planes -->
+        <div class="plan-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Duración</th>
+                        <th>Beneficios</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="plan : ${planes}">
+                        <td th:text="${plan.nombre}"></td>
+                        <td th:text="${plan.descripcion}"></td>
+                        <td th:text="${plan.precio}"></td>
+                        <td th:text="${plan.duracion} + ' meses'"></td>
+                        <td th:text="${plan.beneficios}"></td>
+                        <td>
+                            <a class="action-btn" th:href="@{/planes/{id}/editar(id=${plan.id})}">Editar</a>
+                            <form th:action="@{/planes/{id}/eliminar(id=${plan.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="action-btn delete-btn">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

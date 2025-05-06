@@ -4,47 +4,63 @@ import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
 import com.ProyectoAula.GymAssist.mongoServices.PlanService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/planes")
+@Controller
+@RequestMapping("/planes")
 public class PlanController {
 
     @Autowired
     private PlanService planService;
 
-    @PostMapping
-    public ResponseEntity<PlanEntity> createPlan(@RequestBody PlanEntity plan) {
-        return ResponseEntity.ok(planService.createPlan(plan));
+    // Mostrar todos los planes de un gimnasio en una vista HTML
+    @GetMapping("/gimnasio/{gymId}")
+    public String mostrarPlanesPorGimnasio(@PathVariable String gymId, Model model) {
+        List<PlanEntity> planes = planService.getPlanesByGimnasioId(new ObjectId(gymId));
+        model.addAttribute("planes", planes);
+        model.addAttribute("gymId", gymId);
+        return "planesGimnasio"; // Nombre de tu plantilla HTML
     }
 
-    @GetMapping("/gimnasio/{gimnasioId}")
-    public ResponseEntity<List<PlanEntity>> getPlanesByGimnasioId(@PathVariable Long gimnasioId) {
-        return ResponseEntity.ok(planService.getPlanesByGimnasioId(gimnasioId));
+    // Mostrar formulario para crear un nuevo plan para un gimnasio
+    @GetMapping("/gimnasio/{gymId}/nuevo")
+    public String mostrarFormularioNuevoPlan(@PathVariable Long gymId, Model model) {
+        model.addAttribute("plan", new PlanEntity());
+        model.addAttribute("gymId", gymId);
+        return "nuevoPlan";
     }
 
-    @GetMapping("/cliente/{clienteId}")
-    public ResponseEntity<List<PlanEntity>> getPlanesByClienteId(@PathVariable Long clienteId) {
-        return ResponseEntity.ok(planService.getPlanesByClienteId(clienteId));
+    // Guardar un nuevo plan para un gimnasio
+    @PostMapping("/gimnasio/{gymId}/guardar")
+    public String guardarNuevoPlan(@PathVariable String gymId, @ModelAttribute PlanEntity plan) {
+        plan.setGymId(new ObjectId(gymId));
+        planService.createPlan(plan);
+        return "redirect:/planes/gimnasio/" + gymId;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PlanEntity> getPlanById(@PathVariable String id) {
-        return planService.getPlanById(new ObjectId(id))
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // Mostrar formulario para editar un plan
+    @GetMapping("/{id}/editar")
+    public String mostrarFormularioEditarPlan(@PathVariable String id, Model model) {
+        PlanEntity plan = planService.getPlanById(new ObjectId(id)).orElse(null);
+        model.addAttribute("plan", plan);
+        return "editarPlan";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<PlanEntity> updatePlan(@PathVariable String id, @RequestBody PlanEntity plan) {
-        return ResponseEntity.ok(planService.updatePlan(new ObjectId(id), plan));
+    // Actualizar un plan
+    @PostMapping("/{id}/actualizar")
+    public String actualizarPlan(@PathVariable String id, @ModelAttribute PlanEntity plan) {
+        planService.updatePlan(new ObjectId(id), plan);
+        // Redirigir a la lista de planes del gimnasio correspondiente
+        return "redirect:/planes/gimnasio/" + plan.getGymId().toHexString();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePlanById(@PathVariable String id) {
+    // Eliminar un plan
+    @PostMapping("/{id}/eliminar")
+    public String eliminarPlan(@PathVariable String id, @RequestParam Long gymId) {
         planService.deletePlanById(new ObjectId(id));
-        return ResponseEntity.noContent().build();
+        return "redirect:/planes/gimnasio/" + gymId;
     }
 }

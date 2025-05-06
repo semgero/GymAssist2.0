@@ -23,7 +23,7 @@ public class ClienteService {
     }
 
     // Guardar un cliente nuevo (cuando el admin crea uno)
-    public void crearCliente(String nombre, String correo, String telefono, String mensualidad, String username, String password, ObjectId adminId, ObjectId gymId) {
+    public void crearCliente(String nombre, String correo, String telefono, String mensualidad, String username, String password, ObjectId adminId, ObjectId gymId, String idDocumento) {
         // Verificar si el correo electrónico ya está registrado
         if (userRepository.existsByEmail(correo)) {
             throw new RuntimeException("El correo electrónico ya está en uso.");
@@ -39,6 +39,7 @@ public class ClienteService {
         ClientEntity cliente = new ClientEntity();             
         cliente.setNombre(nombre);
         cliente.setCorreo(correo);
+        cliente.setIdDocumento(idDocumento); // Usamos el correo como ID de documento
         cliente.setTelefono(Integer.valueOf(telefono)); 
         cliente.setMensualidad(mensualidad);
         cliente.setUsername(username); // Usamos el username proporcionado
