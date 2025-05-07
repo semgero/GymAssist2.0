@@ -5,8 +5,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
+import com.ProyectoAula.GymAssist.mongoModels.ClientEntity.Asistencia;
 import com.ProyectoAula.GymAssist.mongoRepository.ClientRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -105,4 +108,27 @@ public class ClienteService {
         // Eliminar el cliente
         clientRepository.deleteById(id);
     }
+
+    public void registrarAsistencia(ObjectId clienteId, LocalDate fecha, List<String> musculos) {
+        ClientEntity cliente = buscarClientePorId(clienteId);
+    
+        Asistencia asistencia = new Asistencia();
+        asistencia.setFecha(fecha);
+        asistencia.setMusculos(musculos);
+    
+        cliente.getAsistencias().add(asistencia);
+        clientRepository.save(cliente);
+    }
+    
+    public void contarInasistencia(ObjectId clienteId) {
+        ClientEntity cliente = buscarClientePorId(clienteId);
+        cliente.setInasistencias(cliente.getInasistencias() + 1);
+        clientRepository.save(cliente);
+    }
+
+    public ClientEntity buscarPorUsername(String username) {
+    return clientRepository.findByUsername(username)
+        .orElseThrow(() -> new RuntimeException("Cliente no encontrado con username: " + username));
+}
+
 }

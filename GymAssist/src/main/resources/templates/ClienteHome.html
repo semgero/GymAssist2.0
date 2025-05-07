@@ -1,11 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cliente</title>
+    <title>Panel Cliente</title>
+    <link rel="stylesheet" href="/Styles/ClienteHome.css">
 </head>
 <body>
-    <h1> desde cliente home</h1>
+    <div class="perfil">
+        <p th:text="${cliente.nombre}"></p>
+        <p th:text="${cliente.correo}"></p>
+    </div>
+
+    <div class="info-clase">
+        <h2>Gimnasio:</h2>
+        <p th:text="${cliente.gymId}"></p>
+
+        <h3>Ver asistencia</h3>
+        <ul>
+            <li th:each="asistencia : ${cliente.asistencias}">
+                <span th:text="${asistencia.fecha}">Fecha</span> -
+                <span th:text="${asistencia.musculos}">Músculos</span>
+            </li>
+        </ul>
+
+        <p>Total inasistencias: <span th:text="${cliente.inasistencias}"></span></p>
+    </div>
+
+    <div class="registro-asistencia">
+        <form th:action="@{/Api/Cliente/registrar-asistencia}" method="post">
+            <label for="fecha">Fecha:</label>
+            <input type="date" name="fecha" required />
+
+            <label for="musculos">Músculos trabajados:</label>
+            <select name="musculos" multiple required>
+                <option value="Pecho">Pecho</option>
+                <option value="Pierna">Pierna</option>
+                <option value="Espalda">Espalda</option>
+                <option value="Bíceps">Bíceps</option>
+                <option value="Tríceps">Tríceps</option>
+            </select>
+
+            <button type="submit">Registrar asistencia</button>
+        </form>
+    </div>
 </body>
 </html>

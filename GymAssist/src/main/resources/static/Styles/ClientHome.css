@@ -1,0 +1,28 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 20px;
+}
+
+.perfil {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.info-clase, .registro-asistencia {
+    background-color: white;
+    padding: 20px;
+    margin-top: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+form input, form select {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    display: block;
+    width: 100%;
+    padding: 8px;
+}

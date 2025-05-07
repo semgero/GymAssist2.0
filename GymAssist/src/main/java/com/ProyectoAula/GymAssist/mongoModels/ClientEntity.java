@@ -1,6 +1,9 @@
 package com.ProyectoAula.GymAssist.mongoModels;
 //
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.bson.codecs.pojo.annotations.BsonProperty;
@@ -49,148 +52,166 @@ public class ClientEntity {
   @BsonProperty("password")
   private String password;
 
+  @BsonProperty("asistencias")
+    private List<Asistencia> asistencias = new ArrayList<>();
+
+    @BsonProperty("inasistencias")
+    private int inasistencias = 0;
+
   // --- Getters and Setters ---
 
   public ObjectId getId() {
     return id;
-  }
+}
 
-  public void setId(ObjectId id) {
+public void setId(ObjectId id) {
     this.id = id;
-  }
+}
 
-  public String getCorreo() {
-    return correo;
-  }
-
-  public void setCorreo(String correo) {
-    this.correo = correo;
-  }
-
-  public Boolean getActivo() {
+public Boolean getActivo() {
     return activo;
-  }
+}
 
-  public Boolean setActivo(Boolean activo) {
+public void setActivo(Boolean activo) {
     this.activo = activo;
-    return activo;
-  }
+}
 
-  public String getIdDocumento() {
+public String getCorreo() {
+    return correo;
+}
+
+public void setCorreo(String correo) {
+    this.correo = correo;
+}
+
+public String getIdDocumento() {
     return idDocumento;
-  }
+}
 
-  public void setIdDocumento(String idDocumento) {
+public void setIdDocumento(String idDocumento) {
     this.idDocumento = idDocumento;
-  }
+}
 
-  public String getMensualidad() {
+public String getMensualidad() {
     return mensualidad;
-  }
+}
 
-  public void setMensualidad(String mensualidad) {
+public void setMensualidad(String mensualidad) {
     this.mensualidad = mensualidad;
-  }
+}
 
-  public String getNombre() {
+public String getNombre() {
     return nombre;
-  }
+}
 
-  public void setNombre(String nombre) {
+public void setNombre(String nombre) {
     this.nombre = nombre;
-  }
+}
 
-  public Integer getTelefono() {
+public Integer getTelefono() {
     return telefono;
-  }
+}
 
-  public void setTelefono(Integer telefono) {
+public void setTelefono(Integer telefono) {
     this.telefono = telefono;
-  }
+}
 
-  public ObjectId getAdminId() {
+public ObjectId getAdminId() {
     return adminId;
-  }
+}
 
-  public void setAdminId(ObjectId adminId) {
+public void setAdminId(ObjectId adminId) {
     this.adminId = adminId;
-  }
+}
 
-  public ObjectId getGymId() {
+public ObjectId getGymId() {
     return gymId;
-  }
+}
 
-  public void setGymId(ObjectId gymId) {
+public void setGymId(ObjectId gymId) {
     this.gymId = gymId;
-  }
+}
 
-  public String getUsername() {
+public String getUsername() {
     return username;
-  }
+}
 
-  public void setUsername(String username) {
+public void setUsername(String username) {
     this.username = username;
-  }
+}
 
-  public String getPassword() {
+public String getPassword() {
     return password;
-  }
+}
 
-  public void setPassword(String password) {
+public void setPassword(String password) {
     this.password = password;
-  }
+}
 
-  // --- Equals and HashCode ---
+public List<Asistencia> getAsistencias() {
+    return asistencias;
+}
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    ClientEntity client = (ClientEntity) o;
-    return Objects.equals(id, client.id) &&
-        Objects.equals(activo, client.activo) &&
-        Objects.equals(correo, client.correo) &&
-        Objects.equals(idDocumento, client.idDocumento) &&
-        Objects.equals(mensualidad, client.mensualidad) &&
-        Objects.equals(nombre, client.nombre) &&
-        Objects.equals(telefono, client.telefono) &&
-        Objects.equals(adminId, client.adminId) &&
-        Objects.equals(gymId, client.gymId) &&
-        Objects.equals(username, client.username) &&
-        Objects.equals(password, client.password);
-  }
+public void setAsistencias(List<Asistencia> asistencias) {
+    this.asistencias = asistencias;
+}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, correo, idDocumento, mensualidad, nombre, telefono, adminId, gymId, username, password);
-  }
+public int getInasistencias() {
+    return inasistencias;
+}
 
-  // --- ToString ---
+public void setInasistencias(int inasistencias) {
+    this.inasistencias = inasistencias;
+}
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class ClientEntity {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    activo: ").append(toIndentedString(activo)).append("\n");
-    sb.append("    correo: ").append(toIndentedString(correo)).append("\n");
-    sb.append("    idDocumento: ").append(toIndentedString(idDocumento)).append("\n");
-    sb.append("    mensualidad: ").append(toIndentedString(mensualidad)).append("\n");
-    sb.append("    nombre: ").append(toIndentedString(nombre)).append("\n");
-    sb.append("    telefono: ").append(toIndentedString(telefono)).append("\n");
-    sb.append("    adminId: ").append(toIndentedString(adminId)).append("\n");
-    sb.append("    gymId: ").append(toIndentedString(gymId)).append("\n");
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
+// ----------- Clase interna para asistencia -----------
 
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
+public static class Asistencia {
+    private LocalDate fecha;
+    private List<String> musculos;
+
+    public LocalDate getFecha() {
+        return fecha;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public List<String> getMusculos() {
+        return musculos;
+    }
+
+    public void setMusculos(List<String> musculos) {
+        this.musculos = musculos;
+    }
+}
+
+// ----------- Equals, HashCode y ToString ------------
+
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ClientEntity)) return false;
+    ClientEntity that = (ClientEntity) o;
+    return Objects.equals(id, that.id) &&
+            Objects.equals(correo, that.correo) &&
+            Objects.equals(username, that.username);
+}
+
+@Override
+public int hashCode() {
+    return Objects.hash(id, correo, username);
+}
+
+@Override
+public String toString() {
+    return "ClientEntity{" +
+            "id=" + id +
+            ", nombre='" + nombre + '\'' +
+            ", correo='" + correo + '\'' +
+            ", username='" + username + '\'' +
+            '}';
+}
 }
 

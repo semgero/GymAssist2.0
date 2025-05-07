@@ -11,5 +11,5 @@ public interface ClientRepository extends MongoRepository<ClientEntity, ObjectId
     Optional<ClientEntity> findByCorreo(String correo);
     ClientEntity findUsernameById(Long id);
     List<ClientEntity> findByGymId(ObjectId gymId);
-
+    Optional<ClientEntity> findByUsername(String username);
 }
