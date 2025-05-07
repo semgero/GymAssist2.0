@@ -1,39 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Registrar Gimnasio</title>
-    <link rel="stylesheet" href="/Styles/estilos.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear Gimnasio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/Styles/crearGimnasio.css" />
 </head>
 <body>
-    <h2>Registro de Gimnasio</h2>
-    <form th:action="@{/gimnasios/register}" method="post" enctype="multipart/form-data">
-        <div>
-            <label for="rut">RUT:</label>
-            <input type="number" id="rut" name="rut" th:value="*{rut}" required>
+  <div class="container">
+    <div class="form-card">
+      <h1>Bienvenido a <span>GymAssist</span></h1>
+      <p>Antes de comenzar, cuéntanos sobre tu gimnasio.</p>
+      <form th:action="@{/gimnasios/register}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="nombreGimnasio">🏋️ Nombre del Gimnasio</label>
+          <input type="text" id="nombreGymnasio" name="nombreGymnasio" th:value="*{nombreGymnasio}" required>
         </div>
-        <div>
-            <label for="nombreGymnasio">Nombre del Gimnasio:</label>
-            <input type="text" id="nombreGymnasio" name="nombreGymnasio" th:value="*{nombreGymnasio}" required>
+
+        <div class="form-group">
+          <label for="rut">📄 RUT</label>
+          <input type="number" id="rut" name="rut" th:value="*{rut}" required>
         </div>
-        <div>
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" th:text="*{descripcion}" required></textarea>
+
+        <div class="form-group">
+          <label for="direccion">📍 Dirección</label>
+          <input type="text" id="direccion" name="direccion" th:value="*{direccion}" required>
         </div>
-        <div>
-            <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" name="direccion" th:value="*{direccion}" required>
+
+        <div class="form-group">
+          <label for="descripcion">📝 Descripción</label>
+          <textarea id="descripcion" name="descripcion" th:text="*{descripcion}" required></textarea>
         </div>
-        <div>
-            <label for="fotos">Foto:</label>
-            <input type="file" name="fotos">
+
+        <div class="form-group">
+          <label for="fotos">📷 Subir Fotos</label>
+          <div class="file-input-wrapper">
+            <label class="file-input-label">
+              Seleccionar Fotos
+              <input type="file" id="fotos" name="fotos" accept="image/*"
+                onchange="document.querySelector('.file-input-text').textContent = this.files[0]?.name || 'Ningún archivo seleccionado';">
+            </label>
+            <div class="file-input-text">Ningún archivo seleccionado</div>
+          </div>
         </div>
-        <div>
-            <button type="submit">Registrar Gimnasio</button>
-        </div>
-    </form>
-    <!-- Mensaje de éxito/error opcional -->
-    <div th:if="${success}" style="color:green;">¡Gimnasio registrado correctamente!</div>
-    <div th:if="${error}" style="color:red;">Error al registrar el gimnasio.</div>
+        
+        
+
+        <button type="submit">✅ Registrar Gimnasio</button>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

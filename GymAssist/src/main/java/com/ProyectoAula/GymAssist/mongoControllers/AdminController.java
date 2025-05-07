@@ -62,7 +62,7 @@ public class AdminController {
     public String agregarCliente(@RequestParam String nombre,
             @RequestParam String correo,
             @RequestParam String idDocumento,
-            @RequestParam String telefono,
+            @RequestParam Integer telefono,
             @RequestParam String mensualidad,
             @RequestParam String username,
             @RequestParam String password,

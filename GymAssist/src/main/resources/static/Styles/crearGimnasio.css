@@ -1,0 +1,195 @@
+/* ===== Variables ===== */
+:root {
+  --font-base: 'Inter', sans-serif;
+  --color-bg: background linear-gradient(135deg, #0e75b9 , #fff );
+  --color-card: #ffffff;
+  --color-gradient-start: #e6f7ff;
+  --color-gradient-end: #ffffff;
+  --color-primary: #059adf;
+  --color-secondary: #1f5290;
+  --color-text: #333333;
+  --color-placeholder: #999999;
+  --color-border: #d1d5db;
+  --radius: 0.5rem;
+  --transition-fast: 0.2s ease;
+  --shadow-light: 0 4px 12px rgba(0,0,0,0.05);
+  --shadow-hover: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+/* ===== Reset & Body ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-base);
+}
+body {
+  background: var(--color-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+/* ===== Contenedor ===== */
+.container {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ===== Form Card ===== */
+.form-card {
+  background: linear-gradient(160deg, var(--color-gradient-start), var(--color-gradient-end));
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  box-shadow: var(--shadow-light);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.form-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ===== Title & Decorative Line Under GymAssist ===== */
+.form-card h1 {
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.form-card h1 span {
+  position: relative;
+  color: var(--color-primary);
+}
+.form-card h1 span::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-125%);
+  width: 60px;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+.form-card p {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+/* ===== Form Groups ===== */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+/* ===== Inputs & Textarea ===== */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-placeholder);
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 6px rgba(5,154,223,0.3);
+}
+
+/* ===== Styled File Input ===== */
+/* ---- Wrapper sólo layout, ya no posiciona el input ---- */
+.file-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ---- Label-actúa-como-botón: posicion relativa para contener el input ---- */
+.file-input-label {
+  position: relative;
+  padding: 0.75rem 1rem;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- Input dentro del label, oculto y sólo clickeable encima ---- */
+.file-input-label input[type="file"] {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ---- Hover del botón ---- */
+.file-input-label:hover {
+  background: var(--color-secondary);
+  box-shadow: 0 2px 8px rgba(31,82,144,0.3);
+}
+
+/* ---- Texto del nombre de archivo ---- */
+.file-input-text {
+  flex: 1 1 auto;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== Submit Button ===== */
+button[type="submit"] {
+  width: 100%;
+  padding: 0.85rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+button[type="submit"]:hover {
+  background: var(--color-secondary);
+  transform: translateY(-2px);
+}
+button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .form-card {
+    padding: 1.5rem 1rem;
+  }
+}

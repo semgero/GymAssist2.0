@@ -1,109 +1,188 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/Imagenes/logo_icon.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdminHome - Gym Management</title>
-    <link rel="stylesheet" href="/Styles/server.css">
-    <link rel="stylesheet" href="/Styles/AdminHome.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GymAssist Admin</title>
+  <!-- FontAwesome para los iconos -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/Styles/dashboard.css"/>
+  <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
 </head>
 <body>
-    <div class="hamburger" id="hamburger">&#9776;</div>
-
-    <div class="sidebar" id="sidebar">
-        <h2>Gym Management</h2>
-        <ul>
-            <li><a href="/dashboard">🏠 Dashboard</a></li>
-            <li><a href="/AdminHome">👥 AdminHome</a></li>
-            <li><a href="/pagos">💵 Pagos</a></li>
-            <li><a href="/configuracion">⚙️ Configuración</a></li>
-        </ul>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="navbar-brand">GymAssist Admin</div>
     </div>
-
-    <div class="main-content">
-        <header>
-            <h1>AdminHome Registrados</h1>
-        </header>
-        
-        <div class="add-client-form">  
-            <form th:action="@{/Api/Admin/Home}" method="post">
-                <h2>Agregar Cliente</h2>
-                <input type="text" th:name="nombre" placeholder="Nombre Completo" id="clientName" required>
-                <input type="email" th:name="correo" placeholder="Correo Electrónico" id="clientEmail" required>
-                <input type="tel" th:name="telefono" placeholder="Número de Teléfono" id="clientPhone" required>
-                <select th:name="mensualidad" required>
-                    <option value="Plan Mensual">Plan Mensual</option>
-                </select>
-                <!-- Nuevo campo para el username -->
-                <input type="text" th:name="username" placeholder="Username" id="clientUsername" required>
-                <input type="text" th:name="idDocumento" placeholder="ID Documento" id="clientIdDocument" required>
-                <!-- Nuevo campo para la contraseña -->
-                <input type="password" th:name="password" placeholder="Password" id="clientPassword" required>
-                <input type="hidden" name="adminId" th:value="${adminId}" />
-                <input type="hidden" name="gymId" th:value="${gymId}" />
-                <button type="submit">Añadir Cliente</button>
-            </form>
+    <div class="navbar-right">
+      <!-- Selector de tema -->
+      <button class="btn-theme" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+      <!-- Perfil -->
+      <div class="profile">
+        <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
+        <div id="dropdown" class="dropdown">
+          <a href="#"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a th:href="@{/Api/Auth/Logout}" class="danger">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
         </div>
+      </div>
+    </div>
+  </header>
 
-        <div class="client-list">           
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Teléfono</th>
-                        <th>Plan</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="cliente : ${AdminHome}">
-                        <td th:text="${cliente.nombre}"></td>
-                        <td th:text="${cliente.correo}"></td>
-                        <td th:text="${cliente.telefono}"></td>
-                        <td th:text="${cliente.mensualidad}"></td>
-                        <td th:text="${cliente.username}"></td>  <!-- Columna para el username -->
-                        <td th:text="${cliente.idDocumento}"></td>  <!-- Columna para el password -->
-                        <td>
-                            <a class="action-btn" th:href="@{/Api/Admin/edit/{id}(id=${cliente.id})}">Editar</a>
-                            <a class="action-btn delete-btn" th:href="@{/Api/Admin/delete/{id}(id=${cliente.id})}">Borrar</a>
-                        </td>
-                        <td>
-                            <span th:if="${cliente.activo}" class="badge badge-success">Activo</span>
-                            <span th:if="${!cliente.activo}" class="badge badge-danger">Inactivo</span>
-                            <!-- Si tienes más estados, puedes agregar más condiciones aquí -->
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <a href="#" title="Dashboard">
+        <i class="fas fa-home icon"></i>
+        <span class="text">Home</span>
+      </a>
+      <a href="#" title="Usuarios">
+        <i class="fas fa-users icon"></i>
+        <span class="text">prueba</span>
+      </a>
+      <a href="#" title="Membresías">
+        <i class="fas fa-credit-card icon"></i>
+        <span class="text">Membresías</span>
+      </a>
+      <a href="#" title="Rutinas">
+        <i class="fas fa-calendar-alt icon"></i>
+        <span class="text">Rutinas</span>
+      </a>
+      <a href="#" class="active" title="dashboard">
+        <i class="fas fa-chart-pie icon"></i>
+        <span class="text">dashboard</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <h1>Dashboard</h1>
+    <div class="card">
+        <div class="tarjetas_usuarios">
+            <i class="fas fa-user-check"></i>
+            <h2>Usuarios Activos</h2>
+            <div class="count" data-target="520">0</div>
+            <p>Actualmente registrados y en actividad.</p>
+          </div>
+      
+          <div class="tarjetas_usuarios">
+            <i class="fas fa-user-slash"></i>
+            <h2>Usuarios Retirados</h2>
+            <div class="count" data-target="134">0</div>
+            <p>Usuarios suspendidos en el sistema.</p>
+          </div>
+      
+          <div class="tarjetas_usuarios">
+            <i class="fas fa-users"></i>
+            <h2>Usuarios Totales</h2>
+            <div class="count" data-target="654">0</div>
+            <p>todos los usuarios registrados.</p>
+          </div>
         </div>
     </div>
+    <!-- Botón para abrir el modal -->
+    <button id="abrirModal" class="btn-agregar-cliente">Agregar Cliente</button>
 
-   
-    <script>
-        const hamburger = document.getElementById('hamburger');
-        const sidebar = document.getElementById('sidebar');
+    <!-- Modal -->
+    <div id="modalCliente" class="modal">
+      <div class="modal-contenido">
+        <span class="cerrar" id="cerrarModal">&times;</span>
+        <div class="form-container">
+          <h2>Agregar Cliente</h2>
+          <form class="formulario-cliente" th:action="@{/Api/Admin/Home}" method="post">
+            <div class="form-group">
+              <label for="nombre">Nombre completo</label>
+              <input type="text" th:name="nombre" placeholder="Nombre Completo" id="clientName" required>
+            </div>
+            <div class="form-group">
+              <label for="correo">Correo electrónico</label>
+              <input type="email" th:name="correo" placeholder="Correo Electrónico" id="clientEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="idDocumento">Numero de Documento</label>
+              <input type="tel" id="idDocumento" name="idDocumento" placeholder="Documento" required>
+            </div>
+            <div class="form-group">
+              <label for="telefono">Número telefónico</label>
+              <input type="tel" th:name="telefono" placeholder="Número de Teléfono" id="clientPhone" required>
+            </div>
+            <div class="form-group">
+              <label for="plan">Tipo de plan</label>
+              <select th:name="mensualidad" required>
+                <option value="">Selecciona un plan</option>
+                <option value="mensual">Mensual</option>
+                <option value="trimestral">Trimestral</option>
+                <option value="anual">Anual</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="username">Nombre de usuario</label>
+              <input type="text" th:name="username" placeholder="Username" id="clientUsername" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Contraseña</label>
+              <input type="password" th:name="password" placeholder="Password" id="clientPassword" required>
+              <input type="hidden" name="adminId" th:value="${adminId}" />
+              <input type="hidden" name="gymId" th:value="${gymId}" />
+            </div>
+            <button type="submit" class="btn-agregar">Agregar Cliente</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- tabla de clientes -->
+    <div class="tabla-container">
+      <div class="tabla-scroll">
+        <table class="tabla-usuarios">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo Electrónico</th>
+              <th>Numero de Documento</th>
+              <th>Teléfono</th>
+              <th>Tipo de Plan</th>
+              <th>Nombre de Usuario</th>
+              <th>Estado de Cuenta</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="cliente : ${AdminHome}">
+              <td th:text="${cliente.nombre}"></td>
+              <td th:text="${cliente.correo}"></td>              
+              <td th:text="${cliente.idDocumento}"></td>  <!-- Columna para el password -->
+              <td th:text="${cliente.telefono}"></td>
+              <td th:text="${cliente.mensualidad}"></td>
+              <td th:text="${cliente.username}"></td>
+              <td>
+                  <span th:if="${cliente.activo}" class="badge badge-success">Activo</span>
+                  <!-- Si tienes más estados, puedes agregar más condiciones aquí -->
+              </td>  <!-- Columna para el username -->
+              <td>
+                  <a class="btn-editar" th:href="@{/Api/Admin/edit/{id}(id=${cliente.id})}">✏️editar</a>
+                  <a class="btn-eliminar" th:href="@{/Api/Admin/delete/{id}(id=${cliente.id})}">🗑️suspender</a>
+              </td>
+              <td>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+  </main>
 
-        
-        hamburger.addEventListener('click', (event) => {
-            event.stopPropagation(); 
-            sidebar.classList.toggle('active');
-        });
-
-        
-        document.body.addEventListener('click', (event) => {
-            
-            if (!sidebar.contains(event.target) && !hamburger.contains(event.target) && sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-            }
-        });
-
-        
-        sidebar.addEventListener('click', (event) => {
-            event.stopPropagation();
-        });
-    </script>
-
+  <!-- Footer -->
+  <footer class="footer">
+    &copy; 2025 GymAssist. Todos los derechos reservados.
+  </footer>
 </body>
+<script src="/Styles/dashboard.js"></script>
 </html>

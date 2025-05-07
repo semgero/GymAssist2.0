@@ -26,7 +26,7 @@ public class ClienteService {
     }
 
     // Guardar un cliente nuevo (cuando el admin crea uno)
-    public void crearCliente(String nombre, String correo, String telefono, String mensualidad, String username, String password, ObjectId adminId, ObjectId gymId, String idDocumento) {
+    public void crearCliente(String nombre, String correo, Integer telefono, String mensualidad, String username, String password, ObjectId adminId, ObjectId gymId, String idDocumento) {
         // Verificar si el correo electrónico ya está registrado
         if (userRepository.existsByEmail(correo)) {
             throw new RuntimeException("El correo electrónico ya está en uso.");
