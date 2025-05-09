@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 import jakarta.annotation.Generated;
+import java.time.LocalDateTime;
 
 @JsonTypeName("rutina")
 @Generated(value = "com.mongodb.migrator.application.codegen.config.java.JavaSpringCodegenConfig", date = "2025-04-23T20:31:20.848102300-05:00[America/Bogota]", comments = "Generator version: 7.10.0")
@@ -29,10 +30,42 @@ public class RutinaEntity {
   private String series;
 
   @BsonProperty("gymId")
-  private Long gymId;
+  private ObjectId gymId;
 
   @BsonProperty("fotosRutina")
   private List<FotoRutina> fotosRutina;
+
+  @BsonProperty("createdAt")
+  private LocalDateTime createdAt;
+
+  @BsonProperty("updatedAt")
+  private LocalDateTime updatedAt;
+
+  public RutinaEntity createdAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+    return this;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public RutinaEntity updatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+    return this;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
 
   public RutinaEntity id(ObjectId id) {
     this.id = id;
@@ -90,17 +123,17 @@ public class RutinaEntity {
     this.series = series;
   }
 
-  public RutinaEntity gymId(Long gymId) {
+  public RutinaEntity gymId(ObjectId gymId) {
     this.gymId = gymId;
     return this;
   }
 
   @JsonProperty("gymId")
-  public Long getGymId() {
+  public ObjectId getGymId() {
     return gymId;
   }
 
-  public void setGymId(Long gymId) {
+  public void setGymId(ObjectId gymId) {
     this.gymId = gymId;
   }
 
@@ -132,12 +165,14 @@ public class RutinaEntity {
         Objects.equals(this.repeticiones, rutina.repeticiones) &&
         Objects.equals(this.series, rutina.series) &&
         Objects.equals(this.gymId, rutina.gymId) &&
-        Objects.equals(this.fotosRutina, rutina.fotosRutina);
+        Objects.equals(this.fotosRutina, rutina.fotosRutina)&&
+        Objects.equals(this.createdAt, rutina.createdAt) &&
+        Objects.equals(this.updatedAt, rutina.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, grupoMuscular, repeticiones, series, gymId, fotosRutina);
+    return Objects.hash(id, grupoMuscular, repeticiones, series, gymId, fotosRutina, createdAt, updatedAt);
   }
 
   @Override
@@ -150,6 +185,8 @@ public class RutinaEntity {
     sb.append("    series: ").append(toIndentedString(series)).append("\n");
     sb.append("    gymId: ").append(toIndentedString(gymId)).append("\n");
     sb.append("    fotosRutina: ").append(toIndentedString(fotosRutina)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -166,7 +203,8 @@ public class RutinaEntity {
     private String url;
     private String descripcion;
 
-    public FotoRutina() {}
+    public FotoRutina() {
+    }
 
     public FotoRutina(String url, String descripcion) {
       this.url = url;
@@ -193,11 +231,13 @@ public class RutinaEntity {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o)
+        return true;
+      if (o == null || getClass() != o.getClass())
+        return false;
       FotoRutina that = (FotoRutina) o;
       return Objects.equals(url, that.url) &&
-             Objects.equals(descripcion, that.descripcion);
+          Objects.equals(descripcion, that.descripcion);
     }
 
     @Override
@@ -208,9 +248,9 @@ public class RutinaEntity {
     @Override
     public String toString() {
       return "FotoRutina{" +
-              "url='" + url + '\'' +
-              ", descripcion='" + descripcion + '\'' +
-              '}';
+          "url='" + url + '\'' +
+          ", descripcion='" + descripcion + '\'' +
+          '}';
     }
   }
 }

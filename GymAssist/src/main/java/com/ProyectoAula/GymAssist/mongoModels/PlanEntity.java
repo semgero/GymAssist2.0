@@ -1,5 +1,6 @@
 package com.ProyectoAula.GymAssist.mongoModels;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,9 +37,6 @@ public class PlanEntity {
 
   @BsonProperty("gymId")
   private ObjectId gymId;
-
-  @BsonProperty("clienteId")
-  private Long clienteId;
 
   public PlanEntity id(ObjectId id) {
     this.id = id;
@@ -142,20 +140,6 @@ public class PlanEntity {
     this.gymId = gymId;
   }
 
-  public PlanEntity clienteId(Long clienteId) {
-    this.clienteId = clienteId;
-    return this;
-  }
-
-  @JsonProperty("clienteId")
-  public Long getClienteId() {
-    return clienteId;
-  }
-
-  public void setClienteId(Long clienteId) {
-    this.clienteId = clienteId;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -171,13 +155,12 @@ public class PlanEntity {
         Objects.equals(this.precio, plan.precio) &&
         Objects.equals(this.duracion, plan.duracion) &&
         Objects.equals(this.beneficios, plan.beneficios) &&
-        Objects.equals(this.gymId, plan.gymId) &&
-        Objects.equals(this.clienteId, plan.clienteId);
+        Objects.equals(this.gymId, plan.gymId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nombre, descripcion, precio, duracion, beneficios, gymId, clienteId);
+    return Objects.hash(id, nombre, descripcion, precio, duracion, beneficios, gymId);
   }
 
   @Override
@@ -191,7 +174,6 @@ public class PlanEntity {
     sb.append("    duracion: ").append(toIndentedString(duracion)).append("\n");
     sb.append("    beneficios: ").append(toIndentedString(beneficios)).append("\n");
     sb.append("    gimnasioId: ").append(toIndentedString(gymId)).append("\n");
-    sb.append("    clienteId: ").append(toIndentedString(clienteId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

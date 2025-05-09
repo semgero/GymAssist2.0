@@ -18,5 +18,5 @@ import org.bson.types.ObjectId;
 public interface RutinaRepository extends MongoRepository<RutinaEntity, ObjectId> {
     // Custom query methods can be defined here if needed
     // For example, to find by gymId:
-    List<RutinaEntity> findByGymId(Long gymId);
+    List<RutinaEntity> findByGymId(ObjectId gymId);
 }

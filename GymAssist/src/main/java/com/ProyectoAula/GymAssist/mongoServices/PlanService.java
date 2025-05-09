@@ -22,10 +22,6 @@ public class PlanService {
         return planRepository.findByGymId(gymId);
     }
 
-    public List<PlanEntity> getPlanesByClienteId(Long clienteId) {
-        return planRepository.findByClienteId(clienteId);
-    }
-
     public Optional<PlanEntity> getPlanById(ObjectId id) {
         return planRepository.findById(id);
     }
@@ -39,7 +35,6 @@ public class PlanService {
         existingPlan.setDuracion(planDetails.getDuracion());
         existingPlan.setBeneficios(planDetails.getBeneficios());
         existingPlan.setGymId(planDetails.getGymId());
-        existingPlan.setClienteId(planDetails.getClienteId());
         return planRepository.save(existingPlan);
     }
 

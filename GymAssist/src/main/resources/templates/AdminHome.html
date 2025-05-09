@@ -45,11 +45,11 @@
         <i class="fas fa-users icon"></i>
         <span class="text">prueba</span>
       </a>
-      <a href="#" title="Membresías">
-        <i class="fas fa-credit-card icon"></i>
-        <span class="text">Membresías</span>
+        <a th:href="@{/planes/gimnasio/{gymId}(gymId=${gymId})}" title="Membresías">
+          <i class="fas fa-credit-card icon"></i>
+          <span class="text">Membresías</span>
       </a>
-      <a href="#" title="Rutinas">
+      <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" title="Rutinas">
         <i class="fas fa-calendar-alt icon"></i>
         <span class="text">Rutinas</span>
       </a>
@@ -114,11 +114,12 @@
             </div>
             <div class="form-group">
               <label for="plan">Tipo de plan</label>
-              <select th:name="mensualidad" required>
+              <select name="planId" required>
                 <option value="">Selecciona un plan</option>
-                <option value="mensual">Mensual</option>
-                <option value="trimestral">Trimestral</option>
-                <option value="anual">Anual</option>
+                <option th:each="plan : ${planes}"
+                        th:value="${plan.id}"
+                        th:text="${plan.nombre} + ' - $' + ${plan.precio} + ' / ' + ${plan.duracion} + ' meses'">
+                </option>
               </select>
             </div>
             <div class="form-group">
@@ -156,17 +157,19 @@
             <tr th:each="cliente : ${AdminHome}">
               <td th:text="${cliente.nombre}"></td>
               <td th:text="${cliente.correo}"></td>              
-              <td th:text="${cliente.idDocumento}"></td>  <!-- Columna para el password -->
+              <td th:text="${cliente.idDocumento}"></td> 
               <td th:text="${cliente.telefono}"></td>
               <td th:text="${cliente.mensualidad}"></td>
               <td th:text="${cliente.username}"></td>
               <td>
-                  <span th:if="${cliente.activo}" class="badge badge-success">Activo</span>
-                  <!-- Si tienes más estados, puedes agregar más condiciones aquí -->
-              </td>  <!-- Columna para el username -->
+                <span th:if="${cliente.estado.name() == 'ACTIVO'}" class="badge badge-success">Activo</span>
+                <span th:if="${cliente.estado.name() == 'PENDIENTE'}" class="badge badge-warning">Pendiente</span>
+                <span th:if="${cliente.estado.name() == 'SUSPENDIDO'}" class="badge badge-danger">Suspendido</span>
+              </td>
               <td>
                   <a class="btn-editar" th:href="@{/Api/Admin/edit/{id}(id=${cliente.id})}">✏️editar</a>
-                  <a class="btn-eliminar" th:href="@{/Api/Admin/delete/{id}(id=${cliente.id})}">🗑️suspender</a>
+                  <a th:if="${cliente.estado.name() != 'SUSPENDIDO'}"class="btn-suspender"th:href="@{/Api/Admin/suspender/{id}(id=${cliente.id})}">🚫 Suspender</a>
+                  <a th:if="${cliente.estado.name() == 'SUSPENDIDO'}"class="btn-activar" th:href="@{/Api/Admin/activar/{id}(id=${cliente.id})}">✅ Activar</a>
               </td>
               <td>
               </td>

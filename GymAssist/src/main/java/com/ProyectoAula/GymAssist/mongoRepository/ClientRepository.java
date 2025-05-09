@@ -12,4 +12,6 @@ public interface ClientRepository extends MongoRepository<ClientEntity, ObjectId
     ClientEntity findUsernameById(Long id);
     List<ClientEntity> findByGymId(ObjectId gymId);
     Optional<ClientEntity> findByUsername(String username);
+    long countByPlanId(ObjectId planId); // Método para contar clientes por plan
+
 }

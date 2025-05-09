@@ -1,5 +1,4 @@
 package com.ProyectoAula.GymAssist.mongoModels;
-//
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,8 +21,12 @@ public class ClientEntity {
   @BsonProperty("_id")
   private ObjectId id = null;
 
-  @BsonProperty("activo")
-  private Boolean activo = true;
+  public enum EstadoCliente {
+    ACTIVO, PENDIENTE, SUSPENDIDO
+  }
+
+  @BsonProperty("estado")
+  private EstadoCliente estado = EstadoCliente.PENDIENTE;
 
   @BsonProperty("correo")
   private String correo;
@@ -40,8 +43,8 @@ public class ClientEntity {
   @BsonProperty("telefono")
   private Integer telefono;
 
-  @BsonProperty("adminId")
-  private ObjectId adminId;
+  @BsonProperty("planId")
+  private ObjectId planId;
 
   @BsonProperty("gymId")
   private ObjectId gymId;
@@ -58,6 +61,12 @@ public class ClientEntity {
     @BsonProperty("inasistencias")
     private int inasistencias = 0;
 
+  @BsonProperty("fechaInicioMembresia")
+  private LocalDate fechaInicioMembresia;
+
+  @BsonProperty("fechaFinMembresia")
+  private LocalDate fechaFinMembresia;
+
   // --- Getters and Setters ---
 
   public ObjectId getId() {
@@ -68,12 +77,12 @@ public void setId(ObjectId id) {
     this.id = id;
 }
 
-public Boolean getActivo() {
-    return activo;
+public EstadoCliente getEstado() {
+    return estado;
 }
 
-public void setActivo(Boolean activo) {
-    this.activo = activo;
+public void setEstado(EstadoCliente estado) {
+    this.estado = estado;
 }
 
 public String getCorreo() {
@@ -116,12 +125,12 @@ public void setTelefono(Integer telefono) {
     this.telefono = telefono;
 }
 
-public ObjectId getAdminId() {
-    return adminId;
+public ObjectId getPlanId() {
+    return planId;
 }
 
-public void setAdminId(ObjectId adminId) {
-    this.adminId = adminId;
+public void setPlanId(ObjectId planId) {
+    this.planId = planId;
 }
 
 public ObjectId getGymId() {
@@ -164,6 +173,22 @@ public void setInasistencias(int inasistencias) {
     this.inasistencias = inasistencias;
 }
 
+public LocalDate getFechaInicioMembresia() {
+    return fechaInicioMembresia;
+}
+
+public void setFechaInicioMembresia(LocalDate fechaInicioMembresia) {
+    this.fechaInicioMembresia = fechaInicioMembresia;
+}
+
+public LocalDate getFechaFinMembresia() {
+    return fechaFinMembresia;
+}
+
+public void setFechaFinMembresia(LocalDate fechaFinMembresia) {
+    this.fechaFinMembresia = fechaFinMembresia;
+}
+
 // ----------- Clase interna para asistencia -----------
 
 public static class Asistencia {
@@ -196,12 +221,24 @@ public boolean equals(Object o) {
     ClientEntity that = (ClientEntity) o;
     return Objects.equals(id, that.id) &&
             Objects.equals(correo, that.correo) &&
-            Objects.equals(username, that.username);
+            Objects.equals(username, that.username)&&
+            Objects.equals(nombre, that.nombre) &&
+            Objects.equals(telefono, that.telefono) &&
+            Objects.equals(idDocumento, that.idDocumento) &&
+            Objects.equals(mensualidad, that.mensualidad) &&
+            Objects.equals(estado, that.estado) &&
+            Objects.equals(planId, that.planId) &&
+            Objects.equals(gymId, that.gymId) &&
+            Objects.equals(password, that.password) &&
+            Objects.equals(asistencias, that.asistencias) &&
+            Objects.equals(inasistencias, that.inasistencias) &&
+            Objects.equals(fechaInicioMembresia, that.fechaInicioMembresia) &&
+            Objects.equals(fechaFinMembresia, that.fechaFinMembresia);
 }
 
 @Override
 public int hashCode() {
-    return Objects.hash(id, correo, username);
+    return Objects.hash(id, correo, username, nombre, telefono, idDocumento, mensualidad, estado, planId, gymId, password, asistencias, inasistencias, fechaInicioMembresia, fechaFinMembresia);
 }
 
 @Override
@@ -211,6 +248,17 @@ public String toString() {
             ", nombre='" + nombre + '\'' +
             ", correo='" + correo + '\'' +
             ", username='" + username + '\'' +
+            ", telefono=" + telefono +
+            ", idDocumento='" + idDocumento + '\'' +
+            ", mensualidad='" + mensualidad + '\'' +
+            ", activo=" + estado +
+            ", planId=" + planId +
+            ", gymId=" + gymId +
+            ", password='" + password + '\'' +
+            ", asistencias=" + asistencias +
+            ", inasistencias=" + inasistencias +
+            ", fechaInicioMembresia=" + fechaInicioMembresia +
+            ", fechaFinMembresia=" + fechaFinMembresia +
             '}';
 }
 }

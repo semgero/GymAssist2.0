@@ -1,8 +1,6 @@
 package com.ProyectoAula.GymAssist.mongoControllers;
 
 import org.bson.types.ObjectId;
-import org.checkerframework.checker.units.qual.g;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,16 +9,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
-
 import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoModels.GimnasiosEntity;
+import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
 import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
 import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
 import com.ProyectoAula.GymAssist.mongoRepository.AdminRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.GimnasiosRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
 import java.security.Principal;
+import java.util.List;
+import com.ProyectoAula.GymAssist.mongoServices.PlanService;
 
 @Controller
 @RequestMapping("/Api/Admin")
@@ -31,11 +31,13 @@ public class AdminController {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
     private final GimnasiosRepository gimnasiosRepository;
+    private final PlanService planService;
 
     // Inyección de dependencias para ClienteService y BCryptPasswordEncoder
-    @Autowired
     public AdminController(ClienteService clienteService, BCryptPasswordEncoder passwordEncoder,
-            UserRepository userRepository, AdminRepository adminRepository, GimnasiosRepository gimnasiosRepository) {
+            UserRepository userRepository, AdminRepository adminRepository, GimnasiosRepository gimnasiosRepository,
+            PlanService planService) {
+        this.planService = planService;
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
         this.gimnasiosRepository = gimnasiosRepository;
@@ -54,6 +56,10 @@ public class AdminController {
 
         // Pasar la lista de clientes
         model.addAttribute("AdminHome", clienteService.listarClientesPorGym(gym.getId()));
+        if (gym != null) {
+            List<PlanEntity> planes = planService.getPlanesByGimnasioId(gym.getId());
+            model.addAttribute("planes", planes);
+        }
         return "AdminHome"; // Página de AdminHome
     }
 
@@ -63,14 +69,17 @@ public class AdminController {
             @RequestParam String correo,
             @RequestParam String idDocumento,
             @RequestParam Integer telefono,
-            @RequestParam String mensualidad,
             @RequestParam String username,
             @RequestParam String password,
-            @RequestParam ObjectId adminId,
+            @RequestParam ObjectId planId,
             @RequestParam ObjectId gymId) {
 
+        PlanEntity plan = planService.getPlanById(planId).orElse(null);
+        String mensualidad = plan != null ? plan.getNombre() : "Desconocido";
+
         // Crear el cliente con el servicio
-        clienteService.crearCliente(nombre, correo, telefono, mensualidad, username, password, adminId, gymId, idDocumento);
+        clienteService.crearCliente(nombre, correo, idDocumento, telefono, mensualidad, username, password, gymId,
+                planId);
         return "redirect:/Api/Admin/AdminHome"; // Regresar a AdminHome
     }
 
@@ -100,9 +109,15 @@ public class AdminController {
     }
 
     // Eliminar cliente
-    @GetMapping("/delete/{id}")
-    public String eliminarCliente(@PathVariable ObjectId id) {
-        clienteService.eliminarCliente(id);
-        return "redirect:/Api/Admin/AdminHome"; // Regresar a AdminHome
+    @GetMapping("/suspender/{id}")
+    public String suspenderCliente(@PathVariable ObjectId id) {
+        clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.SUSPENDIDO);
+        return "redirect:/Api/Admin/AdminHome";
+    }
+
+    @GetMapping("/activar/{id}")
+    public String activarCliente(@PathVariable ObjectId id) {
+        clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.ACTIVO);
+        return "redirect:/Api/Admin/AdminHome";
     }
 }

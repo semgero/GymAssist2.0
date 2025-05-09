@@ -18,7 +18,7 @@ public class RutinaService {
         return rutinaRepository.save(rutina);
     }
 
-    public List<RutinaEntity> getRutinasByGymId(Long gymId) {
+    public List<RutinaEntity> getRutinasByGymId(ObjectId gymId) {
         return rutinaRepository.findByGymId(gymId);
     }
     
