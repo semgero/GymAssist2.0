@@ -3,6 +3,8 @@ package com.ProyectoAula.GymAssist.mongoControllers;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,10 +49,22 @@ public class ClientController {
     }
 
     @GetMapping("/imc")
-    public String mostrarFormularioIMC(Model model) {
-        model.addAttribute("imc", null); // para evitar errores si accedes directo despues de terminar las pruebas colocar  ", null"
-        return "Imc";
+    public String mostrarFormularioIMC(Model model, Principal principal) {
+    ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
+        Optional<MedicionesEntity> ultimaMedicion = medicionesService.obtenerUltimaMedicion(cliente.getId());
+
+    if (ultimaMedicion.isPresent()) {
+        MedicionesEntity medicion = ultimaMedicion.get();
+        double imc = medicionesService.calcularIMC(medicion.getPeso(), medicion.getEstatura());
+        String resultado = medicionesService.interpretarIMC(imc);
+        model.addAttribute("imc", imc);
+        model.addAttribute("resultado", resultado);
+    } else {
+        model.addAttribute("imc", null);
     }
+
+    return "Imc";
+}
 
     @PostMapping("/imc/guardar")
     public String guardarIMC(@RequestParam Double peso,
@@ -66,6 +80,6 @@ public class ClientController {
 
     model.addAttribute("imc", imc);
     model.addAttribute("resultado", resultado);
-    return "Imc";
+    return "mc";
 }
 }

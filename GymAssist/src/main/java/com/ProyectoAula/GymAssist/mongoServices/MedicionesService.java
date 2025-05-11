@@ -4,6 +4,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
 import com.ProyectoAula.GymAssist.mongoModels.MedicionesEntity;
 import com.ProyectoAula.GymAssist.mongoRepository.MedicionesRepository;
 
@@ -31,5 +33,9 @@ public class MedicionesService {
         else if (imc < 24.9) return "Peso normal";
         else if (imc < 29.9) return "Sobrepeso";
         else return "Obesidad";
+    }
+
+    public Optional<MedicionesEntity> obtenerUltimaMedicion(ObjectId clienteId) {
+        return medicionesRepository.findTopByClienteIdOrderByFechaRegistroDesc(clienteId);
     }
 }

@@ -8,5 +8,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import com.ProyectoAula.GymAssist.mongoModels.MedicionesEntity;
 
 public interface MedicionesRepository extends MongoRepository<MedicionesEntity, ObjectId> {
-    Optional<MedicionesEntity> findTopByClienteIdOrderByFechaRegistroDesc(Long clienteId);
+    Optional<MedicionesEntity> findTopByClienteIdOrderByFechaRegistroDesc(ObjectId clienteId);
 }
