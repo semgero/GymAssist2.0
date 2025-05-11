@@ -30,7 +30,7 @@ public class MedicionesEntity {
   private Double peso;
 
   @BsonProperty("clienteId")
-  private Long clienteId;
+  private ObjectId  clienteId;
 
   public MedicionesEntity id(ObjectId id) {
     this.id = id;
@@ -108,7 +108,7 @@ public class MedicionesEntity {
     this.peso = peso;
   }
 
-  public MedicionesEntity clienteId(Long clienteId) {
+  public MedicionesEntity clienteId(ObjectId  clienteId) {
     this.clienteId = clienteId;
     return this;
   }
@@ -119,11 +119,11 @@ public class MedicionesEntity {
    */
   
   @JsonProperty("clienteId")
-  public Long getClienteId() {
+  public ObjectId  getClienteId() {
     return clienteId;
   }
 
-  public void setClienteId(Long clienteId) {
+  public void setClienteId(ObjectId  clienteId) {
     this.clienteId = clienteId;
   }
   @Override

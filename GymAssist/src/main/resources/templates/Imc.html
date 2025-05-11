@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Calculadora de IMC</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h2>Calcula tu IMC</h2>
+
+    <form th:action="@{/Api/Cliente/imc/guardar}" method="post">
+        <label for="peso">Peso (kg):</label>
+        <input type="number" name="peso" step="0.1" required><br><br>
+
+        <label for="estatura">Estatura (m):</label>
+        <input type="number" name="estatura" step="0.01" required><br><br>
+
+        <button type="submit">Calcular</button>
+    </form>
+
+    <!-- Mostrar resultado si existe -->
+    <div th:if="${imc != null}">
+        <h3>Resultado</h3>
+        <p>Tu IMC es: <strong th:text="${imc}"></strong></p>
+        <p>Interpretación: <strong th:text="${resultado}"></strong></p>
+    </div>
+
+    <br>
+    <a th:href="@{/Api/Cliente/ClienteHome}">Volver a inicio</a>
+</body>
+</html>

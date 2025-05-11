@@ -1,46 +1,107 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 <head>
-    <title>Panel Cliente</title>
-    <link rel="stylesheet" href="/Styles/ClienteHome.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Asistencia - GymAssist</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/Styles/ClientHome.css"/>
+  <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
 </head>
 <body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="navbar-brand">GymAssist Cliente</div>
+    </div>
+    <div class="navbar-right">
+      <button class="btn-theme" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+      <div class="profile">
+        <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
+        <div id="dropdown" class="dropdown">
+          <a href="#"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a href="#" class="danger"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <a href="clientedashboard.html" title="Dashboard">
+        <i class="fas fa-home icon"></i>
+        <span class="text">Dashboard</span>
+      </a>
+      <a th:href="@{/Api/Cliente/imc}" title="IMC">
+        <i class="fas fa-weight icon"></i>
+        <span class="text">IMC</span>
+      </a>
+      <a href="asistencia.html" class="active" title="Asistencia">
+        <i class="fas fa-calendar-check icon"></i>
+        <span class="text">Asistencia</span>
+      </a>
+      <a href="progreso.html" title="Progreso">
+        <i class="fas fa-chart-line icon"></i>
+        <span class="text">Progreso</span>
+      </a>
+      <a href="membresia.html" title="Mi Membresía">
+        <i class="fas fa-id-card icon"></i>
+        <span class="text">Mi Membresía</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <h1>Historial de Asistencia</h1>
     <div class="perfil">
-        <p th:text="${cliente.nombre}"></p>
-        <p th:text="${cliente.correo}"></p>
-    </div>
+      <h1>Bienvenido</h1>
+      <p th:text="${cliente.nombre}"></p>
+      <p th:text="${cliente.correo}"></p>
+  </div>
 
-    <div class="info-clase">
-        <h2>Gimnasio:</h2>
-        <p th:text="${cliente.gymId}"></p>
+  <div class="info-clase">
+      <h2>Gimnasio:</h2>
 
-        <h3>Ver asistencia</h3>
-        <ul>
-            <li th:each="asistencia : ${cliente.asistencias}">
-                <span th:text="${asistencia.fecha}">Fecha</span> -
-                <span th:text="${asistencia.musculos}">Músculos</span>
-            </li>
-        </ul>
+      
 
-        <p>Total inasistencias: <span th:text="${cliente.inasistencias}"></span></p>
-    </div>
+      <p>Total inasistencias: <span th:text="${cliente.inasistencias}"></span></p>
+  </div>
 
-    <div class="registro-asistencia">
-        <form th:action="@{/Api/Cliente/registrar-asistencia}" method="post">
-            <label for="fecha">Fecha:</label>
-            <input type="date" name="fecha" required />
+  <div class="registro-asistencia">
+      <form th:action="@{/Api/Cliente/registrar-asistencia}" method="post">
+          <label for="fecha">Fecha:</label>
+          <input type="date" name="fecha" required />
 
-            <label for="musculos">Músculos trabajados:</label>
-            <select name="musculos" multiple required>
-                <option value="Pecho">Pecho</option>
-                <option value="Pierna">Pierna</option>
-                <option value="Espalda">Espalda</option>
-                <option value="Bíceps">Bíceps</option>
-                <option value="Tríceps">Tríceps</option>
-            </select>
+          <label for="musculos">Músculos trabajados:</label>
+          <select name="musculos" multiple required>
+              <option value="Pecho">Pecho</option>
+              <option value="Pierna">Pierna</option>
+              <option value="Espalda">Espalda</option>
+              <option value="Bíceps">Bíceps</option>
+              <option value="Tríceps">Tríceps</option>
+          </select>
 
-            <button type="submit">Registrar asistencia</button>
-        </form>
-    </div>
+          <button type="submit">Registrar asistencia</button>
+      </form>
+  </div>
+  
+  <h3>Ver asistencia</h3>
+      <ul>
+          <li th:each="asistencia : ${cliente.asistencias}">
+              <span th:text="${asistencia.fecha}">Fecha</span> -
+              <span th:text="${asistencia.musculos}">Músculos</span>
+          </li>
+      </ul>
+  </main>
+  
+
+  <!-- Footer -->
+  <footer class="footer">
+    &copy; 2025 GymAssist. Todos los derechos reservados.
+  </footer>
 </body>
+<script src="/Styles/ClientHome.js"></script>
 </html>
