@@ -89,6 +89,8 @@
   </div>
   
   <h3>Ver asistencia</h3>
+    <input type="text" id="filtroAsistencia" placeholder="Buscar asistencia..." onkeyup="filtrarAsistencias()"/>
+    <button onclick="toggleAsistencias()">Mostrar/Ocultar asistencias</button>
       <ul>
           <li th:each="asistencia : ${cliente.asistencias}">
               <span th:text="${asistencia.fecha}">Fecha</span> -
@@ -102,6 +104,26 @@
   <footer class="footer">
     &copy; 2025 GymAssist. Todos los derechos reservados.
   </footer>
+
+    <script>
+      function toggleAsistencias() {
+        const lista = document.querySelector("ul");
+        if (lista.style.display === "none") {
+          lista.style.display = "block";
+        } else {
+          lista.style.display = "none";
+        }
+      }
+
+      function filtrarAsistencias() {
+        const filtro = document.getElementById("filtroAsistencia").value.toLowerCase();
+        const asistencias = document.querySelectorAll("ul li");
+
+        asistencias.forEach(item => {
+          const texto = item.textContent.toLowerCase();
+          item.style.display = texto.includes(filtro) ? "list-item" : "none";
+        });
+      }
+    </script>
 </body>
-<script src="/Styles/ClientHome.js"></script>
 </html>

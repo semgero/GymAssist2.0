@@ -24,7 +24,43 @@
         <p>Interpretación: <strong th:text="${resultado}"></strong></p>
     </div>
 
+    <hr>
+
+    <h3>Historial de mediciones</h3>
+    <input type="text" id="filtroFecha" placeholder="Buscar por fecha (YYYY-MM-DD)" onkeyup="filtrarHistorial()" />
+    <button type="button" onclick="toggleHistorial()">Mostrar/Ocultar historial</button>
+
+    <ul id="listaHistorial">
+        <li th:each="med : ${mediciones}">
+            <span th:text="${#temporals.format(med.fechaRegistro, 'yyyy-MM-dd')}">Fecha</span> -
+            <span th:text="${med.peso}">Peso</span> kg,
+            <span th:text="${med.estatura}">Estatura</span> m
+        </li>
+    </ul>
+
     <br>
     <a th:href="@{/Api/Cliente/ClienteHome}">Volver a inicio</a>
+
+
+    <script>
+        function toggleHistorial() {
+            const lista = document.getElementById("listaHistorial");
+            if (lista.style.display === "none") {
+                lista.style.display = "block";
+            } else {
+                lista.style.display = "none";
+            }
+        }
+
+        function filtrarHistorial() {
+            const filtro = document.getElementById("filtroFecha").value.toLowerCase();
+            const items = document.querySelectorAll("#listaHistorial li");
+
+            items.forEach(item => {
+                const texto = item.textContent.toLowerCase();
+                item.style.display = texto.includes(filtro) ? "list-item" : "none";
+            });
+        }
+    </script>   
 </body>
 </html>

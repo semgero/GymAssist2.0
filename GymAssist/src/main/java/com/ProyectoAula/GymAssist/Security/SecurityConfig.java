@@ -75,7 +75,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                         .invalidSessionUrl("/Api/Auth/Login")
                         .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::newSession))
-                .authenticationProvider(authenticationProvider(userDetailsService(userRepository), passwordEncoder())) // SOLO
+                        .authenticationProvider(authenticationProvider(userDetailsService(userRepository), passwordEncoder())) // SOLO
                                                                                                                        // ESTA
                                                                                                                        // LÍNEA
                                                                                                                        // AQUÍ
@@ -142,7 +142,7 @@ public class SecurityConfig {
      */
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return (request, response, authentication) -> {
+        return (_, response, authentication) -> {
             String username = authentication.getName();
             String role = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
