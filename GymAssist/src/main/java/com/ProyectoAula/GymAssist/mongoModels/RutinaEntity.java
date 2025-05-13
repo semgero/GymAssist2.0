@@ -165,7 +165,7 @@ public class RutinaEntity {
         Objects.equals(this.repeticiones, rutina.repeticiones) &&
         Objects.equals(this.series, rutina.series) &&
         Objects.equals(this.gymId, rutina.gymId) &&
-        Objects.equals(this.fotosRutina, rutina.fotosRutina)&&
+        Objects.equals(this.fotosRutina, rutina.fotosRutina) &&
         Objects.equals(this.createdAt, rutina.createdAt) &&
         Objects.equals(this.updatedAt, rutina.updatedAt);
   }
@@ -200,24 +200,40 @@ public class RutinaEntity {
 
   // Clase interna para fotos y descripciones
   public static class FotoRutina {
-    private String url;
+    // Campos
+    private String nombreEjercicio; // ✅ Atributo añadido aquí
+    private String nombreArchivo;
     private String descripcion;
+    private String imagenBase64; // Imagen en Base64
+    private String contentType; // Tipo MIME (ej: "image/jpeg")
 
-    public FotoRutina() {
-    }
-
-    public FotoRutina(String url, String descripcion) {
-      this.url = url;
+    // Constructor completo
+    public FotoRutina(String nombreEjercicio, String nombreArchivo, String descripcion,
+        String imagenBase64, String contentType) {
+      this.nombreEjercicio = nombreEjercicio;
+      this.nombreArchivo = nombreArchivo;
       this.descripcion = descripcion;
+      this.imagenBase64 = imagenBase64;
+      this.contentType = contentType;
     }
 
-    @JsonProperty("url")
-    public String getUrl() {
-      return url;
+    // Getters y Setters (¡OBLIGATORIOS para Spring Data MongoDB!)
+    @JsonProperty("nombreEjercicio")
+    public String getNombreEjercicio() {
+      return nombreEjercicio;
     }
 
-    public void setUrl(String url) {
-      this.url = url;
+    public void setNombreEjercicio(String nombreEjercicio) {
+      this.nombreEjercicio = nombreEjercicio;
+    }
+
+    @JsonProperty("nombreArchivo")
+    public String getNombreArchivo() {
+      return nombreArchivo;
+    }
+
+    public void setNombreArchivo(String nombreArchivo) {
+      this.nombreArchivo = nombreArchivo;
     }
 
     @JsonProperty("descripcion")
@@ -229,6 +245,25 @@ public class RutinaEntity {
       this.descripcion = descripcion;
     }
 
+    @JsonProperty("imagenBase64")
+    public String getImagenBase64() {
+      return imagenBase64;
+    }
+
+    public void setImagenBase64(String imagenBase64) {
+      this.imagenBase64 = imagenBase64;
+    }
+
+    @JsonProperty("contentType")
+    public String getContentType() {
+      return contentType;
+    }
+
+    public void setContentType(String contentType) {
+      this.contentType = contentType;
+    }
+
+    // equals(), hashCode() y toString() actualizados
     @Override
     public boolean equals(Object o) {
       if (this == o)
@@ -236,21 +271,26 @@ public class RutinaEntity {
       if (o == null || getClass() != o.getClass())
         return false;
       FotoRutina that = (FotoRutina) o;
-      return Objects.equals(url, that.url) &&
-          Objects.equals(descripcion, that.descripcion);
+      return Objects.equals(nombreEjercicio, that.nombreEjercicio) &&
+          Objects.equals(nombreArchivo, that.nombreArchivo) &&
+          Objects.equals(descripcion, that.descripcion) &&
+          Objects.equals(imagenBase64, that.imagenBase64) &&
+          Objects.equals(contentType, that.contentType);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(url, descripcion);
+      return Objects.hash(nombreEjercicio, nombreArchivo, descripcion, imagenBase64, contentType);
     }
 
     @Override
     public String toString() {
       return "FotoRutina{" +
-          "url='" + url + '\'' +
+          "nombreEjercicio='" + nombreEjercicio + '\'' +
+          ", nombreArchivo='" + nombreArchivo + '\'' +
           ", descripcion='" + descripcion + '\'' +
-          '}';
+          ", contentType='" + contentType + '\'' +
+          '}'; // Nota: No mostramos imagenBase64 (es muy largo)
     }
   }
 }

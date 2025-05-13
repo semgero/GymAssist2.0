@@ -19,4 +19,5 @@ public interface RutinaRepository extends MongoRepository<RutinaEntity, ObjectId
     // Custom query methods can be defined here if needed
     // For example, to find by gymId:
     List<RutinaEntity> findByGymId(ObjectId gymId);
+    List<RutinaEntity> findByFotosRutina_NombreEjercicioIgnoreCase(String nombreEjercicio);
 }

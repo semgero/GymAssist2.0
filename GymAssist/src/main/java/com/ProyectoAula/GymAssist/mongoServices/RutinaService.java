@@ -15,6 +15,13 @@ public class RutinaService {
     private RutinaRepository rutinaRepository;
 
     public RutinaEntity createRutina(RutinaEntity rutina) {
+        if (rutina.getFotosRutina() != null) {
+            rutina.getFotosRutina().forEach(foto -> {
+                if (foto.getImagenBase64() == null || foto.getImagenBase64().isEmpty()) {
+                    throw new IllegalArgumentException("La imagen Base64 no puede estar vacía");
+                }
+            });
+        }
         return rutinaRepository.save(rutina);
     }
 
@@ -26,18 +33,44 @@ public class RutinaService {
         return rutinaRepository.findById(id);
     }
 
-    public RutinaEntity updateRutina(ObjectId id, RutinaEntity rutinaEntity){
+    public RutinaEntity updateRutina(ObjectId id, RutinaEntity rutinaEntity) {
         RutinaEntity existingRutina = rutinaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Rutina not found with id: " + id));
-        existingRutina.setGrupoMuscular(rutinaEntity.getGrupoMuscular());
-        existingRutina.setRepeticiones(rutinaEntity.getRepeticiones());
-        existingRutina.setSeries(rutinaEntity.getSeries());
-        existingRutina.setFotosRutina(rutinaEntity.getFotosRutina()); // Cambiado aquí
-        existingRutina.setGymId(rutinaEntity.getGymId());
+            .orElseThrow(() -> new RuntimeException("Rutina no encontrada con id: " + id));
+
+        if (rutinaEntity.getGrupoMuscular() != null) {
+            existingRutina.setGrupoMuscular(rutinaEntity.getGrupoMuscular());
+        }
+        if (rutinaEntity.getRepeticiones() != null) {
+            existingRutina.setRepeticiones(rutinaEntity.getRepeticiones());
+        }
+        if (rutinaEntity.getSeries() != null) {
+            existingRutina.setSeries(rutinaEntity.getSeries());
+        }
+        if (rutinaEntity.getFotosRutina() != null) {
+            existingRutina.setFotosRutina(rutinaEntity.getFotosRutina());
+        }
+        if (rutinaEntity.getGymId() != null) {
+            existingRutina.setGymId(rutinaEntity.getGymId());
+        }
+
         return rutinaRepository.save(existingRutina);
     }
 
     public void deleteRutinaById(ObjectId id) {
+        if (!rutinaRepository.existsById(id)) {
+            throw new RuntimeException("No se puede eliminar: Rutina no encontrada con id: " + id);
+        }
         rutinaRepository.deleteById(id);
+    }
+
+    public List<RutinaEntity> findByNombreEjercicio(String nombreEjercicio) {
+        return rutinaRepository.findByFotosRutina_NombreEjercicioIgnoreCase(nombreEjercicio);
+    }
+
+    public boolean hasValidImages(ObjectId id) {
+        return rutinaRepository.findById(id)
+            .map(rutina -> rutina.getFotosRutina().stream()
+                .allMatch(foto -> foto.getImagenBase64() != null && !foto.getImagenBase64().isEmpty()))
+            .orElse(false);
     }
 }

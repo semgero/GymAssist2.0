@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Rutina</title>
+</head>
+<body>
+<h1>Editar Rutina</h1>
+
+<form th:action="@{'/rutinas/' + ${rutina.id} + '/actualizar'}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" th:value="${rutina.id}" />
+    <input type="hidden" name="gymId" th:value="${gymId}" />
+
+    <label>Nombre del Ejercicio:</label>
+    <input type="text" name="nombreEjercicio"
+           th:value="${rutina.fotosRutina != null && !rutina.fotosRutina.isEmpty() ? rutina.fotosRutina[0].nombreEjercicio : ''}"
+           required /><br>
+
+    <label>Grupo Muscular:</label>
+    <input type="text" name="grupoMuscular" th:value="${rutina.grupoMuscular}" required /><br>
+
+    <label>Repeticiones:</label>
+    <input type="text" name="repeticiones" th:value="${rutina.repeticiones}" required /><br>
+
+    <label>Series:</label>
+    <input type="text" name="series" th:value="${rutina.series}" required /><br>
+
+    <h3>Fotos actuales:</h3>
+    <div th:each="foto, stat : ${rutina.fotosRutina}">
+        <img th:src="'data:' + ${foto.contentType} + ';base64,' + ${foto.imagenBase64}" width="150" />
+        <p><b>Descripción:</b> <span th:text="${foto.descripcion}"></span></p>
+        <label><input type="checkbox" name="fotosAEliminar" th:value="${stat.index}"> Eliminar esta foto</label>
+        <hr>
+    </div>
+
+    <h3>Agregar nuevas fotos:</h3>
+    <div id="nuevas-fotos-container">
+        <div class="foto-item">
+            <label>Foto:</label>
+            <input type="file" name="fotosRutina" />
+            <label>Descripción:</label>
+            <input type="text" name="descripciones" placeholder="Descripción" />
+        </div>
+    </div>
+
+    <button type="button" onclick="agregarFoto()">Agregar otra foto</button><br><br>
+    <button type="submit">Actualizar</button>
+</form>
+
+<a th:href="@{'/rutinas/gym/' + ${gymId}}">Volver</a>
+
+<script>
+    function agregarFoto() {
+        const container = document.getElementById('nuevas-fotos-container');
+        const nuevo = document.createElement('div');
+        nuevo.classList.add('foto-item');
+        nuevo.innerHTML = `
+            <label>Foto:</label>
+            <input type="file" name="fotosRutina" />
+            <label>Descripción:</label>
+            <input type="text" name="descripciones" placeholder="Descripción" />
+        `;
+        container.appendChild(nuevo);
+    }
+</script>
+</body>
+</html>
