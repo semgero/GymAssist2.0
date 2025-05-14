@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,33 +18,9 @@ public class RutinaService {
     @Autowired
     private RutinaRepository rutinaRepository;
 
-    @Autowired
-    private S3Service s3Service;
 
     public RutinaEntity createRutina(RutinaEntity rutina, List<MultipartFile> archivos, List<String> descripciones) {
         List<RutinaEntity.FotoRutina> fotos = new ArrayList<>();
-
-        for (int i = 0; i < archivos.size(); i++) {
-            MultipartFile archivo = archivos.get(i);
-            if (!archivo.isEmpty()) {
-                try {
-                    String nombreArchivo = System.currentTimeMillis() + "_" + archivo.getOriginalFilename();
-                    Path rutaTemp = Path.of(System.getProperty("java.io.tmpdir"), nombreArchivo);
-                    archivo.transferTo(rutaTemp.toFile());
-
-                    String urlImagen = s3Service.subirImagen(nombreArchivo, rutaTemp);
-
-                    fotos.add(new RutinaEntity.FotoRutina(
-                            rutina.getGrupoMuscular(),
-                            nombreArchivo,
-                            descripciones.get(i),
-                            urlImagen, 
-                            archivo.getContentType()));
-                } catch (IOException e) {
-                    throw new RuntimeException("Error al subir la imagen a S3: " + e.getMessage());
-                }
-            }
-        }
 
         rutina.setFotosRutina(fotos);
         return rutinaRepository.save(rutina);

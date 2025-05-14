@@ -8,7 +8,7 @@
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="/Styles/ClienteHome.css"/>
+  <link rel="stylesheet" href="/Styles/cuentacliente.css"/>
   <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
 </head>
 <body>
@@ -35,7 +35,7 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <nav>
-      <a th:href="@{/Api/Cliente/ClienteHome}" class="active"  title="home">
+      <a th:href="@{/Api/Cliente/ClienteHome}"  title="home">
         <i class="fas fa-home icon"></i>
         <span class="text">Home</span>
       </a> 
@@ -60,31 +60,70 @@
 
   <!-- Main -->
   <main class="main-content">
-    <h1>Home</h1>
-    <div class="card">
-        <div class="bienvenida-contenido">
-          <div class="texto-bienvenida">
-            <h1 class="home-title">
-              <span class="saludo">Bienvenido,</span> <span class="nombre">Samuel 👋</span>
-            </h1>
-            <p class="home-description">Veamos como va tu progreso 💪</p>
-          </div>
-          <div class="dumbbell-container">
-            <!-- Mancuerna desde Icons8 -->
-            <img src="https://img.icons8.com/ios-filled/150/2c3e50/dumbbell.png" alt="Mancuerna" />
-            <div class="shadow"></div>
-        </div>
-        </div>
-      </div>                      
-  </main>
+    <div class="container">
+    <!-- Tarjeta de perfil completa -->
+    <div class="card profile-card">
+      <div class="profile-icon">
+        <i class="fas fa-user-cog"></i>
+      </div>
+      <p class="status-title">Estado de cuenta</p>
+      <span class="status-badge">Activo</span>
+      <div class="info">
+        <p><strong>Nombre:</strong> samuel rhenals</p>
+        <p><strong>Correo:</strong> samu@gmail.com</p>
+        <p><strong>Teléfono:</strong> 304 304585</p>
+        <p><strong>plan:</strong> mensual</p>
+      </div>
+      <button class="edit-button" onclick="openModal()">✏️ Editar Información</button>
     </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-container" id="modal">
+    <div class="modal">
+      <form id="editForm">
+        <div class="modal-header">
+          <h2><i class="fas fa-user-edit"></i> Editar Información</h2>
+          <p>Modifica tus datos personales y actualiza tu contraseña.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone"><i class="fas fa-phone-alt"></i> Teléfono</label>
+          <input type="tel" id="phone" name="phone" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password"><i class="fas fa-lock"></i> Nueva Contraseña</label>
+          <input type="password" id="password" name="password">
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
+          <input type="password" id="confirm-password" name="confirm-password">
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="half-btn save-btn">
+            <i class="fas fa-save"></i> Guardar
+          </button>
+          <button type="button" class="half-btn cancel-btn" onclick="closeModal()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
   </main>
 
   <!-- Footer -->
   <footer class="footer">
     &copy; 2025 GymAssist. Todos los derechos reservados.
   </footer>
-
   <script>
     function toggleSidebar() {
     document.body.classList.toggle('sidebar-collapsed');
@@ -114,6 +153,14 @@
 
   // Exponemos la función al scope global
   window.btnTheme = btnTheme;
+
+  function openModal() {
+      document.getElementById('modal').classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('show');
+    }
   </script>
 </body>
 </html>

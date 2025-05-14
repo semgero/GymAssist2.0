@@ -12,18 +12,21 @@
 <body>
     <div class="container" id="container">
         <div class="form-container sign-up">
-          <form th:action="@{/Api/Auth/register}" method="post">            <h1>Register</h1>
+          <form th:action="@{/Api/Auth/register}" method="post">
+            <img src="/Imagenes/logo_icon.png" class="logo" alt="Logo del gimnasio">         
+              <h1>Register</h1>
               <input type="text" name="username" placeholder="Username" required>
               <input type="email" name="email" placeholder="Email" required>
               <input type="password" name="password" placeholder="Password" required>
-              <input type="password" name="confirmPassword" placeholder="Confirm Password" required>                <a href="/login" class="forgot-password">Already have an account? Login</a>
+              <input type="password" name="confirmPassword" placeholder="Confirm Password" required>                
+              <a href="/login" class="forgot-password">Already have an account? Login</a>
                <p th:if="${error}" th:text="${error}" style="color: red;"></p>
               <button type="submit" class="btn">Register</button>
           </form>
         </div>
         <div class="form-container sign-in">
           <form th:action="@{/Api/Auth/login}" method="post">
-            <img src="/Login_oliver/img/logo_icon.png" class="logo" alt="Logo del gimnasio">
+            <img src="/Imagenes/logo_icon.png" class="logo" alt="Logo del gimnasio">
             <h1>Login</h1>
               <input type="text" name="username" placeholder="username" required>
               <input type="password" name="password" placeholder="Password" required>
@@ -40,7 +43,7 @@
               <button class="hidden" id="login">Iniciar sesion</button>
             </div>
             <div class="toggle-panel toggle-right">
-              <h1>Bienvenido!</h1>
+              <h1>Bienvenido a GymAssist!</h1>
               <p>
                 ¿Aún no estás registrado? Ingresa aquí y forma parte de nuestro equipo
               </p>

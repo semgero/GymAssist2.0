@@ -4,9 +4,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,18 +23,37 @@ public class ClientController {
     private final ClienteService clienteService;
     private final MedicionesService medicionesService;
 
-    @Autowired
     public ClientController(ClienteService clienteService, MedicionesService medicionesService) {
         this.clienteService = clienteService;
         this.medicionesService = medicionesService;
     }
 
     @GetMapping("/ClienteHome")
-    public String homeCliente(Model model, Principal principal) {
+    public String ClienteHome(){
+        return "ClienteHome";
+    }
+
+    @GetMapping("/ClienteRutinas")
+    public String ClienteRutinas(){
+        return "ClienteRutinas";
+    }
+
+    @GetMapping("/ClienteDashboard")
+    public String ClienteDashboard(){
+        return "ClienteDashboard";
+    }
+
+    @GetMapping("/ClienteCuenta")
+    public String ClienteCuenta(){
+        return "ClienteCuenta";
+    }
+
+    @GetMapping("/Asistencia")
+    public String asistencia(Model model, Principal principal) {
         String username = principal.getName();
         ClientEntity cliente = clienteService.buscarPorUsername(username);
         model.addAttribute("cliente", cliente);
-        return "ClienteHome";
+        return "Asistencia";
     }
     
     @PostMapping("/registrar-asistencia")
@@ -46,7 +63,7 @@ public class ClientController {
     ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
     LocalDate fecha = LocalDate.parse(fechaStr);
     clienteService.registrarAsistencia(cliente.getId(), fecha, musculos);
-    return "redirect:/Api/Cliente/ClienteHome";
+    return "redirect:/Api/Cliente/Asistencia";
     }
 
     @GetMapping("/imc")
@@ -70,7 +87,7 @@ public class ClientController {
         List<MedicionesEntity> historial = medicionesService.obtenerHistorial(clienteId);
         model.addAttribute("mediciones", historial);
 
-        return "Imc";
+        return "imc";
     }
 
     @PostMapping("/imc/guardar")

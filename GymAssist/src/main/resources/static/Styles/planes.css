@@ -348,6 +348,181 @@ body.theme-dark .form__group textarea {
 body.theme-dark .btn:hover {
   background-color: #3ea7ff;
 }
+
+.plan-list {
+      max-width: 100%;
+      margin: 2rem auto;
+      background-color: var(--card-bg);
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: background-color var(--transition);
+    }
+
+    .plan-list table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    /* Sticky header */
+    .plan-list thead {
+      display: block;
+      width: 100%;
+    }
+    .plan-list thead th {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(90deg, var(--sidebar-start), var(--sidebar-end));
+      color: #fff;
+      padding: 0.8rem 1rem;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      z-index: 1;
+    }
+
+    /* Anchos relativos ajustados */
+    .plan-list thead th:nth-child(1) { width: 14%; }  /* Nombre */
+    .plan-list thead th:nth-child(2) { width: 24%; }  /* Descripción reducido */
+    .plan-list thead th:nth-child(3) { width: 10%; }  /* Precio */
+    .plan-list thead th:nth-child(4) { width: 10%; }  /* Duración */
+    .plan-list thead th:nth-child(5) { width: 20%; }  /* Beneficios incrementado */
+    .plan-list thead th:nth-child(6) { width: 15%; }  /* Acciones */
+    .plan-list thead th:nth-child(7) { width: 17%; }  /* Suscriptores incrementado */
+
+    /* Scroll tras 4 filas */
+    .plan-list tbody {
+      display: block;
+      max-height: calc(4 * 2.5rem);
+      overflow-y: auto;
+      width: 100%;
+      /* Scroll personalizado */
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) var(--input-bg);
+    }
+    /* WebKit scroll */
+    .plan-list tbody::-webkit-scrollbar {
+      width: 8px;
+    }
+    .plan-list tbody::-webkit-scrollbar-track {
+      background: var(--input-bg);
+      border-radius: 4px;
+    }
+    .plan-list tbody::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 4px;
+    }
+    body.theme-dark .plan-list tbody::-webkit-scrollbar-track {
+      background: var(--input-border);
+    }
+    body.theme-dark .plan-list tbody::-webkit-scrollbar-thumb {
+      background: var(--sidebar-end);
+    }
+
+    .plan-list tbody tr,
+    .plan-list thead tr {
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+    }
+
+    .plan-list td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--input-border);
+      vertical-align: middle;
+      transition: background-color var(--transition);
+      word-wrap: break-word;
+    }
+
+    /* Filas alternas */
+    .plan-list tbody tr:nth-child(even) {
+      background-color: rgba(0,0,0,0.03);
+    }
+    body.theme-dark .plan-list tbody tr:nth-child(even) {
+      background-color: rgba(255,255,255,0.05);
+    }
+
+    /* Hover */
+    .plan-list tbody tr:hover td {
+      background-color: var(--input-bg);
+    }
+    body.theme-dark .plan-list tbody tr:hover td {
+      background-color: var(--input-border);
+    }
+
+    /* Botones iguales y alineados */
+    .plan-list td:nth-child(6) {
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.5rem;
+    }
+    .action-btn {
+      flex: 1;
+      padding: 0.5rem;
+      text-align: center;
+      background-color: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 0.25rem;
+      font-size: 0.85rem;
+      transition: background-color var(--transition), transform var(--transition);
+      white-space: nowrap;
+    }
+    .action-btn:hover {
+      background-color: rgba(37,99,235,0.8);
+      transform: translateY(-1px);
+    }
+    .delete-btn {
+      background-color: #e74c3c;
+    }
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+
+    /* Responsive móvil */
+    @media (max-width: 768px) {
+      .plan-list table,
+      .plan-list thead,
+      .plan-list tbody,
+      .plan-list th,
+      .plan-list td,
+      .plan-list tr {
+        display: block;
+      }
+      .plan-list thead {
+        height: 0;
+        overflow: hidden;
+      }
+      .plan-list tr {
+        margin-bottom: 1rem;
+        background: var(--card-bg);
+        border: 1px solid var(--input-border);
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+      }
+      .plan-list td {
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+        border: none;
+      }
+      .plan-list td:before {
+        content: '';
+        position: absolute;
+        left: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        color: var(--fg);
+      }
+      .plan-list td:nth-child(1):before { content: "Nombre"; }
+      .plan-list td:nth-child(2):before { content: "Descripción"; }
+      .plan-list td:nth-child(3):before { content: "Precio"; }
+      .plan-list td:nth-child(4):before { content: "Duración"; }
+      .plan-list td:nth-child(5):before { content: "Beneficios"; }
+      .plan-list td:nth-child(6):before { content: "Acciones"; }
+      .plan-list td:nth-child(7):before { content: "Suscriptores"; }
+    }
   
   .footer {
     grid-area: foo;

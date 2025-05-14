@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GymAssist Cliente</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/Styles/asistencia.css"/>
+  <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="navbar-brand">GymAssist Cliente</div>
+    </div>
+    <div class="navbar-right">
+      <button class="btn-theme" onclick="btnTheme()"><i class="fas fa-moon"></i></button>
+      <div class="profile">
+        <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
+        <div id="dropdown" class="dropdown">
+          <a th:href="@{ClienteCuenta}"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a th:href="@{/Api/Auth/Logout}" class="danger"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <a th:href="@{/Api/Cliente/ClienteHome}" title="home">
+        <i class="fas fa-home icon"></i>
+        <span class="text">Home</span>
+      </a> 
+      <a th:href="@{/Api/Cliente/ClienteDashboard}" title="dashboard">
+        <i class="fas fa-chart-line icon"></i>
+        <span class="text">Dashboard</span>
+      </a>
+      <a th:href="@{/Api/Cliente/imc}" title="IMC">
+        <i class="fas fa-weight icon"></i>
+        <span class="text">IMC</span>
+      </a>
+      <a th:href="@{/Api/Cliente/ClienteRutinas}" title="rutinas">
+        <i class="fa-solid fa-dumbbell icon"></i>
+        <span class="text">Rutinas</span>
+      </a>
+      <a th:href="@{/Api/Cliente/Asistencia}" class="active" title="Asistencia">
+        <i class="fas fa-calendar-check icon"></i>
+        <span class="text">Asistencia</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+ <main class="main-content">
+    <h1>Asistencia</h1>
+    <div class="header-grid">
+      <div class="card">
+        <h2>Bienvenido</h2>
+        <p th:text="${cliente.nombre}"></p>
+      </div>
+      <div class="card">
+        <h2>Estadísticas</h2>
+        <p>Total Inasistencias: <strong th:text="${cliente.inasistencias}"></strong></p>
+      </div>
+    </div>
+    <div class="content-grid">
+      <section class="registro card">
+        <h2>Registrar Asistencia</h2>
+        <form th:action="@{/Api/Cliente/registrar-asistencia}" method="post" class="registro">
+          <div>
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" name="fecha" required />
+          </div>
+          <div>
+            <label class="form-label">Músculos trabajados</label>
+            <select class="muscle-list" name="musculos" multiple required>
+              <option type="checkbox" id="m1" name="musculos" th:value="'Pecho'" ><label for="m1" class="option">Pecho</label></option>
+              <option type="checkbox" id="m2" name="musculos" th:value="'Pierna'" ><label for="m2" class="option">Pierna</label></option></li>
+              <option type="checkbox" id="m3" name="musculos" th:value="'Espalda'" ><label for="m3" class="option">Espalda</label></option></li>
+              <option type="checkbox" id="m4" name="musculos" th:value="'Biceps'" ><label for="m4" class="option">Bíceps</label></option></li>
+              <option type="checkbox" id="m5" name="musculos" th:value="'Triceps'" ><label for="m5" class="option">Tríceps</label></li>
+            </select>
+          </div>
+          <button type="submit">Registrar</button>
+        </form>
+      </section>
+      <section class="card timeline">
+        <h2>Historial de Asistencia</h2>
+        <div class="controls">
+              <label for="filtroAsistencia">Buscar asistencia:</label>
+                <input type="text" id="filtroAsistencia" placeholder="Escribe aquí..." onkeyup="filtrarAsistencias()"/>
+                <button class="button-mostrar" onclick="toggleAsistencias()">Mostrar/Ocultar</button>
+        </div>
+        <div class="timeline-content-wrapper">
+          <div class="timeline-scroll">
+            <div th:each="asistencia : ${cliente.asistencias}" class="timeline-item">
+              <div class="timeline-date" th:text="${asistencia.fecha}"></div>
+              <div class="timeline-content" th:text="${asistencia.musculos}"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  
+
+  <!-- Footer -->
+  <footer class="footer">
+    &copy; 2025 GymAssist. Todos los derechos reservados.
+  </footer>
+
+  <script >
+    function toggleSidebar() {
+    document.body.classList.toggle('sidebar-collapsed');
+  }
+  function toggleDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('dropdown').classList.toggle('show');
+  }
+
+  document.addEventListener('click', () => {
+    document.getElementById('dropdown').classList.remove('show');
+  })
+
+  // Al cargar la página, aplica el tema guardado:
+  document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+      document.body.classList.add('theme-dark');
+    }
+  });
+
+  // Función única para alternar tema y guardarlo
+  function btnTheme() {
+    const isDark = document.body.classList.toggle('theme-dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }
+
+  // Exponemos la función al scope global
+  window.btnTheme = btnTheme;
+
+    function toggleAsistencias() {
+    const section = document.querySelector(".card.timeline");
+    const timelineScroll = section.querySelector(".timeline-scroll");
+
+    timelineScroll.style.display = timelineScroll.style.display === "none" ? "block" : "none";
+  }
+
+  function filtrarAsistencias() {
+    const section = document.querySelector(".card.timeline");
+    const filtro = section.querySelector("#filtroAsistencia").value.toLowerCase();
+    const asistencias = section.querySelectorAll(".timeline-item");
+
+    asistencias.forEach(item => {
+      const texto = item.textContent.toLowerCase();
+      item.style.display = texto.includes(filtro) ? "block" : "none";
+    });
+  }
+  </script>
+</body>
+
+</html>
