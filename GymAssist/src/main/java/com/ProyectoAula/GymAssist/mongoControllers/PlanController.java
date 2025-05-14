@@ -53,14 +53,12 @@ public class PlanController {
             @RequestParam String descripcion,
             @RequestParam Double precio,
             @RequestParam Integer duracion, // Número de meses
-            @RequestParam String beneficios,
             Model model) {
         PlanEntity plan = new PlanEntity();
         plan.setNombre(nombre);
         plan.setDescripcion(descripcion);
         plan.setPrecio(precio);
         plan.setDuracion(duracion);
-        plan.setBeneficios(List.of(beneficios.split("\\s*,\\s*")));
         plan.setGymId(new ObjectId(gymId));
         planService.createPlan(plan);
         return "redirect:/planes/gimnasio/" + gymId;
@@ -82,14 +80,12 @@ public class PlanController {
             @RequestParam String descripcion,
             @RequestParam Double precio,
             @RequestParam Integer duracion,
-            @RequestParam String beneficios,
             @RequestParam String gymId) {
         PlanEntity plan = new PlanEntity();
         plan.setNombre(nombre);
         plan.setDescripcion(descripcion);
         plan.setPrecio(precio);
         plan.setDuracion(duracion);
-        plan.setBeneficios(List.of(beneficios.split("\\s*,\\s*")));
         plan.setGymId(new ObjectId(gymId));
         planService.updatePlan(new ObjectId(id), plan);
         return "redirect:/planes/gimnasio/" + gymId;

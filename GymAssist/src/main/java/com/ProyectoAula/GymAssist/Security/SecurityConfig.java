@@ -45,13 +45,14 @@ public class SecurityConfig {
      * @return El filtro de seguridad configurado.
      * @throws Exception Si ocurre un error al configurar la seguridad.
      */
+    
     @Bean
     public SecurityFilterChain securedFilterChain(final HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/Api/Auth/login", "/Api/Auth/logout", "/Api/Auth/register").permitAll()
-                        .requestMatchers("/Styles/**", "/Imagenes/**", "/Js/**").permitAll()
+                        .requestMatchers("/Styles/**", "/Imagenes/**", "/Js/**", "/uploads/**", "/content/**").permitAll()
                         .requestMatchers("/Error/**", "/Error").permitAll()
                         .requestMatchers("/gimnasios/register").authenticated()
                         .requestMatchers("/Api/Admin/**").hasRole("ADMIN")

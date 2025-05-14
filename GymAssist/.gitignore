@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Al final de tu .gitignore agrega:
+/uploads/
+!/uploads/rutinas/.keep

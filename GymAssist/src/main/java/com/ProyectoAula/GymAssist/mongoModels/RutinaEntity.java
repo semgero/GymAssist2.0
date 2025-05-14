@@ -198,26 +198,22 @@ public class RutinaEntity {
     return o.toString().replace("\n", "\n    ");
   }
 
-  // Clase interna para fotos y descripciones
   public static class FotoRutina {
-    // Campos
-    private String nombreEjercicio; // ✅ Atributo añadido aquí
+    private String nombreEjercicio;
     private String nombreArchivo;
     private String descripcion;
-    private String imagenBase64; // Imagen en Base64
-    private String contentType; // Tipo MIME (ej: "image/jpeg")
+    private String rutaImagen;
+    private String contentType;
 
-    // Constructor completo
     public FotoRutina(String nombreEjercicio, String nombreArchivo, String descripcion,
-        String imagenBase64, String contentType) {
+        String rutaImagen, String contentType) {
       this.nombreEjercicio = nombreEjercicio;
       this.nombreArchivo = nombreArchivo;
       this.descripcion = descripcion;
-      this.imagenBase64 = imagenBase64;
+      this.rutaImagen = rutaImagen;
       this.contentType = contentType;
     }
 
-    // Getters y Setters (¡OBLIGATORIOS para Spring Data MongoDB!)
     @JsonProperty("nombreEjercicio")
     public String getNombreEjercicio() {
       return nombreEjercicio;
@@ -245,13 +241,13 @@ public class RutinaEntity {
       this.descripcion = descripcion;
     }
 
-    @JsonProperty("imagenBase64")
-    public String getImagenBase64() {
-      return imagenBase64;
+    @JsonProperty("rutaImagen")
+    public String getRutaImagen() {
+      return rutaImagen;
     }
 
-    public void setImagenBase64(String imagenBase64) {
-      this.imagenBase64 = imagenBase64;
+    public void setRutaImagen(String rutaImagen) {
+      this.rutaImagen = rutaImagen;
     }
 
     @JsonProperty("contentType")
@@ -263,7 +259,6 @@ public class RutinaEntity {
       this.contentType = contentType;
     }
 
-    // equals(), hashCode() y toString() actualizados
     @Override
     public boolean equals(Object o) {
       if (this == o)
@@ -274,13 +269,13 @@ public class RutinaEntity {
       return Objects.equals(nombreEjercicio, that.nombreEjercicio) &&
           Objects.equals(nombreArchivo, that.nombreArchivo) &&
           Objects.equals(descripcion, that.descripcion) &&
-          Objects.equals(imagenBase64, that.imagenBase64) &&
+          Objects.equals(rutaImagen, that.rutaImagen) &&
           Objects.equals(contentType, that.contentType);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(nombreEjercicio, nombreArchivo, descripcion, imagenBase64, contentType);
+      return Objects.hash(nombreEjercicio, nombreArchivo, descripcion, rutaImagen, contentType);
     }
 
     @Override
@@ -289,8 +284,9 @@ public class RutinaEntity {
           "nombreEjercicio='" + nombreEjercicio + '\'' +
           ", nombreArchivo='" + nombreArchivo + '\'' +
           ", descripcion='" + descripcion + '\'' +
+          ", rutaImagen='" + rutaImagen + '\'' +
           ", contentType='" + contentType + '\'' +
-          '}'; // Nota: No mostramos imagenBase64 (es muy largo)
+          '}';
     }
   }
 }

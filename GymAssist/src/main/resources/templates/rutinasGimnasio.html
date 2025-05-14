@@ -59,11 +59,12 @@
             <td th:text="${rutina.repeticiones}">Reps</td>
             <td th:text="${rutina.series}">Series</td>
             <td>
-                <div th:each="foto : ${rutina.fotosRutina}">
-                    <img th:src="'data:' + ${foto.contentType} + ';base64,' + ${foto.imagenBase64}"
-                         alt="Foto de rutina" style="width: 100px; height: auto;" />
-                    <p th:text="${foto.descripcion}">Descripcion</p>
-                </div>
+                <td>
+                    <div th:each="foto : ${rutina.fotosRutina}">
+                        <img th:src="${foto.rutaImagen}" alt="Ejercicio">                    
+                        <p th:text="${foto.descripcion}">Descripción</p>
+                    </div>
+                </td>
                 <div style="margin-top: 10px;">
                     <a th:href="@{'/rutinas/' + ${rutina.id} + '/editar'}">Editar</a>
                     <form th:action="@{'/rutinas/' + ${rutina.id} + '/eliminar'}" method="post" style="display:inline;">
@@ -72,7 +73,6 @@
                     </form>
                 </div>
             </td>
-            
         </tr>
         </tbody>
     </table>
@@ -92,6 +92,8 @@
         container.appendChild(nuevo);
     }
 </script>
+
+<!-- El CSS puede permanecer igual -->
 <style>
     /* General */
     body {

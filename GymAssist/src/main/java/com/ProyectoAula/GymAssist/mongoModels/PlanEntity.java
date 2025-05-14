@@ -31,9 +31,6 @@ public class PlanEntity {
   @BsonProperty("duracion")
   private Integer duracion;
 
-  @BsonProperty("beneficios")
-  private List<String> beneficios;
-
   @BsonProperty("gymId")
   private ObjectId gymId;
 
@@ -107,20 +104,6 @@ public class PlanEntity {
     this.duracion = duracion;
   }
 
-  public PlanEntity beneficios(List<String> beneficios) {
-    this.beneficios = beneficios;
-    return this;
-  }
-
-  @JsonProperty("beneficios")
-  public List<String> getBeneficios() {
-    return beneficios;
-  }
-
-  public void setBeneficios(List<String> beneficios) {
-    this.beneficios = beneficios;
-  }
-
   public PlanEntity gymId(ObjectId gymId) {
     this.gymId = gymId;
     return this;
@@ -153,13 +136,12 @@ public class PlanEntity {
         Objects.equals(this.descripcion, plan.descripcion) &&
         Objects.equals(this.precio, plan.precio) &&
         Objects.equals(this.duracion, plan.duracion) &&
-        Objects.equals(this.beneficios, plan.beneficios) &&
         Objects.equals(this.gymId, plan.gymId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nombre, descripcion, precio, duracion, beneficios, gymId);
+    return Objects.hash(id, nombre, descripcion, precio, duracion, gymId);
   }
 
   @Override
@@ -171,7 +153,6 @@ public class PlanEntity {
     sb.append("    descripcion: ").append(toIndentedString(descripcion)).append("\n");
     sb.append("    precio: ").append(toIndentedString(precio)).append("\n");
     sb.append("    duracion: ").append(toIndentedString(duracion)).append("\n");
-    sb.append("    beneficios: ").append(toIndentedString(beneficios)).append("\n");
     sb.append("    gimnasioId: ").append(toIndentedString(gymId)).append("\n");
     sb.append("}");
     return sb.toString();

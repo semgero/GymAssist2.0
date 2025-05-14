@@ -47,32 +47,39 @@ public class AdminController {
 
     // Mostrar la lista de clientes en AdminHome
     @GetMapping("/AdminHome")
-    public String mostrarAdminHome(Model model, Principal principal) {
+    public String mostrarAdminHome(Model model, Principal principal,
+            @RequestParam(required = false) ObjectId clienteId) {
         UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
         AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
         GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+
         model.addAttribute("adminId", admin != null ? admin.getId() : null);
         model.addAttribute("gymId", gym != null ? gym.getId() : null);
-
-        // Pasar la lista de clientes
         model.addAttribute("AdminHome", clienteService.listarClientesPorGym(gym.getId()));
+
+        if (clienteId != null) {
+            ClientEntity cliente = clienteService.buscarClientePorId(clienteId);
+            model.addAttribute("cliente", cliente);
+        }
+
         if (gym != null) {
             List<PlanEntity> planes = planService.getPlanesByGimnasioId(gym.getId());
             model.addAttribute("planes", planes);
         }
-        return "AdminHome"; // Página de AdminHome
+
+        return "AdminHome";
     }
 
     // Agregar nuevo cliente
     @PostMapping("/Home")
-        public String agregarCliente(@RequestParam String nombre,
-                                    @RequestParam String correo,
-                                    @RequestParam String idDocumento,
-                                    @RequestParam Integer telefono,
-                                    @RequestParam String username,
-                                    @RequestParam String password,
-                                    @RequestParam ObjectId planId,
-                                    @RequestParam ObjectId gymId) {
+    public String agregarCliente(@RequestParam String nombre,
+            @RequestParam String correo,
+            @RequestParam String idDocumento,
+            @RequestParam Integer telefono,
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam ObjectId planId,
+            @RequestParam ObjectId gymId) {
 
         PlanEntity plan = planService.getPlanById(planId).orElse(null);
         String mensualidad = plan != null ? plan.getNombre() : "Desconocido";

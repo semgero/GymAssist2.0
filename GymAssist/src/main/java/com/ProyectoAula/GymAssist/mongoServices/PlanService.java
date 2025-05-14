@@ -33,7 +33,6 @@ public class PlanService {
         existingPlan.setDescripcion(planDetails.getDescripcion());
         existingPlan.setPrecio(planDetails.getPrecio());
         existingPlan.setDuracion(planDetails.getDuracion());
-        existingPlan.setBeneficios(planDetails.getBeneficios());
         existingPlan.setGymId(planDetails.getGymId());
         return planRepository.save(existingPlan);
     }
