@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoModels.MedicionesEntity;
 import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
 import org.springframework.ui.Model;
 import com.ProyectoAula.GymAssist.mongoServices.MedicionesService;
+import com.ProyectoAula.GymAssist.mongoServices.PlanService;
 import com.ProyectoAula.GymAssist.mongoServices.RutinaService;
 
 @Controller
@@ -27,16 +29,22 @@ public class ClientController {
     private final ClienteService clienteService;
     private final MedicionesService medicionesService;
     private final RutinaService rutinaService;
+    private final PlanService planService;
 
     @Autowired
-    public ClientController(ClienteService clienteService, MedicionesService medicionesService, RutinaService rutinaService) {
+    public ClientController(ClienteService clienteService, MedicionesService medicionesService, RutinaService rutinaService, PlanService planService) {
         this.clienteService = clienteService;
         this.rutinaService = rutinaService;
         this.medicionesService = medicionesService;
+        this.planService = planService;
     }
 
     @GetMapping("/ClienteHome")
-    public String ClienteHome(){
+    public String ClienteHome(Model model, Principal principal){
+        String username = principal.getName(); 
+        ClientEntity cliente = clienteService.buscarPorUsername(username); // tu método para encontrar al cliente
+
+        model.addAttribute("cliente", cliente);
         return "ClienteHome";
     }
 
@@ -48,6 +56,35 @@ public class ClientController {
     @GetMapping("/ClienteDashboard")
     public String ClienteDashboard(){
         return "ClienteDashboard";
+    }
+
+    @GetMapping("/ClienteCuenta")
+    public String ClienteCuenta(Model model, Principal principal){
+        String username = principal.getName(); // obtiene el username del usuario logueado
+        ClientEntity cliente = clienteService.buscarPorUsername(username); // tu método para encontrar al cliente
+
+        // Obtiene el nombre del plan (si tiene uno)
+        String nombrePlan = planService.obtenerNombreDelPlan(cliente.getPlanId());
+
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("nombrePlan", nombrePlan);
+        return "ClienteCuenta"; // plantilla ClienteCuenta.html
+    }
+
+    @PostMapping("/actualizar-datos")
+    public String actualizarDatosCliente(@RequestParam String correo,
+                                        @RequestParam String username,
+                                        @RequestParam(required = false) String password,
+                                        Principal principal,
+                                        RedirectAttributes redirectAttributes) {
+        try {
+            clienteService.actualizarDatosPersonales(correo, username, password, principal.getName());
+            redirectAttributes.addFlashAttribute("exito", "Datos actualizados correctamente.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+
+        return "redirect:/Api/Cliente/ClienteCuenta";
     }
 
     @GetMapping("/Asistencia")

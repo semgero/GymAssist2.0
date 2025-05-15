@@ -1,12 +1,14 @@
 package com.ProyectoAula.GymAssist.mongoServices;
 
 import org.bson.types.ObjectId;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity.Asistencia;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity.EstadoCliente;
+import com.ProyectoAula.GymAssist.mongoModels.ClienteResumenDTO;
 import com.ProyectoAula.GymAssist.mongoRepository.ClientRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
 
@@ -88,7 +90,6 @@ public class ClienteService {
                         "Usuario no encontrado con el nombre de usuario: " + cliente.getUsername()));
 
         // Actualizamos los atributos del cliente
-        cliente.setNombre(nombre);
         cliente.setCorreo(correo);
         cliente.setTelefono(Integer.valueOf(telefono));
         cliente.setMensualidad(mensualidad);
@@ -130,6 +131,57 @@ public class ClienteService {
     public ClientEntity buscarPorUsername(String username) {
         return clientRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con username: " + username));
+    }
+
+    public ClienteResumenDTO obtenerResumenPorGym(ObjectId gymId) {
+        List<ClientEntity> clientes = clientRepository.findByGymId(gymId);
+
+        long activos = clientes.stream()
+                .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.ACTIVO)
+                .count();
+        long suspendidos = clientes.stream()
+                .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.SUSPENDIDO)
+                .count();
+
+        return new ClienteResumenDTO(activos, suspendidos);
+        }
+
+        public void actualizarCliente(ClientEntity clienteActualizado) {
+        clientRepository.save(clienteActualizado);
+    }
+
+    public void actualizarDatosPersonales(String nuevoCorreo, String nuevoUsername, String nuevaPassword, String usernameActual) {
+        ClientEntity cliente = clientRepository.findByUsername(usernameActual)
+            .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
+        UserEntity user = userRepository.findByUsername(usernameActual)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Verificar si se cambia el correo o username (y evitar duplicados)
+        if (!nuevoCorreo.equalsIgnoreCase(cliente.getCorreo()) && userRepository.existsByEmail(nuevoCorreo)) {
+            throw new RuntimeException("El correo ya está registrado.");
+        }
+
+        if (!nuevoUsername.equalsIgnoreCase(cliente.getUsername()) && userRepository.existsByUsername(nuevoUsername)) {
+            throw new RuntimeException("El nombre de usuario ya está en uso.");
+        }
+
+        // Actualizar en ClientEntity
+        cliente.setCorreo(nuevoCorreo);
+        cliente.setUsername(nuevoUsername);
+        clientRepository.save(cliente);
+
+        // Actualizar en UserEntity
+        user.setEmail(nuevoCorreo);
+        user.setUsername(nuevoUsername);
+
+        if (nuevaPassword != null && !nuevaPassword.isBlank()) {
+            user.setPassword(passwordEncoder.encode(nuevaPassword));
+            cliente.setPassword(passwordEncoder.encode(nuevaPassword)); // también en ClientEntity
+        }
+
+        userRepository.save(user);
+        clientRepository.save(cliente); // importante: guardar también el cliente
     }
 
 }

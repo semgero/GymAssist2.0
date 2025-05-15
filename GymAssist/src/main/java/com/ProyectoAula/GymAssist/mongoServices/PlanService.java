@@ -40,4 +40,10 @@ public class PlanService {
     public void deletePlanById(ObjectId id) {
         planRepository.deleteById(id);
     }
+
+    public String obtenerNombreDelPlan(ObjectId planId) {
+    return planRepository.findById(planId)
+        .map(PlanEntity::getNombre) // o el campo correcto que uses para el nombre
+        .orElse("Sin plan asignado");
+    }
 }

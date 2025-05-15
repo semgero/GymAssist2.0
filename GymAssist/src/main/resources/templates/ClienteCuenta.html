@@ -8,7 +8,7 @@
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="/Styles/cuentacliente.css"/>
+  <link rel="stylesheet" href="/Styles/ClienteCuenta.css"/>
   <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
 </head>
 <body>
@@ -35,7 +35,7 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <nav>
-      <a th:href="@{/Api/Cliente/ClienteHome}"  title="home">
+      <a th:href="@{/Api/Cliente/ClienteHome}" class="active"  title="home">
         <i class="fas fa-home icon"></i>
         <span class="text">Home</span>
       </a> 
@@ -69,10 +69,10 @@
       <p class="status-title">Estado de cuenta</p>
       <span class="status-badge">Activo</span>
       <div class="info">
-        <p><strong>Nombre:</strong> samuel rhenals</p>
-        <p><strong>Correo:</strong> samu@gmail.com</p>
-        <p><strong>Teléfono:</strong> 304 304585</p>
-        <p><strong>plan:</strong> mensual</p>
+        <p><strong>Usuario:</strong> <span th:text="${cliente.username}">Usuario</span></p>
+        <p><strong>Correo:</strong> <span th:text="${cliente.correo}">correo@example.com</span></p>
+        <p><strong>Teléfono:</strong> <span th:text="${cliente.telefono}">123456</span></p>
+        <p><strong>Plan actual:</strong> <span th:text="${nombrePlan}">Plan Básico</span></p>
       </div>
       <button class="edit-button" onclick="openModal()">✏️ Editar Información</button>
     </div>
@@ -81,7 +81,7 @@
   <!-- Modal -->
   <div class="modal-container" id="modal">
     <div class="modal">
-      <form id="editForm">
+      <form id="editForm" th:action="@{/Api/Cliente/actualizar-datos}" method="post">
         <div class="modal-header">
           <h2><i class="fas fa-user-edit"></i> Editar Información</h2>
           <p>Modifica tus datos personales y actualiza tu contraseña.</p>
@@ -89,12 +89,12 @@
 
         <div class="form-group">
           <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
-          <input type="email" id="email" name="email" required>
+          <input type="email" id="email" name="correo" required>
         </div>
 
         <div class="form-group">
-          <label for="phone"><i class="fas fa-phone-alt"></i> Teléfono</label>
-          <input type="tel" id="phone" name="phone" required>
+          <label for="phone"><i class="fas fa-phone-alt"></i> username</label>
+          <input type="text" id="phone" name="username" required>
         </div>
 
         <div class="form-group">
@@ -124,8 +124,9 @@
   <footer class="footer">
     &copy; 2025 GymAssist. Todos los derechos reservados.
   </footer>
+
   <script>
-    function toggleSidebar() {
+        function toggleSidebar() {
     document.body.classList.toggle('sidebar-collapsed');
   }
   function toggleDropdown(e) {

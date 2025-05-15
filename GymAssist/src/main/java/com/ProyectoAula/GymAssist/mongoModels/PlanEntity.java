@@ -1,6 +1,5 @@
 package com.ProyectoAula.GymAssist.mongoModels;
 
-import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
