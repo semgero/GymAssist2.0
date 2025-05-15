@@ -44,6 +44,7 @@ public class AdminController {
         this.clienteService = clienteService;
         this.passwordEncoder = passwordEncoder;
     }
+    //
 
     // Mostrar la lista de clientes en AdminHome
     @GetMapping("/AdminHome")
