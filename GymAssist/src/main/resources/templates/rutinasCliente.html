@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rutinas del Gimnasio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .foto-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .foto-ejercicio {
+            text-align: center;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Rutinas Disponibles</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Ejercicio</th>
+                <th>Grupo Muscular</th>
+                <th>Repeticiones</th>
+                <th>Series</th>
+                <th>Fotos / Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="rutina : ${rutinas}">
+                <td th:text="${#lists.isEmpty(rutina.fotosRutina) ? 'Sin ejercicio' : rutina.fotosRutina[0].nombreEjercicio}">Nombre</td>
+                <td th:text="${rutina.grupoMuscular}">Grupo</td>
+                <td th:text="${rutina.repeticiones}">Reps</td>
+                <td th:text="${rutina.series}">Series</td>
+                <td>
+                    <div class="foto-container" th:each="foto : ${rutina.fotosRutina}">
+                        <div class="foto-ejercicio">
+                            <img th:src="${foto.rutaImagen}" alt="Imagen ejercicio"/>
+                            <p th:text="${foto.descripcion}">Descripción</p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

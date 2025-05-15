@@ -2,18 +2,20 @@ package com.ProyectoAula.GymAssist.mongoControllers;
 
 import com.ProyectoAula.GymAssist.mongoModels.RutinaEntity;
 import com.ProyectoAula.GymAssist.mongoServices.RutinaService;
+import com.ProyectoAula.GymAssist.mongoServices.S3Service;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +24,13 @@ import java.util.List;
 @RequestMapping("/rutinas")
 public class RutinaController {
 
-    @Autowired
-    private RutinaService rutinaService;
+    private final RutinaService rutinaService;
+    private final S3Service s3Service;
 
-    private static final String RUTA_IMAGENES = "uploads/";
+    public RutinaController(RutinaService rutinaService, S3Service s3Service) {
+        this.rutinaService = rutinaService;
+        this.s3Service = s3Service;
+    }
 
     @GetMapping("/gym/{gymId}")
     public String mostrarRutinasPorGymId(@PathVariable String gymId, Model model) {
@@ -42,26 +47,51 @@ public class RutinaController {
         return "nuevaRutina";
     }
 
+    @GetMapping("/ClienteRutinas/grupo/{grupoMuscular}")
+    public String mostrarRutinasPorGrupo(@PathVariable String grupoMuscular, Model model, HttpSession session) {
+        System.out.println("🟢 Grupo muscular recibido: " + grupoMuscular); // Verifica en consola
+
+        // Validar si el ID del gimnasio existe
+        ObjectId gymId = (ObjectId) session.getAttribute("gymId");
+        System.out.println("🔎 gymId en sesión: " + gymId);
+        if (gymId == null) {
+            return "redirect:/Api/Auth/login";
+        }
+
+        // Obtener rutinas filtradas
+        List<RutinaEntity> rutinas = rutinaService.findByGrupoMuscularAndGymId(grupoMuscular.toUpperCase(), gymId);
+        System.out.println("🔎 Rutinas encontradas: " + rutinas.size());
+        model.addAttribute("rutinas", rutinas);
+        model.addAttribute("grupoMuscular", grupoMuscular);
+        return "/rutinasGrupo";
+    }
+
     @PostMapping("/gym/{gymId}/guardar")
-public String guardarRutina(@PathVariable String gymId,
-                            @RequestParam String nombreEjercicio,
-                            @RequestParam String grupoMuscular,
-                            @RequestParam String repeticiones,
-                            @RequestParam String series,
-                            @RequestParam("fotosRutina") List<MultipartFile> archivos,
-                            @RequestParam("descripciones") List<String> descripciones) {
+    public String guardarRutina(@PathVariable String gymId,
+            @RequestParam String nombreEjercicio,
+            @RequestParam String grupoMuscular,
+            @RequestParam String repeticiones,
+            @RequestParam String series,
+            @RequestParam("fotosRutina") List<MultipartFile> archivos,
+            @RequestParam("descripciones") List<String> descripciones) {
 
-    RutinaEntity rutina = new RutinaEntity();
-    rutina.setGrupoMuscular(grupoMuscular);
-    rutina.setRepeticiones(repeticiones);
-    rutina.setSeries(series);
-    rutina.setGymId(new ObjectId(gymId));
-    rutina.setCreatedAt(LocalDateTime.now());
-    rutina.setUpdatedAt(LocalDateTime.now());
+        String grupoCorregido = rutinaService.sugerirGrupoMuscular(grupoMuscular);
+        if (grupoCorregido == null) {
+            grupoCorregido = grupoMuscular;
+        }
 
-    rutinaService.createRutina(rutina, archivos, descripciones);
-    return "redirect:/rutinas/gym/" + gymId;
-}
+        // Crear la rutina con el nombre corregido
+        RutinaEntity rutina = new RutinaEntity();
+        rutina.setGrupoMuscular(grupoCorregido);
+        rutina.setRepeticiones(repeticiones);
+        rutina.setSeries(series);
+        rutina.setGymId(new ObjectId(gymId));
+        rutina.setCreatedAt(LocalDateTime.now());
+        rutina.setUpdatedAt(LocalDateTime.now());
+
+        rutinaService.createRutina(rutina, archivos, descripciones);
+        return "redirect:/rutinas/gym/" + gymId;
+    }
 
     @GetMapping("/{id}/editar")
     public String mostrarFormularioEditarRutina(@PathVariable String id, Model model) {
@@ -93,13 +123,23 @@ public String guardarRutina(@PathVariable String gymId,
 
         // Eliminar fotos seleccionadas
         if (fotosAEliminar != null && !fotosAEliminar.isEmpty()) {
-            List<RutinaEntity.FotoRutina> restantes = new ArrayList<>();
-            for (int i = 0; i < rutina.getFotosRutina().size(); i++) {
+            List<RutinaEntity.FotoRutina> fotosActuales = rutina.getFotosRutina();
+            List<RutinaEntity.FotoRutina> fotosActualizadas = new ArrayList<>();
+
+            for (int i = 0; i < fotosActuales.size(); i++) {
                 if (!fotosAEliminar.contains(i)) {
-                    restantes.add(rutina.getFotosRutina().get(i));
+                    fotosActualizadas.add(fotosActuales.get(i));
+                } else {
+                    // Opcional: Eliminar la imagen de S3
+                    try {
+                        s3Service.eliminarImagen(fotosActuales.get(i).getNombreArchivo());
+                    } catch (Exception e) {
+                        // Loggear el error pero continuar
+                        System.err.println("Error al eliminar imagen de S3: " + e.getMessage());
+                    }
                 }
             }
-            rutina.setFotosRutina(restantes);
+            rutina.setFotosRutina(fotosActualizadas);
         }
 
         // Agregar nuevas fotos
@@ -107,25 +147,20 @@ public String guardarRutina(@PathVariable String gymId,
             MultipartFile archivo = archivos.get(i);
             if (!archivo.isEmpty()) {
                 try {
-                    // Generar nombre único para el archivo
                     String nombreArchivo = System.currentTimeMillis() + "_" + archivo.getOriginalFilename();
-                    Path rutaGuardado = Paths.get(RUTA_IMAGENES + nombreArchivo);
+                    Path rutaTemp = Path.of(System.getProperty("java.io.tmpdir"), nombreArchivo);
+                    archivo.transferTo(rutaTemp.toFile());
 
-                    // Crear directorios si no existen
-                    Files.createDirectories(rutaGuardado.getParent());
+                    String urlImagen = s3Service.subirImagen(nombreArchivo, rutaTemp);
 
-                    // Guardar archivo en el sistema
-                    Files.copy(archivo.getInputStream(), rutaGuardado, StandardCopyOption.REPLACE_EXISTING);
-
-                    // Agregar nueva foto a la rutina
                     rutina.getFotosRutina().add(new RutinaEntity.FotoRutina(
                             nombreEjercicio,
                             nombreArchivo,
                             descripciones.get(i),
-                            "/content/rutinas/" + nombreArchivo,
+                            urlImagen,
                             archivo.getContentType()));
                 } catch (IOException e) {
-                    throw new RuntimeException("Error al guardar la imagen: " + e.getMessage());
+                    throw new RuntimeException("Error al subir la imagen a S3: " + e.getMessage());
                 }
             }
         }
@@ -137,6 +172,46 @@ public String guardarRutina(@PathVariable String gymId,
 
         rutinaService.updateRutina(new ObjectId(id), rutina);
         return "redirect:/rutinas/gym/" + rutina.getGymId();
+    }
+
+    @GetMapping("/cliente/ver/{gymId}")
+    public String verRutinasCliente(
+            @PathVariable String gymId,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        // 1. Verificar si el parámetro contiene {gymId} literal
+        if (gymId.startsWith("{") && gymId.endsWith("}")) {
+            redirectAttributes.addFlashAttribute("error", "Debe proporcionar un ID de gimnasio válido");
+            return "redirect:/error-page";
+        }
+
+        // 2. Validación básica
+        if (gymId == null || gymId.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "El ID del gimnasio es requerido");
+            return "redirect:/error-page";
+        }
+
+        try {
+            // 3. Conversión a ObjectId
+            ObjectId gymObjectId = new ObjectId(gymId);
+
+            // 4. Obtención de rutinas
+            List<RutinaEntity> rutinas = rutinaService.getRutinasByGymId(gymObjectId);
+
+            model.addAttribute("rutinas", rutinas);
+            return "rutinasCliente";
+
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", "ID de gimnasio no válido: " + gymId);
+            return "redirect:/error-page";
+        }
+    }
+
+    @GetMapping("/{grupoMuscular}")
+    public ResponseEntity<List<RutinaEntity>> obtenerRutinas(@PathVariable String grupoMuscular) {
+        List<RutinaEntity> rutinas = rutinaService.getRutinasPorGrupoMuscular(grupoMuscular);
+        return ResponseEntity.ok(rutinas);
     }
 
     @PostMapping("/{id}/eliminar")

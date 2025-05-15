@@ -1,5 +1,8 @@
 package com.ProyectoAula.GymAssist.Security;
 
+import java.util.Optional;
+
+import org.bson.types.ObjectId;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,11 +20,16 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.config.Customizer;
 
 import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
+import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
+import com.ProyectoAula.GymAssist.mongoModels.GimnasiosEntity;
 import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
 import com.ProyectoAula.GymAssist.mongoRepository.AdminRepository;
+import com.ProyectoAula.GymAssist.mongoRepository.ClientRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.GimnasiosRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
 import com.ProyectoAula.GymAssist.mongoServices.CustomUserDetailsService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
@@ -30,12 +38,14 @@ public class SecurityConfig {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
     private final GimnasiosRepository gimnasiosRepository;
+    private final ClientRepository clientRepository;
 
     public SecurityConfig(UserRepository userRepository, AdminRepository adminRepository,
-            GimnasiosRepository gimnasiosRepository) {
+            GimnasiosRepository gimnasiosRepository, ClientRepository clientRepository) {
         this.gimnasiosRepository = gimnasiosRepository;
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
+        this.clientRepository = clientRepository;
     }
 
     /**
@@ -45,16 +55,18 @@ public class SecurityConfig {
      * @return El filtro de seguridad configurado.
      * @throws Exception Si ocurre un error al configurar la seguridad.
      */
-    
+
     @Bean
     public SecurityFilterChain securedFilterChain(final HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/Api/Auth/login", "/Api/Auth/logout", "/Api/Auth/register").permitAll()
-                        .requestMatchers("/Styles/**", "/Imagenes/**", "/Js/**", "/uploads/**", "/content/**").permitAll()
+                        .requestMatchers("/Styles/**", "/Imagenes/**", "/Js/**", "/uploads/**", "/content/**")
+                        .permitAll()
                         .requestMatchers("/Error/**", "/Error").permitAll()
                         .requestMatchers("/gimnasios/register").authenticated()
+                        .requestMatchers("/rutinas/**").authenticated()
                         .requestMatchers("/Api/Admin/**").hasRole("ADMIN")
                         .requestMatchers("/Api/Cliente/**").hasRole("CLIENTE")
                         .anyRequest().authenticated())
@@ -76,10 +88,10 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                         .invalidSessionUrl("/Api/Auth/Login")
                         .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::newSession))
-                        .authenticationProvider(authenticationProvider(userDetailsService(userRepository), passwordEncoder())) // SOLO
-                                                                                                                       // ESTA
-                                                                                                                       // LÍNEA
-                                                                                                                       // AQUÍ
+                .authenticationProvider(authenticationProvider(userDetailsService(userRepository), passwordEncoder())) // SOLO
+                // ESTA
+                // LÍNEA
+                // AQUÍ
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
@@ -143,18 +155,18 @@ public class SecurityConfig {
      */
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return (_, response, authentication) -> {
+        return (request, response, authentication) -> { // Agrega `request` para acceder a la sesión
             String username = authentication.getName();
             String role = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .findFirst()
                     .orElse("");
 
+            HttpSession session = request.getSession(); // Obtén la sesión
+
             String redirectUrl = "/Api/Auth/login"; // Default
 
             if ("ROLE_ADMIN".equals(role)) {
-                // Inyecta los servicios necesarios aquí o usa un @Component externo si
-                // prefieres
                 UserEntity user = userRepository.findByUsername(username).orElse(null);
                 if (user != null) {
                     AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
@@ -164,11 +176,25 @@ public class SecurityConfig {
                             redirectUrl = "/gimnasios/register";
                         } else {
                             redirectUrl = "/Api/Admin/AdminHome";
+                            // ⚡ Guardar gymId en la sesión
+                            ObjectId gymId = gimnasiosRepository.findByAdminId(admin.getId())
+                                    .map(GimnasiosEntity::getId)
+                                    .orElse(null);
+                            session.setAttribute("gymId", gymId);
                         }
                     }
                 }
             } else if ("ROLE_CLIENTE".equals(role)) {
-                redirectUrl = "/Api/Cliente/ClienteHome";
+                UserEntity user = userRepository.findByUsername(username).orElse(null);
+                if (user != null) {
+                    Optional<ClientEntity> cliente = clientRepository.findByUsername(username);
+                    if (cliente != null) {
+                        redirectUrl = "/Api/Cliente/ClienteHome";
+                        // ⚡ Guardar gymId en la sesión
+                        ObjectId gymId = cliente.map(ClientEntity::getGymId).orElse(null);
+                        session.setAttribute("gymId", gymId);
+                    }
+                }
             }
 
             response.sendRedirect(redirectUrl);

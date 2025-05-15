@@ -32,6 +32,11 @@ build/
 ### VS Code ###
 .vscode/
 
-# Al final de tu .gitignore agrega:
+### Archivos de entorno y seguridad ###
+.env
+.env.local
+.env.*.local
+
+### Subidas (uploads de imágenes, por ejemplo) ###
 /uploads/
 !/uploads/rutinas/.keep

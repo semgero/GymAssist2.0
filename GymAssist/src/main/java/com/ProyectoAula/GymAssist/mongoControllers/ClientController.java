@@ -4,17 +4,21 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoModels.MedicionesEntity;
 import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
 import org.springframework.ui.Model;
 import com.ProyectoAula.GymAssist.mongoServices.MedicionesService;
+import com.ProyectoAula.GymAssist.mongoServices.RutinaService;
 
 @Controller
 @RequestMapping("/Api/Cliente")
@@ -22,9 +26,12 @@ public class ClientController {
 
     private final ClienteService clienteService;
     private final MedicionesService medicionesService;
+    private final RutinaService rutinaService;
 
-    public ClientController(ClienteService clienteService, MedicionesService medicionesService) {
+    @Autowired
+    public ClientController(ClienteService clienteService, MedicionesService medicionesService, RutinaService rutinaService) {
         this.clienteService = clienteService;
+        this.rutinaService = rutinaService;
         this.medicionesService = medicionesService;
     }
 
@@ -41,11 +48,6 @@ public class ClientController {
     @GetMapping("/ClienteDashboard")
     public String ClienteDashboard(){
         return "ClienteDashboard";
-    }
-
-    @GetMapping("/ClienteCuenta")
-    public String ClienteCuenta(){
-        return "ClienteCuenta";
     }
 
     @GetMapping("/Asistencia")

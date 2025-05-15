@@ -1,240 +1,260 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GymAssist Cliente</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="/Styles/ClientesRutinas.css"/>
-  <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GymAssist Cliente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="/Styles/ClientesRutinas.css" />
+    <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
 </head>
+
 <body>
-  <!-- Navbar -->
-  <header class="navbar">
-    <div class="navbar-left">
-      <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-      <div class="navbar-brand">GymAssist Cliente</div>
-    </div>
-    <div class="navbar-right">
-      <button class="btn-theme" onclick="btnTheme()"><i class="fas fa-moon"></i></button>
-      <div class="profile">
-        <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
-        <div id="dropdown" class="dropdown">
-          <a th:href="@{ClienteCuenta}"><i class="fas fa-user-cog"></i> Cuenta</a>
-          <a th:href="@{/Api/Auth/Logout}" class="danger"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="navbar-brand">GymAssist Cliente</div>
         </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <nav>
-      <a th:href="@{/Api/Cliente/ClienteHome}" title="home">
-        <i class="fas fa-home icon"></i>
-        <span class="text">Home</span>
-      </a> 
-      <a th:href="@{/Api/Cliente/ClienteDashboard}" title="dashboard">
-        <i class="fas fa-chart-line icon"></i>
-        <span class="text">Dashboard</span>
-      </a>
-      <a th:href="@{/Api/Cliente/imc}" title="IMC">
-        <i class="fas fa-weight icon"></i>
-        <span class="text">IMC</span>
-      </a>
-      <a th:href="@{/Api/Cliente/ClienteRutinas}" class="active" title="rutinas">
-        <i class="fa-solid fa-dumbbell icon"></i>
-        <span class="text">Rutinas</span>
-      </a>
-      <a th:href="@{/Api/Cliente/Asistencia}" title="Asistencia">
-        <i class="fas fa-calendar-check icon"></i>
-        <span class="text">Asistencia</span>
-      </a>
-    </nav>
-  </aside>
-
-  <!-- Main -->
-  <main class="main-content">
-    <h1>Rutinas</h1>
-    <div class="card">
-        <div class="wrapper">
-
-            <div class="cols">
-                <div class="col" ontouchstart="this.classList.toggle('hover');">
-                    <a href="#">
-                        <div class="container">
-                            <div class="front" style="background-image: url(https://i.blogs.es/947e13/six-pack/450_1000.webp)">
-                                <div class="inner">
-                                    <p>PECHO</p>
-                                    <span>chest</span>
-                                </div>
-                            </div>
-                            <div class="back">
-                                <div class="inner">
-                                    <p>El pecho es un grupo muscular del torso que se entrena para ganar fuerza y volumen.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col" ontouchstart="this.classList.toggle('hover');">
-                    <a href="#">
-                        <div class="container">
-                            <div class="front" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT79KANaXUx9OK8r8z2z2dZ5HPNNHDNnNZihA&s)">
-                                <div class="inner">
-                                    <p>ESPALDA</p>
-                                    <span>back</span>
-                                </div>
-                            </div>
-                            <div class="back">
-                                <div class="inner">
-                                    <p>La espalda es un grupo muscular del torso que se entrena para ganar fuerza y amplitud.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col" ontouchstart="this.classList.toggle('hover');">
-                    <a href="#">
-                        <div class="container">
-                            <div class="front" style="background-image: url(https://img.freepik.com/fotos-premium/primer-plano-piernas-culturistas-listos-deporte-competitivo_600776-12403.jpg)">
-                                <div class="inner">
-                                    <p>CUADRICEPS</p>
-                                    <span>quadriceps</span>
-                                </div>
-                            </div>
-                            <div class="back">
-                                <div class="inner">
-                                    <p>El cuádriceps es un músculo del muslo que se entrena para ganar fuerza y potencia en las piernas.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col" ontouchstart="this.classList.toggle('hover');">
-                    <a href="#">
-                        <div class="container">
-                            <div class="front" style="background-image: url(https://mundoentrenamiento.com/wp-content/uploads/2023/03/curl-femoral.jpg)">
-                                <div class="inner">
-                                    <p>FEMORAL</p>
-                                    <span>femoral</span>
-                                </div>
-                            </div>
-                            <div class="back">
-                                <div class="inner">
-                                    <p>El femoral es un músculo posterior del muslo que se entrena para ganar fuerza y estabilidad en las piernas.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col" ontouchstart="this.classList.toggle('hover');">
-                    <a href="#">
-                        <div class="container">
-                            <div class="front" style="background-image: url(https://us.123rf.com/450wm/spotpoint74/spotpoint741704/spotpoint74170400024/75528600-atleta-culturista-trasero-muscular-y-muslos-culturismo-competiciones.jpg?ver=6)">
-                                <div class="inner">
-                                    <p>GLUTEOS</p>
-                                    <span>glúteos</span>
-                                </div>
-                            </div>
-                            <div class="back">
-                                <div class="inner">
-                                    <p>Los glúteos son un grupo muscular del torso inferior que se entrena para ganar volumen y tonificación.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col" ontouchstart="this.classList.toggle('hover');">
-                    <a href="#">
-                        <div class="container">
-                            <div class="front" style="background-image: url(https://hips.hearstapps.com/hmg-prod/images/young-man-exercising-his-biceps-in-the-gym-royalty-free-image-1578574306.jpg)">
-                                <div class="inner">
-                                    <p>BICEPS</p>
-                                    <span>biceps</span>
-                                </div>
-                            </div>
-                            <div class="back">
-                                <div class="inner">
-                                    <p>El bíceps es un músculo del brazo que se entrena para ganar fuerza y volumen.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col" ontouchstart="this.classList.toggle('hover');">
-                    <a href="#">
-                        <div class="container">
-                            <div class="front" style="background-image: url(https://i0.wp.com/www.muscleandfitness.com/wp-content/uploads/2019/12/arms-triceps-gym-cable-machine.jpg?w=1300&h=731&crop=1&quality=86&strip=all)">
-                                <div class="inner">
-                                    <p>TRICEPS</p>
-                                    <span>triceps</span>
-                                </div>
-                            </div>
-                            <div class="back">
-                                <div class="inner">
-                                    <p>El tríceps es un músculo del brazo que se entrena para ganar fuerza y definición.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col" ontouchstart="this.classList.toggle('hover');">
-                    <a href="#">
-                        <div class="container">
-                            <div class="front" style="background-image: url(https://www.cambiatufisico.com/wp-content/uploads/ejercicios-hombro1.jpg)">
-                                <div class="inner">
-                                    <p>HOMBRO</p>
-                                    <span>shoulder</span>
-                                </div>
-                            </div>
-                            <div class="back">
-                                <div class="inner">
-                                    <p>El hombro es un grupo muscular que se entrena para ganar fuerza y movilidad en la parte superior del cuerpo.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+        <div class="navbar-right">
+            <button class="btn-theme" onclick="btnTheme()"><i class="fas fa-moon"></i></button>
+            <div class="profile">
+                <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
+                <div id="dropdown" class="dropdown">
+                    <a th:href="@{ClienteCuenta}"><i class="fas fa-user-cog"></i> Cuenta</a>
+                    <a th:href="@{/Api/Auth/Logout}" class="danger"><i class="fas fa-sign-out-alt"></i> Cerrar
+                        sesión</a>
                 </div>
             </div>
         </div>
-    </div>
-  </main>
-  
+    </header>
 
-  <!-- Footer -->
-  <footer class="footer">
-    &copy; 2025 GymAssist. Todos los derechos reservados.
-  </footer>
-  <script>
-    function toggleSidebar() {
-    document.body.classList.toggle('sidebar-collapsed');
-  }
-  function toggleDropdown(e) {
-    e.stopPropagation();
-    document.getElementById('dropdown').classList.toggle('show');
-  }
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <nav>
+            <a th:href="@{/Api/Cliente/ClienteHome}" title="home">
+                <i class="fas fa-home icon"></i>
+                <span class="text">Home</span>
+            </a>
+            <a th:href="@{/Api/Cliente/ClienteDashboard}" title="dashboard">
+                <i class="fas fa-chart-line icon"></i>
+                <span class="text">Dashboard</span>
+            </a>
+            <a th:href="@{/Api/Cliente/imc}" title="IMC">
+                <i class="fas fa-weight icon"></i>
+                <span class="text">IMC</span>
+            </a>
+            <a th:href="@{/Api/Cliente/ClienteRutinas}" class="active" title="rutinas">
+                <i class="fa-solid fa-dumbbell icon"></i>
+                <span class="text">Rutinas</span>
+            </a>
+            <a th:href="@{/Api/Cliente/Asistencia}" title="Asistencia">
+                <i class="fas fa-calendar-check icon"></i>
+                <span class="text">Asistencia</span>
+            </a>
+        </nav>
+    </aside>
 
-  document.addEventListener('click', () => {
-    document.getElementById('dropdown').classList.remove('show');
-  })
+    <!-- Main -->
+    <main class="main-content">
+        <h1>Rutinas</h1>
+        <div class="card">
+            <div class="wrapper">
 
-  // Al cargar la página, aplica el tema guardado:
-  document.addEventListener('DOMContentLoaded', () => {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark') {
-      document.body.classList.add('theme-dark');
-    }
-  });
+                <div class="cols">
+                    <div class="col" ontouchstart="this.classList.toggle('hover');">
+                        <a th:href="@{/rutinas/ClienteRutinas/grupo/{grupoMuscular}(grupoMuscular='Pecho')}">
+                            <div class="container">
+                                <div class="front"
+                                    style="background-image: url(https://i.blogs.es/947e13/six-pack/450_1000.webp)">
+                                    <div class="inner">
+                                        <p>PECHO</p>
+                                        <span>chest</span>
+                                    </div>
+                                </div>
+                                <div class="back">
+                                    <div class="inner">
+                                        <p>El pecho es un grupo muscular del torso que se entrena para ganar fuerza y
+                                            volumen.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col" ontouchstart="this.classList.toggle('hover');">
+                        <a th:href="@{/rutinas/ClienteRutinas/grupo/{grupoMuscular}(grupoMuscular='Espalda')}">
+                            <div class="container">
+                                <div class="front"
+                                    style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT79KANaXUx9OK8r8z2z2dZ5HPNNHDNnNZihA&s)">
+                                    <div class="inner">
+                                        <p>ESPALDA</p>
+                                        <span>back</span>
+                                    </div>
+                                </div>
+                                <div class="back">
+                                    <div class="inner">
+                                        <p>La espalda es un grupo muscular del torso que se entrena para ganar fuerza y
+                                            amplitud.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col" ontouchstart="this.classList.toggle('hover');">
+                        <a th:href="@{/rutinas/ClienteRutinas/grupo/{grupoMuscular}(grupoMuscular='Cuadriceps')}">
+                            <div class="container">
+                                <div class="front"
+                                    style="background-image: url(https://img.freepik.com/fotos-premium/primer-plano-piernas-culturistas-listos-deporte-competitivo_600776-12403.jpg)">
+                                    <div class="inner">
+                                        <p>CUADRICEPS</p>
+                                        <span>quadriceps</span>
+                                    </div>
+                                </div>
+                                <div class="back">
+                                    <div class="inner">
+                                        <p>El cuádriceps es un músculo del muslo que se entrena para ganar fuerza y
+                                            potencia en las piernas.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col" ontouchstart="this.classList.toggle('hover');">
+                        <a th:href="@{/rutinas/ClienteRutinas/grupo/Femoral}">
+                            <div class="container">
+                                <div class="front"
+                                    style="background-image: url(https://mundoentrenamiento.com/wp-content/uploads/2023/03/curl-femoral.jpg)">
+                                    <div class="inner">
+                                        <p>FEMORAL</p>
+                                        <span>femoral</span>
+                                    </div>
+                                </div>
+                                <div class="back">
+                                    <div class="inner">
+                                        <p>El femoral es un músculo posterior del muslo que se entrena para ganar fuerza
+                                            y estabilidad en las piernas.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col" ontouchstart="this.classList.toggle('hover');">
+                        <a th:href="@{/rutinas/ClienteRutinas/grupo/Gluteos}">
+                            <div class="container">
+                                <div class="front"
+                                    style="background-image: url(https://us.123rf.com/450wm/spotpoint74/spotpoint741704/spotpoint74170400024/75528600-atleta-culturista-trasero-muscular-y-muslos-culturismo-competiciones.jpg?ver=6)">
+                                    <div class="inner">
+                                        <p>GLUTEOS</p>
+                                        <span>glúteos</span>
+                                    </div>
+                                </div>
+                                <div class="back">
+                                    <div class="inner">
+                                        <p>Los glúteos son un grupo muscular del torso inferior que se entrena para
+                                            ganar volumen y tonificación.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col" ontouchstart="this.classList.toggle('hover');">
+                        <a th:href="@{/rutinas/ClienteRutinas/grupo/Biceps}">
+                            <div class="container">
+                                <div class="front"
+                                    style="background-image: url(https://hips.hearstapps.com/hmg-prod/images/young-man-exercising-his-biceps-in-the-gym-royalty-free-image-1578574306.jpg)">
+                                    <div class="inner">
+                                        <p>BICEPS</p>
+                                        <span>biceps</span>
+                                    </div>
+                                </div>
+                                <div class="back">
+                                    <div class="inner">
+                                        <p>El bíceps es un músculo del brazo que se entrena para ganar fuerza y volumen.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col" ontouchstart="this.classList.toggle('hover');">
+                        <a th:href="@{/rutinas/ClienteRutinas/grupo/Triceps}">
+                            <div class="container">
+                                <div class="front"
+                                    style="background-image: url(https://i0.wp.com/www.muscleandfitness.com/wp-content/uploads/2019/12/arms-triceps-gym-cable-machine.jpg?w=1300&h=731&crop=1&quality=86&strip=all)">
+                                    <div class="inner">
+                                        <p>TRICEPS</p>
+                                        <span>triceps</span>
+                                    </div>
+                                </div>
+                                <div class="back">
+                                    <div class="inner">
+                                        <p>El tríceps es un músculo del brazo que se entrena para ganar fuerza y
+                                            definición.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col" ontouchstart="this.classList.toggle('hover');">
+                        <a th:href="@{/rutinas/ClienteRutinas/grupo/Hombros}">
+                            <div class="container">
+                                <div class="front"
+                                    style="background-image: url(https://www.cambiatufisico.com/wp-content/uploads/ejercicios-hombro1.jpg)">
+                                    <div class="inner">
+                                        <p>HOMBRO</p>
+                                        <span>shoulder</span>
+                                    </div>
+                                </div>
+                                <div class="back">
+                                    <div class="inner">
+                                        <p>El hombro es un grupo muscular que se entrena para ganar fuerza y movilidad
+                                            en la parte superior del cuerpo.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-  // Función única para alternar tema y guardarlo
-  function btnTheme() {
-    const isDark = document.body.classList.toggle('theme-dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  }
 
-  // Exponemos la función al scope global
-  window.btnTheme = btnTheme;
-  </script>
+    <!-- Footer -->
+    <footer class="footer">
+        &copy; 2025 GymAssist. Todos los derechos reservados.
+    </footer>
+    <script>
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+        }
+        function toggleDropdown(e) {
+            e.stopPropagation();
+            document.getElementById('dropdown').classList.toggle('show');
+        }
+
+        document.addEventListener('click', () => {
+            document.getElementById('dropdown').classList.remove('show');
+        })
+
+        // Al cargar la página, aplica el tema guardado:
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+                document.body.classList.add('theme-dark');
+            }
+        });
+
+        // Función única para alternar tema y guardarlo
+        function btnTheme() {
+            const isDark = document.body.classList.toggle('theme-dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Exponemos la función al scope global
+        window.btnTheme = btnTheme;
+    </script>
 </body>
+
 </html>
