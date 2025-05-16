@@ -86,6 +86,11 @@ public class AdminController {
         return "redirect:/Api/Admin/AdminHome"; // Regresar a AdminHome
     }
 
+     @GetMapping("/CuentaAdmin")
+    public String CuentaAdmin() {
+        return "CuentaAdmin"; // <-- tu vista de CuentaAdmin
+    }
+
     @GetMapping("/pagar/{id}")
     public String pagarCliente(@PathVariable ObjectId id) {
         ClientEntity cliente = clienteService.buscarClientePorId(id);

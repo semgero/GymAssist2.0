@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GymAssist Admin</title>
+  <!-- FontAwesome para los iconos -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/Styles/CuentaAdmin.css"/>
+  <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="navbar-brand">GymAssist Admin</div>
+    </div>
+    <div class="navbar-right">
+      <!-- Selector de tema -->
+      <button class="btn-theme" onclick="btnTheme()"><i class="fas fa-moon"></i></button>
+      <!-- Perfil -->
+      <div class="profile">
+        <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
+        <div id="dropdown" class="dropdown">
+          <a href="#"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a href="#" class="danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+        <nav>
+            <a href="#" title="Home">
+                <i class="fas fa-home icon"></i>
+                <span class="text">Home</span>
+            </a>
+            <a th:href="@{/Api/Admin/AdminHome}" title="Usuarios">
+                <i class="fas fa-users icon"></i>
+                <span class="text">Clientes</span>
+            </a>
+            <a href="@{/Api/Admin/planesGimnasio}" class="active" title="Membresías">
+                <i class="fas fa-credit-card icon"></i>
+                <span class="text">Membresías</span>
+            </a>
+            <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" title="Rutinas">
+                <i class="fas fa-calendar-alt icon"></i>
+                <span class="text">Rutinas</span>
+            </a>
+            <a href="#" title="dashboard">
+                <i class="fas fa-chart-pie icon"></i>
+                <span class="text">dashboard</span>
+            </a>
+        </nav>
+    </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <h1>Cuenta</h1>
+    <div class="card">
+        <form class="info-update-form fancy-form">
+            <h1 class="form-title">Cambio de Información</h1>
+
+            <div class="form-cam">
+                <label for="email">Correo Electrónico</label>
+                <div class="input-icon">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" placeholder="correo@ejemplo.com" required />
+                </div>
+            </div>
+
+            <div class="form-cam">
+                <label for="password">Contraseña</label>
+                <div class="input-icon">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Contraseña" required />
+                </div>
+            </div>
+
+            <div class="form-cam">
+                <label for="confirm-password">Confirmar Contraseña</label>
+                <div class="input-icon">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="confirm-password" placeholder="Confirmar Contraseña" required />
+                </div>
+            </div>
+
+            <button type="submit" class="btn-update">Actualizar Datos</button>
+            </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    &copy; 2025 GymAssist. Todos los derechos reservados.
+  </footer>
+</body>
+<script src="cuenta.js"></script>
+</html>
