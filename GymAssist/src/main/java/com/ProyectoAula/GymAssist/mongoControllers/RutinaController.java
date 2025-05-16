@@ -51,14 +51,11 @@ public class RutinaController {
     public String mostrarRutinasPorGrupo(@PathVariable String grupoMuscular, Model model, HttpSession session) {
         System.out.println("🟢 Grupo muscular recibido: " + grupoMuscular); // Verifica en consola
 
-        // Validar si el ID del gimnasio existe
         ObjectId gymId = (ObjectId) session.getAttribute("gymId");
-        System.out.println("🔎 gymId en sesión: " + gymId);
         if (gymId == null) {
             return "redirect:/Api/Auth/login";
         }
 
-        // Obtener rutinas filtradas
         List<RutinaEntity> rutinas = rutinaService.findByGrupoMuscularAndGymId(grupoMuscular.toUpperCase(), gymId);
         System.out.println("🔎 Rutinas encontradas: " + rutinas.size());
         model.addAttribute("rutinas", rutinas);
@@ -68,7 +65,7 @@ public class RutinaController {
 
     @PostMapping("/gym/{gymId}/guardar")
     public String guardarRutina(@PathVariable String gymId,
-            @RequestParam String nombreEjercicio,
+            @RequestParam List<String> nombreEjercicio, // Ahora es lista
             @RequestParam String grupoMuscular,
             @RequestParam String repeticiones,
             @RequestParam String series,
@@ -80,7 +77,7 @@ public class RutinaController {
             grupoCorregido = grupoMuscular;
         }
 
-        // Crear la rutina con el nombre corregido
+        // Crear la rutina con el grupo muscular corregido
         RutinaEntity rutina = new RutinaEntity();
         rutina.setGrupoMuscular(grupoCorregido);
         rutina.setRepeticiones(repeticiones);
@@ -89,7 +86,9 @@ public class RutinaController {
         rutina.setCreatedAt(LocalDateTime.now());
         rutina.setUpdatedAt(LocalDateTime.now());
 
-        rutinaService.createRutina(rutina, archivos, descripciones);
+        // Ahora enviamos la lista de nombresEjercicios al servicio
+        rutinaService.createRutina(rutina, archivos, descripciones, nombreEjercicio);
+
         return "redirect:/rutinas/gym/" + gymId;
     }
 
@@ -105,7 +104,7 @@ public class RutinaController {
     @PostMapping("/{id}/actualizar")
     public String actualizarRutina(
             @PathVariable String id,
-            @RequestParam String nombreEjercicio,
+            @RequestParam List<String> nombreEjercicio, // Ahora lista
             @RequestParam String grupoMuscular,
             @RequestParam String repeticiones,
             @RequestParam String series,
@@ -130,11 +129,9 @@ public class RutinaController {
                 if (!fotosAEliminar.contains(i)) {
                     fotosActualizadas.add(fotosActuales.get(i));
                 } else {
-                    // Opcional: Eliminar la imagen de S3
                     try {
                         s3Service.eliminarImagen(fotosActuales.get(i).getNombreArchivo());
                     } catch (Exception e) {
-                        // Loggear el error pero continuar
                         System.err.println("Error al eliminar imagen de S3: " + e.getMessage());
                     }
                 }
@@ -142,7 +139,7 @@ public class RutinaController {
             rutina.setFotosRutina(fotosActualizadas);
         }
 
-        // Agregar nuevas fotos
+        // Agregar nuevas fotos con los nombres correctos
         for (int i = 0; i < archivos.size(); i++) {
             MultipartFile archivo = archivos.get(i);
             if (!archivo.isEmpty()) {
@@ -154,7 +151,7 @@ public class RutinaController {
                     String urlImagen = s3Service.subirImagen(nombreArchivo, rutaTemp);
 
                     rutina.getFotosRutina().add(new RutinaEntity.FotoRutina(
-                            nombreEjercicio,
+                            nombreEjercicio.get(i), // Asegurar que cada imagen tenga su nombreEjercicio correcto
                             nombreArchivo,
                             descripciones.get(i),
                             urlImagen,
@@ -163,11 +160,6 @@ public class RutinaController {
                     throw new RuntimeException("Error al subir la imagen a S3: " + e.getMessage());
                 }
             }
-        }
-
-        // Actualizar nombre del ejercicio para todas las fotos
-        for (RutinaEntity.FotoRutina foto : rutina.getFotosRutina()) {
-            foto.setNombreEjercicio(nombreEjercicio);
         }
 
         rutinaService.updateRutina(new ObjectId(id), rutina);

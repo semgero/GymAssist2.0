@@ -26,7 +26,8 @@ public class RutinaService {
     @Autowired
     private S3Service s3Service;
 
-    public RutinaEntity createRutina(RutinaEntity rutina, List<MultipartFile> archivos, List<String> descripciones) {
+    public RutinaEntity createRutina(RutinaEntity rutina, List<MultipartFile> archivos, List<String> descripciones,
+            List<String> nombreEjercicio) {
         List<RutinaEntity.FotoRutina> fotos = new ArrayList<>();
 
         for (int i = 0; i < archivos.size(); i++) {
@@ -39,8 +40,10 @@ public class RutinaService {
 
                     String urlImagen = s3Service.subirImagen(nombreArchivo, rutaTemp);
 
+                    // Corrección aquí: Ahora nombreEjercicio viene de nombresEjercicios en el
+                    // controlador
                     fotos.add(new RutinaEntity.FotoRutina(
-                            rutina.getGrupoMuscular(),
+                            nombreEjercicio.get(i), // NombreEjercicio correcto
                             nombreArchivo,
                             descripciones.get(i),
                             urlImagen,

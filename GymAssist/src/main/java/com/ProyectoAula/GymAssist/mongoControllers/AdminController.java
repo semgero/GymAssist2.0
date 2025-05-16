@@ -46,9 +46,28 @@ public class AdminController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Mostrar la lista de clientes en AdminHome
     @GetMapping("/AdminHome")
     public String mostrarAdminHome(Model model, Principal principal) {
+
+        UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+        AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+        GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+        ClienteResumenDTO resumen = clienteService.obtenerResumenPorGym(gym.getId());
+        model.addAttribute("resumen", resumen);
+        model.addAttribute("adminId", admin != null ? admin.getId() : null);
+        model.addAttribute("gymId", gym != null ? gym.getId() : null);
+
+        if (gym != null) {
+            List<PlanEntity> planes = planService.getPlanesByGimnasioId(gym.getId());
+            model.addAttribute("planes", planes);
+        }
+
+        return "AdminHome";
+    }
+
+    // Mostrar la lista de clientes en AdminHome
+    @GetMapping("/AdminRegister")
+    public String mostrarAdminRegister(Model model, Principal principal) {
         UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
         AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
         GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
@@ -58,16 +77,16 @@ public class AdminController {
         model.addAttribute("gymId", gym != null ? gym.getId() : null);
 
         // Pasar la lista de clientes
-        model.addAttribute("AdminHome", clienteService.listarClientesPorGym(gym.getId()));
+        model.addAttribute("AdminRegister", clienteService.listarClientesPorGym(gym.getId()));
         if (gym != null) {
             List<PlanEntity> planes = planService.getPlanesByGimnasioId(gym.getId());
             model.addAttribute("planes", planes);
         }
-        return "AdminHome"; // Página de AdminHome
+        return "AdminRegister"; // Página de AdminHome
     }
 
     // Agregar nuevo cliente
-    @PostMapping("/Home")
+    @PostMapping("/Register")
     public String agregarCliente(@RequestParam String nombre,
             @RequestParam String correo,
             @RequestParam String idDocumento,
@@ -83,7 +102,7 @@ public class AdminController {
         // Crear el cliente con el servicio
         clienteService.crearCliente(nombre, correo, idDocumento, telefono, mensualidad, username, password, gymId,
                 planId);
-        return "redirect:/Api/Admin/AdminHome"; // Regresar a AdminHome
+        return "redirect:/Api/Admin/AdminRegister"; // Regresar a AdminHome
     }
 
     @GetMapping("/pagar/{id}")
@@ -92,7 +111,7 @@ public class AdminController {
         if (cliente.getEstado() == ClientEntity.EstadoCliente.PENDIENTE) {
             clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.ACTIVO);
         }
-        return "redirect:/Api/Admin/AdminHome";
+        return "redirect:/Api/Admin/AdminRegister";
     }
 
     @GetMapping("/detener/{id}")
@@ -101,19 +120,19 @@ public class AdminController {
         if (cliente.getEstado() == ClientEntity.EstadoCliente.ACTIVO) {
             clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.PENDIENTE);
         }
-        return "redirect:/Api/Admin/AdminHome";
+        return "redirect:/Api/Admin/AdminRegister";
     }
 
     // Eliminar cliente
     @GetMapping("/suspender/{id}")
     public String suspenderCliente(@PathVariable ObjectId id) {
         clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.SUSPENDIDO);
-        return "redirect:/Api/Admin/AdminHome";
+        return "redirect:/Api/Admin/AdminRegister";
     }
 
     @GetMapping("/activar/{id}")
     public String activarCliente(@PathVariable ObjectId id) {
         clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.ACTIVO);
-        return "redirect:/Api/Admin/AdminHome";
+        return "redirect:/Api/Admin/AdminRegister";
     }
 }

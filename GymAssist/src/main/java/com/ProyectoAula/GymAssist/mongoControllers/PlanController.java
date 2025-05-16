@@ -69,7 +69,7 @@ public class PlanController {
     public String mostrarFormularioEditarPlan(@PathVariable String id, Model model) {
         PlanEntity plan = planService.getPlanById(new ObjectId(id)).orElse(null);
         model.addAttribute("plan", plan);
-        return "editarPlan";
+        return "planesGimnasio";
     }
 
     // Actualizar un plan
@@ -81,13 +81,19 @@ public class PlanController {
             @RequestParam Double precio,
             @RequestParam Integer duracion,
             @RequestParam String gymId) {
+
         PlanEntity plan = new PlanEntity();
         plan.setNombre(nombre);
         plan.setDescripcion(descripcion);
         plan.setPrecio(precio);
         plan.setDuracion(duracion);
         plan.setGymId(new ObjectId(gymId));
+
         planService.updatePlan(new ObjectId(id), plan);
+
+        // 🔹 Asegurar que los clientes tengan el nombre del plan actualizado
+        planService.actualizarNombreEnClientes(new ObjectId(id), nombre);
+
         return "redirect:/planes/gimnasio/" + gymId;
     }
 
@@ -95,6 +101,10 @@ public class PlanController {
     @PostMapping("/{id}/eliminar")
     public String eliminarPlan(@PathVariable String id, @RequestParam String gymId) {
         planService.deletePlanById(new ObjectId(id));
+
+        // 🔹 Eliminar la referencia del plan en los clientes
+        planService.eliminarPlanEnClientes(new ObjectId(id));
+
         return "redirect:/planes/gimnasio/" + gymId;
     }
 }
