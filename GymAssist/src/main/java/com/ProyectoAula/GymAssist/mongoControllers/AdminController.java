@@ -69,13 +69,13 @@ public class AdminController {
     // Agregar nuevo cliente
     @PostMapping("/Home")
     public String agregarCliente(@RequestParam String nombre,
-                                @RequestParam String correo,
-                                @RequestParam String idDocumento,
-                                @RequestParam Integer telefono,
-                                @RequestParam String username,
-                                @RequestParam String password,
-                                @RequestParam ObjectId planId,
-                                @RequestParam ObjectId gymId) {
+            @RequestParam String correo,
+            @RequestParam String idDocumento,
+            @RequestParam Integer telefono,
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam ObjectId planId,
+            @RequestParam ObjectId gymId) {
 
         PlanEntity plan = planService.getPlanById(planId).orElse(null);
         String mensualidad = plan != null ? plan.getNombre() : "Desconocido";
