@@ -9,7 +9,9 @@ import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity.Asistencia;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity.EstadoCliente;
 import com.ProyectoAula.GymAssist.mongoModels.ClienteResumenDTO;
+import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
 import com.ProyectoAula.GymAssist.mongoRepository.ClientRepository;
+import com.ProyectoAula.GymAssist.mongoRepository.PlanRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
 
 import java.time.LocalDate;
@@ -21,51 +23,62 @@ public class ClienteService {
     private final ClientRepository clientRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PlanRepository planRepository;
 
     public ClienteService(ClientRepository clientRepository, UserRepository userRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder, PlanRepository planRepository) {
         this.clientRepository = clientRepository;
+        this.planRepository = planRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     // Guardar un cliente nuevo (cuando el admin crea uno)
     public void crearCliente(String nombre, String correo, String idDocumento, Integer telefono, String mensualidad,
-            String username,
-            String password, ObjectId gymId, ObjectId planId) {
-        // Verificar si el correo electrónico ya está registrado
+            String username, String password, ObjectId gymId, ObjectId planId) {
+
         if (userRepository.existsByEmail(correo)) {
             throw new RuntimeException("El correo electrónico ya está en uso.");
         }
 
-        // Verificar si el nombre de usuario ya está registrado
         if (userRepository.existsByUsername(username)) {
             throw new RuntimeException("El nombre de usuario ya está en uso.");
         }
 
         String encodedPassword = passwordEncoder.encode(password);
-        // Crear cliente
+
+        // 🔍 Buscar el plan en base de datos
+        PlanEntity plan = planRepository.findById(planId)
+                .orElseThrow(() -> new RuntimeException("El plan no existe."));
+
+        int duracionMeses = plan.getDuracion(); // o getDuracionMeses(), depende cómo lo hayas nombrado
+
         ClientEntity cliente = new ClientEntity();
         cliente.setNombre(nombre);
         cliente.setCorreo(correo);
-        cliente.setIdDocumento(idDocumento); // Usamos el correo como ID de documento
-        cliente.setTelefono(Integer.valueOf(telefono));
+        cliente.setIdDocumento(idDocumento);
+        cliente.setTelefono(telefono);
         cliente.setMensualidad(mensualidad);
-        cliente.setUsername(username); // Usamos el username proporcionado
+        cliente.setUsername(username);
         cliente.setPassword(encodedPassword);
-        cliente.setPlanId(planId); // Asignar el plan al cliente
-        cliente.setEstado(EstadoCliente.PENDIENTE); // Por defecto, el cliente está activo
-        cliente.setGymId(gymId); // Encriptamos la contraseña
+        cliente.setPlanId(planId);
+        cliente.setEstado(EstadoCliente.PENDIENTE);
+        cliente.setGymId(gymId);
+
+        // 📅 Generar fechas según duración del plan
+        LocalDate fechaInicio = LocalDate.now();
+        LocalDate fechaFin = fechaInicio.plusMonths(duracionMeses);
+        cliente.setFechaInicioMembresia(fechaInicio);
+        cliente.setFechaFinMembresia(fechaFin);
+
         clientRepository.save(cliente);
 
-        // Crear su usuario con el rol CLIENTE y encriptar su contraseña
         UserEntity user = new UserEntity();
-        user.setUsername(username); // Usamos el username proporcionado
+        user.setUsername(username);
         user.setEmail(correo);
-        user.setPassword(encodedPassword); // setemas la contraseña que encriptamos en cliente
+        user.setPassword(encodedPassword);
         user.setRole("CLIENTE");
         userRepository.save(user);
-
     }
 
     // Listar todos los clientes
@@ -144,18 +157,19 @@ public class ClienteService {
                 .count();
 
         return new ClienteResumenDTO(activos, suspendidos);
-        }
+    }
 
-        public void actualizarCliente(ClientEntity clienteActualizado) {
+    public void actualizarCliente(ClientEntity clienteActualizado) {
         clientRepository.save(clienteActualizado);
     }
 
-    public void actualizarDatosPersonales(String nuevoCorreo, String nuevoUsername, String nuevaPassword, String usernameActual) {
+    public void actualizarDatosPersonales(String nuevoCorreo, String nuevoUsername, String nuevaPassword,
+            String usernameActual) {
         ClientEntity cliente = clientRepository.findByUsername(usernameActual)
-            .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
         UserEntity user = userRepository.findByUsername(usernameActual)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         // Verificar si se cambia el correo o username (y evitar duplicados)
         if (!nuevoCorreo.equalsIgnoreCase(cliente.getCorreo()) && userRepository.existsByEmail(nuevoCorreo)) {
