@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
+import com.ProyectoAula.GymAssist.mongoModels.GimnasiosEntity;
 import com.ProyectoAula.GymAssist.mongoModels.MedicionesEntity;
 import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
+import com.ProyectoAula.GymAssist.mongoServices.GimnasiosServices;
+
 import org.springframework.ui.Model;
 import com.ProyectoAula.GymAssist.mongoServices.MedicionesService;
 import com.ProyectoAula.GymAssist.mongoServices.PlanService;
@@ -30,13 +33,15 @@ public class ClientController {
     private final MedicionesService medicionesService;
     private final RutinaService rutinaService;
     private final PlanService planService;
+    private final GimnasiosServices gimnasiosServices;
 
     @Autowired
-    public ClientController(ClienteService clienteService, MedicionesService medicionesService, RutinaService rutinaService, PlanService planService) {
+    public ClientController(ClienteService clienteService, MedicionesService medicionesService, RutinaService rutinaService, PlanService planService, GimnasiosServices gimnasiosServices) {
         this.clienteService = clienteService;
         this.rutinaService = rutinaService;
         this.medicionesService = medicionesService;
         this.planService = planService;
+        this.gimnasiosServices = gimnasiosServices;
     }
 
     @GetMapping("/ClienteHome")
@@ -89,10 +94,20 @@ public class ClientController {
 
     @GetMapping("/ClienteAsistencia")
     public String asistencia(Model model, Principal principal) {
-        String username = principal.getName();
+        String username = principal.getName(); // El usuario logueado
         ClientEntity cliente = clienteService.buscarPorUsername(username);
+
+        ObjectId gymId = cliente.getGymId();
+        Optional<GimnasiosEntity> gymOpt = gimnasiosServices.getGymById(gymId);
+
+        String nombreGimnasio = gymOpt.map(GimnasiosEntity::getNombreGymnasio)
+                                    .orElse("Gimnasio no encontrado");
+
+        model.addAttribute("nombreGimnasio", nombreGimnasio);
         model.addAttribute("cliente", cliente);
-        return "ClienteAsistencia";
+
+        // Puedes pasar más atributos si lo deseas
+        return "ClienteAsistencia"; // o el nombre correcto de tu vista
     }
     
     @PostMapping("/registrar-asistencia")

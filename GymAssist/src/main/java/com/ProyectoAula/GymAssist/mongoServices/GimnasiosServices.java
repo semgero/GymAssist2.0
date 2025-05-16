@@ -43,4 +43,8 @@ public class GimnasiosServices {
     public boolean adminHasGym(ObjectId adminId) {
         return gimnasiosRepository.findByAdminId(adminId).isPresent();
     }
+
+    public Optional<GimnasiosEntity> getGymById(ObjectId gymId) {
+        return gimnasiosRepository.findById(gymId);
+    }
 }

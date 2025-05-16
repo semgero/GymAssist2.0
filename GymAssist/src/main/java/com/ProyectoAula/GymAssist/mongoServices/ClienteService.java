@@ -10,6 +10,7 @@ import com.ProyectoAula.GymAssist.mongoModels.ClientEntity.Asistencia;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity.EstadoCliente;
 import com.ProyectoAula.GymAssist.mongoModels.ClienteResumenDTO;
 import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
+import com.ProyectoAula.GymAssist.mongoRepository.AdminRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.ClientRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.PlanRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
@@ -24,13 +25,15 @@ public class ClienteService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PlanRepository planRepository;
+    private final AdminRepository adminRepository;
 
     public ClienteService(ClientRepository clientRepository, UserRepository userRepository,
-            PasswordEncoder passwordEncoder, PlanRepository planRepository) {
+            PasswordEncoder passwordEncoder, PlanRepository planRepository, AdminRepository adminRepository) {
         this.clientRepository = clientRepository;
         this.planRepository = planRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.adminRepository = adminRepository;
     }
 
     // Guardar un cliente nuevo (cuando el admin crea uno)
