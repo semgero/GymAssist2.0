@@ -77,22 +77,22 @@ public class ClientController {
                                         @RequestParam(required = false) String password,
                                         Principal principal,
                                         RedirectAttributes redirectAttributes) {
-        try {
+            try {
             clienteService.actualizarDatosPersonales(correo, username, password, principal.getName());
             redirectAttributes.addFlashAttribute("exito", "Datos actualizados correctamente.");
+            return "redirect:/Api/Auth/Logout"; // Forzar logout después de cambio de username
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/Api/Cliente/ClienteCuenta";
         }
-
-        return "redirect:/Api/Cliente/ClienteCuenta";
     }
 
-    @GetMapping("/Asistencia")
+    @GetMapping("/ClienteAsistencia")
     public String asistencia(Model model, Principal principal) {
         String username = principal.getName();
         ClientEntity cliente = clienteService.buscarPorUsername(username);
         model.addAttribute("cliente", cliente);
-        return "Asistencia";
+        return "ClienteAsistencia";
     }
     
     @PostMapping("/registrar-asistencia")
@@ -102,10 +102,10 @@ public class ClientController {
     ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
     LocalDate fecha = LocalDate.parse(fechaStr);
     clienteService.registrarAsistencia(cliente.getId(), fecha, musculos);
-    return "redirect:/Api/Cliente/Asistencia";
+    return "redirect:/Api/Cliente/ClienteAsistencia";
     }
 
-    @GetMapping("/imc")
+    @GetMapping("/Clienteimc")
         public String mostrarFormularioIMC(Model model, Principal principal) {
         ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
         ObjectId clienteId = cliente.getId();
@@ -126,7 +126,7 @@ public class ClientController {
         List<MedicionesEntity> historial = medicionesService.obtenerHistorial(clienteId);
         model.addAttribute("mediciones", historial);
 
-        return "imc";
+        return "Clienteimc";
     }
 
     @PostMapping("/imc/guardar")
@@ -143,6 +143,6 @@ public class ClientController {
 
     model.addAttribute("imc", imc);
     model.addAttribute("resultado", resultado);
-    return "redirect:/Api/Cliente/imc";
+    return "redirect:/Api/Cliente/Clienteimc";
     }
 }

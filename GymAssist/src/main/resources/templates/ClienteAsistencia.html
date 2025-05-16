@@ -38,7 +38,7 @@
         <i class="fas fa-chart-line icon"></i>
         <span class="text">Dashboard</span>
       </a>
-      <a th:href="@{/Api/Cliente/imc}" title="IMC">
+      <a th:href="@{/Api/Cliente/Clienteimc}" title="IMC">
         <i class="fas fa-weight icon"></i>
         <span class="text">IMC</span>
       </a>
@@ -46,7 +46,7 @@
         <i class="fa-solid fa-dumbbell icon"></i>
         <span class="text">Rutinas</span>
       </a>
-      <a th:href="@{/Api/Cliente/Asistencia}" class="active" title="Asistencia">
+      <a th:href="@{/Api/Cliente/ClienteAsistencia}" class="active" title="Asistencia">
         <i class="fas fa-calendar-check icon"></i>
         <span class="text">Asistencia</span>
       </a>
@@ -76,13 +76,16 @@
           </div>
           <div>
             <label class="form-label">Músculos trabajados</label>
-            <select class="muscle-list" name="musculos" multiple required>
-              <option type="checkbox" id="m1" name="musculos" th:value="'Pecho'" ><label for="m1" class="option">Pecho</label></option>
-              <option type="checkbox" id="m2" name="musculos" th:value="'Pierna'" ><label for="m2" class="option">Pierna</label></option></li>
-              <option type="checkbox" id="m3" name="musculos" th:value="'Espalda'" ><label for="m3" class="option">Espalda</label></option></li>
-              <option type="checkbox" id="m4" name="musculos" th:value="'Biceps'" ><label for="m4" class="option">Bíceps</label></option></li>
-              <option type="checkbox" id="m5" name="musculos" th:value="'Triceps'" ><label for="m5" class="option">Tríceps</label></li>
-            </select>
+            <ul class="muscle-list">
+              <li><input type="checkbox" id="m1" name="musculos" th:value="'Pecho'" /><label for="m1" class="option">Pecho</label></li>
+              <li><input type="checkbox" id="m2" name="musculos" th:value="'Espalda'" /><label for="m2" class="option">Espalda</label></li>
+              <li><input type="checkbox" id="m3" name="musculos" th:value="'Bíceps'" /><label for="m3" class="option">Bíceps</label></li>
+              <li><input type="checkbox" id="m4" name="musculos" th:value="'Tríceps'" /><label for="m4" class="option">Tríceps</label></li>
+              <li><input type="checkbox" id="m5" name="musculos" th:value="'Cuádriceps'" /><label for="m5" class="option">Cuádriceps</label></li>
+              <li><input type="checkbox" id="m6" name="musculos" th:value="'Femoral'" /><label for="m6" class="option">Femoral</label></li>
+              <li><input type="checkbox" id="m7" name="musculos" th:value="'Glúteos'" /><label for="m7" class="option">Glúteos</label></li>
+              <li><input type="checkbox" id="m8" name="musculos" th:value="'Hombro'" /><label for="m8" class="option">Hombro</label></li>
+            </ul>
           </div>
           <button type="submit">Registrar</button>
         </form>

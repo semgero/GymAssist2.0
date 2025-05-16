@@ -30,7 +30,7 @@ public class AuthController {
 
     @GetMapping("/index")
     public String index() {
-        return "index"; // <-- tu vista de index
+        return "redirect:index"; // <-- tu vista de index
     }
 
     @GetMapping("/login")
