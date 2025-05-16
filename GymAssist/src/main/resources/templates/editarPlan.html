@@ -18,7 +18,7 @@
                 <input type="number" name="precio" th:value="${plan.precio}" placeholder="Precio" min="0" required>
                 <input type="number" name="duracion" th:value="${plan.duracion}" placeholder="Duración (meses)" min="1" required>
                 <button type="submit">Guardar Cambios</button>
-                <a th:href="@{/planes/gimnasio/{gymId}(gymId=${plan.gymId})}" class="action-btn">Cancelar</a>
+                <a th:href="@{/planes/gimnasio/{gymId}(gymId=${plan.gymId})}" class="action-btn"><button>Cancelar</button></a>
             </form>
         </div>
     </div>

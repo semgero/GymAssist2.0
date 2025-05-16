@@ -111,16 +111,56 @@
                         <td th:text="${plan.precio}"></td>
                         <td th:text="${plan.duracion} + ' meses'"></td>
                         <td>
-                            <a class="action-btn" th:href="@{/planes/{id}/editar(id=${plan.id})}">Editar</a>
-                            <form th:action="@{/planes/{id}/eliminar(id=${plan.id})}" method="post"
-                                style="display:inline;">
-                                <button type="submit" class="action-btn delete-btn">Eliminar</button>
-                            </form>
+                        <button class="action-btn open-modal-btn" data-id="${plan.id}">
+                        <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <form th:action="@{/planes/{id}/eliminar(id=${plan.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="action-btn delete-btn">
+                        <i class="fas fa-trash"></i> Eliminar
+                        </button>
                         </td>
                         <td th:text="${suscriptoresPorPlan[plan.id]}"></td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <!-- Nuevo Modal para editar plan -->
+        <div class="modal-overlay" id="editModal-${plan.id}">
+            <div class="modal-card">
+                <div class="modal-header">
+                <h2><i class="fas fa-pen"></i> Editar Plan</h2>
+                <button class="close-modal-btn" aria-label="Cerrar modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                <form th:action="@{/planes/{id}/actualizar(id=${plan.id})}" method="post">
+                    <input type="hidden" name="gymId" th:value="${plan.gymId}" />
+                    <div class="input-group">
+                    <i class="fas fa-tag"></i>
+                    <input type="text" name="nombre" th:value="${plan.nombre}" placeholder="Nombre del Plan" required />
+                    </div>
+                    <div class="input-group">
+                    <i class="fas fa-align-left"></i>
+                    <input type="text" name="descripcion" th:value="${plan.descripcion}" placeholder="Descripción" required />
+                    </div>
+                    <div class="input-group">
+                    <i class="fas fa-dollar-sign"></i>
+                    <input type="number" name="precio" th:value="${plan.precio}" placeholder="Precio" min="0" required />
+                    </div>
+                    <div class="input-group">
+                    <i class="fas fa-clock"></i>
+                    <input type="number" name="duracion" th:value="${plan.duracion}" placeholder="Duración (meses)" min="1" required />
+                    </div>
+                    <div class="modal-footer">
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                    <a th:href="@{/planes/gimnasio/{gymId}(gymId=${plan.gymId})}" class="action-btn">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                    </div>
+                </form>
+                </div>
+            </div>
         </div>
     </main>
 
