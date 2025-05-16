@@ -246,7 +246,22 @@
     transform: translateY(-4px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   }
+
+  .tarjetas_contenedor {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
   /* tarjetas */
+
+  .tarjetas_contenedor {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  }
+
   .tarjetas_usuarios {
     flex: 1;
     max-width: 300px;
@@ -457,7 +472,7 @@
 .tabla-usuarios thead th {
   position: sticky;
   top: 0;
-  padding: 14px 18px;
+  padding: 4px 18px;
   background: linear-gradient(90deg, var(--sidebar-start), var(--sidebar-end));
   color: #fff;
   font-size: 0.95rem;
@@ -499,6 +514,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  
 }
 
 /* — Última columna (acciones) ajustada — */
@@ -509,35 +525,69 @@
 }
 
 /* — Botones — */
-.btn-editar,
-.btn-eliminar {
-  padding: 6px 12px;
+a.btn-pagar,
+a.btn-detener,
+a.btn-suspender,
+a.btn-activar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
   border: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.25s ease, transform 0.15s ease;
-  margin-right: 6px;
+  border-radius: 0.5rem;
+  transition: background var(--transition), transform 0.2s var(--transition), box-shadow var(--transition);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  color: var(--card-bg);
+}
+a.btn-pagar i,
+a.btn-detener i,
+a.btn-suspender i,
+a.btn-activar i {
+  font-size: 1rem;
+}
+a.btn-pagar:hover,
+a.btn-detener:hover,
+a.btn-suspender:hover,
+a.btn-activar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
-.btn-editar {
-  background: #2563eb;
-  color: #fff;
+/* Colores por estado */
+a.btn-pagar {
+  background: linear-gradient(90deg, #28a745aa, #28a745);
 }
-.btn-editar:hover {
-  background: #1e40af;
-  transform: translateY(-2px);
+a.btn-pagar:hover { 
+  background: linear-gradient(90deg, #218838, #1e7e34); 
 }
 
-.btn-eliminar {
-  background: #e53e3e;
-  color: #fff;
+a.btn-detener {
+  background: linear-gradient(90deg, #ffc107aa, #ffc107);
 }
-.btn-eliminar:hover {
-  background: #9b2c2c;
-  transform: translateY(-2px);
+a.btn-detener:hover { 
+  background: linear-gradient(90deg, #e0a800, #c69500); 
 }
+
+a.btn-suspender {
+  background: linear-gradient(90deg, #dc3545aa, #dc3545);
+}
+a.btn-suspender:hover { 
+  background: linear-gradient(90deg, #c82333, #a71d2a); 
+}
+
+a.btn-activar {
+  background: linear-gradient(90deg, #17a2b8aa, #17a2b8);
+}
+a.btn-activar:hover { 
+  background: linear-gradient(90deg, #138496, #0f6a76); 
+}
+
+
 
 /* — Estados foco para accesibilidad — */
 .tabla-usuarios tbody tr:focus-within {
@@ -562,7 +612,6 @@ body.theme-dark .tabla-usuarios tbody tr:hover {
   background: rgba(96,165,250,0.08);
 }
 
-  
   .footer {
     grid-area: foo;
     background: var(--nav-bg);

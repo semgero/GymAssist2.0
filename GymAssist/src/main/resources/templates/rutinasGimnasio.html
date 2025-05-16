@@ -50,6 +50,7 @@
             <th>Repeticiones</th>
             <th>Series</th>
             <th>Fotos</th>
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -59,12 +60,12 @@
             <td th:text="${rutina.repeticiones}">Reps</td>
             <td th:text="${rutina.series}">Series</td>
             <td>
-                <td>
                     <div th:each="foto : ${rutina.fotosRutina}">
                         <img th:src="${foto.rutaImagen}" alt="Ejercicio">                    
                         <p th:text="${foto.descripcion}">Descripción</p>
                     </div>
                 </td>
+                <td>
                 <div style="margin-top: 10px;">
                     <a th:href="@{'/rutinas/' + ${rutina.id} + '/editar'}">Editar</a>
                     <form th:action="@{'/rutinas/' + ${rutina.id} + '/eliminar'}" method="post" style="display:inline;">

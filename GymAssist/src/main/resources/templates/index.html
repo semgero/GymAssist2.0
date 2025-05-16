@@ -1,185 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="icon" href="/Imagenes/logo_icon.png">
-    <title>GYMASSIST</title>
-    <link rel="stylesheet" href="/Styles/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-    <header class="navbar">
-        <div class="logo-container">
-            <img src="/Imagenes/logo_icon.png" alt="Logo" class="logo-img">
-            <div class="logo-text">GYMASSIST</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="/Styles/styles.css" />
+    <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>GymAssist Gimnasio</title>
+  </head>
+  <body>
+
+   
+    <header class="header">
+      <nav>
+        <div class="nav__header">
+          <div class="nav__logo">
+            <a href="#"><img src="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" alt="" />GymAssist</a>
+          </div>
+          <div class="nav__menu__btn" id="menu-btn">
+            <span><i class="ri-menu-line"></i></span>
+          </div>
         </div>
-        <nav>
-            <ul>
-                <li><a href="#beneficios">Beneficios</a></li>
-                <li><a href="#frecuentes">Preguntas Frecuentes</a></li>
-                <li><a href="#testimonios">Clientes</a></li>
-                <li><a href="/rutinas">Rutinas</a></li>
-                <li><a href="/planes">Planes</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/signup" class="signup">Register</a></li>
-            </ul>
-        </nav>
+        <ul class="nav__links" id="nav-links">
+          <li class="link"><a href="#home">Home</a></li>
+          <li class="link"><a href="#about">Conocenos</a></li>
+          
+          <li class="link"><a th:href="@{/Api/Auth/login}"><button class="btn">Login</button></li></a>
+        </ul>
+      </nav>
+      <div class="section__container header__container" id="home">
+        <div class="header__image">
+          <img src="/Imagenes/header.png" alt="header" />
+        </div>
+        <div class="header__content">
+          <h4>Construye Tú Cuerpo &</h4>
+          <h1 class="section__header">Se Tú Mejor Versión!</h1>
+          <p>
+            Libera tu potencial y emprende un viaje hacia una versión más fuerte, en forma y segura de ti misma. ¡Inscríbete en 'GymAssist' ahora y sé testigo de la increíble transformación de la que es capaz tu cuerpo!
+          </p>
+        </div>
+      </div>
     </header>
 
-<section class="hero">
-    <h1>Un lugar único...</h1>
-    <p>¿Te imaginas un lugar para administrar tu gimnasio de una manera rapida y eficiente?</p>
-    <p>Aquí te presentamos el mejor proyecto creado para ti.</p>
-</section>
+    
+    <section class="section__container about__container" id="about">
+      <div class="about__image">
+        <img src="/Imagenes/about.png" alt="about" />
+      </div>
+      <div class="about__content">
+        <h2 class="section__header">Conócenos</h2>
+        <p class="section__description">
+          Dirigida por nuestro equipo de instructores expertos y motivadores, "La clase que obtendrá aquí" es una sesión llena de energía y orientada a los resultados que combina una combinación perfecta de cardio, entrenamiento de fuerza y ​​ejercicios funcionales.
+        </p>
+        <div class="about__grid">
+          <div class="about__card">
+            <span><i class="ri-open-arm-line"></i></span>
+            <div>
+              <h4>Política de puertas abiertas</h4>
+              <p>
+                Creemos en brindar acceso sin restricciones a todas las personas, independientemente de su nivel físico, edad o antecedentes.
+              </p>
+            </div>
+          </div>
+          <div class="about__card">
+            <span><i class="ri-shield-cross-line"></i></span>
+            <div>
+              <h4>Totalmente asegurado</h4>
+              <p>
+                Su tranquilidad es nuestra principal prioridad y nuestro compromiso con su seguridad se extiende a cada aspecto de su recorrido de fitness.
+              </p>
+            </div>
+          </div>
+          <div class="about__card">
+            <span><i class="ri-p2p-line"></i></span>
+            <div>
+              <h4>Entrenador personal</h4>
+              <p>
+                Con planes de entrenamiento personalizados adaptados a tus necesidades, nos aseguraremos de que aproveches al máximo tu experiencia en el gimnasio.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<section class="services-container" id="beneficios">
-    <div class="services-image">
-        <img src="https://monodigital.mx/wp-content/uploads/2019/09/slide01_03.png" alt="Decorative Image">
-    </div>
-    <div class="services">
-        <div class="service-card">
-            <img src="https://cdn-icons-png.flaticon.com/512/755/755262.png" alt="Cloud GPU">
-            <h3>Mensualidades</h3>
-            <p>Elige la mensualidad adecuada para ti</p>
-            <p>en tu gimnasio</p>
+    <div class="card-container">
+      <div class="card">
+        <div class="icon-circle">
+          <i class="fas fa-dumbbell"></i>
         </div>
-        <div class="service-card">
-            <img src="https://cdn-icons-png.flaticon.com/512/5193/5193879.png" alt="Cloud Compute">
-            <h3>Gymlocation</h3>
-            <p>Encuentra tu gimnasio ideal desde</p>
-            <p>tu ubicación de residencia</p>
+        <h3>Sobre Nosotros</h3>
+        <p>Conoce nuestra misión, visión y los valores que nos impulsan a ayudarte a alcanzar tus metas fitness.</p>
+      </div>
+    
+      <div class="card">
+        <div class="icon-circle">
+          <i class="fas fa-users"></i>
         </div>
-        <div class="service-card">
-            <img src="https://cdn-icons-png.flaticon.com/512/4165/4165559.png" alt="Optimized Cloud Compute">
-            <h3>segurity</h3>
-            <p>Al registrarse en GymAssist Los datos personales</p>
-            <p>no podrán ser obtenidos o divulgados Ley 1581 de 2012</p>
+        <h3>Nuestro Equipo</h3>
+        <p>Entrenadores y profesionales comprometidos con tu bienestar, salud y rendimiento físico.</p>
+      </div>
+    
+      <div class="card">
+        <div class="icon-circle">
+          <i class="fas fa-cogs"></i>
         </div>
-        <div class="service-card">
-            <img src="https://cdn-icons-png.flaticon.com/512/5200/5200777.png" alt="Bare Metal">
-            <h3>Rutinas</h3>
-            <p>Nuestro software te brinda distintas rutinas</p>
-            <p>diarias que puedes realizar</p>
+        <h3>Servicios y Planes</h3>
+        <p>Accede a clases, rutinas personalizadas, asesorías nutricionales y más para transformar tu estilo de vida.</p>
+      </div>
+    </div>
+    
+    <!-- Pie de Página -->
+    <footer class="footer">
+      <div class="section__container footer__container">
+        <div class="footer__col">
+          <div class="footer__logo">
+            <a href="#"><img src="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" alt="logo" />GymAssist</a>
+          </div>
+          <p>
+            Take the first step towards a healthier, stronger you with our
+            unbeatable pricing plans. Let's sweat, achieve, and conquer
+            together!
+          </p>
+          <div class="footer__socials">
+            <a href="#"><i class="ri-facebook-fill"></i></a>
+            <a href="#"><i class="ri-instagram-line"></i></a>
+            <a href="#"><i class="ri-twitter-fill"></i></a>
+          </div>
         </div>
-    </div>
-</section>
-<section class="additional-section" id="clientes">
-    <div class="additional-text">
-        <h2>Descubre nuestros Servicios Globalmente®</h2>
-        <p></p>
-    </div>
-    <div class="additional-image">
-        <img src="https://i.pinimg.com/originals/f9/79/8b/f9798b563b92f5bf50b4fd4542fbf42f.png" alt="Imagen Adicional">
-    </div>
-</section>
-<section id="frecuentes">
-    <div id="preadmin">
-        <h2>ADMINISTRADOR</h2>
-        <ol>
-            <li class="preguntas">¿Cómo puedo ver la lista de clientes que han pagado la mensualidad?
-                <ul>
-                    <li class="respuesta">El administrador puede acceder a una lista actualizada de clientes
-                        <br>que han pagado su mensualidad, incluyendo detalles como nombre,
-                        <br>fecha de inicio y fecha de finalización de la suscripción.</li>
-                </ul>
-            </li>
-            <li class="preguntas">¿Cómo puedo gestionar los datos de los clientes?
-                <ul>
-                    <li class="respuesta">El sistema permite al administrador ver la información de los clientes,
-                        <br>como datos personales, historial de pagos y asistencia.</li>
-                </ul>
-            </li>
-            <li class="preguntas">¿Cómo puedo configurar los planes de suscripción?
-                <ul>
-                    <li class="respuesta">El administrador puede definir y modificar los diferentes planes de
-                        <br>suscripción disponibles, incluyendo precios, duración y beneficios.</li>
-                </ul>
-            </li>
-            <li class="preguntas">¿Cómo se maneja la seguridad de los datos?
-                <ul>
-                    <li class="respuesta">El sistema debe contar con medidas de seguridad robustas
-                        <br>para proteger la información de los clientes</li>
-                </ul>
-            </li>
-        </ol>
-    </div>
-</section>
-<section class="testimonials" id="testimonios">
-    <h2>Lo que dicen nuestros clientes</h2>
-    <div class="testimonial-card">
-        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Cliente 1" class="testimonial-img">
-        <div class="testimonial-content">
-            <p>"El mejor gimnasio que he probado. La gestión es excelente y las instalaciones son de primera. ¡5 estrellas!"</p>
-            <p>- Juan Pérez</p>
+        <div class="footer__col">
+          <h4>Company</h4>
+          <div class="footer__links">
+            <a href="#">Business</a>
+            <a href="#">Franchise</a>
+            <a href="#">Partnership</a>
+            <a href="#">Network</a>
+          </div>
         </div>
-    </div>
-    <div class="testimonial-card">
-        <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Cliente 2" class="testimonial-img">
-        <div class="testimonial-content">
-            <p>"Me encanta la comodidad y el servicio que ofrecen. Sin duda, recomiendo GYMASSIST a todos mis amigos."</p>
-            <p>- Ana López</p>
+        <div class="footer__col">
+          <h4>About Us</h4>
+          <div class="footer__links">
+            <a href="#">Blogs</a>
+            <a href="#">Security</a>
+            <a href="#">Careers</a>
+          </div>
         </div>
-    </div>
-    <div class="testimonial-card">
-        <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Cliente 3" class="testimonial-img">
-        <div class="testimonial-content">
-            <p>"Una experiencia increíble. El equipo es profesional y siempre están dispuestos a ayudar. ¡Muy recomendable!"</p>
-            <p>- Luis Gómez</p>
+        <div class="footer__col">
+          <h4>Contact</h4>
+          <div class="footer__links">
+            <a href="#">Contact Us</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">BMI Calculator</a>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+      <div class="footer__bar">
+        Copyright © 2025 GymAssist. All rights reserved.
+      </div>
+    </footer>
 
-<footer>
-    <div class="footer-container">
-        <div class="footer-logo-container">
-            <img src="/Imagenes/logo_icon.png" alt="Logo" class="footer-logo"> 
-        </div>
-        <div class="footer-info">
-            <div class="footer-section">
-                <h4>Sobre mí</h4>
-                <ul>
-                    <li><a href="#sobre-mi">Quién soy</a></li>
-                    <li><a href="#proyectos">Mis Proyectos</a></li>
-                    <li><a href="#contacto">Contáctame</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Historia</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Servicios</h4>
-                <ul>
-                    <li><a href="servicios.html">Configuración de Servidores</a></li>
-                    <li><a href="servicios.html">Creación de Contenido</a></li>
-                    <li><a href="servicios.html">Soporte en Discord</a></li>
-                    <li><a href="#">Desarrollo Web</a></li>
-                    <li><a href="#">Consultoría</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Enlaces Útiles</h4>
-                <ul>
-                    <li><a href="#">Política de Privacidad</a></li>
-                    <li><a href="#">Términos de Uso</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Soporte Técnico</a></li>
-                    <li><a href="#">Mapa del Sitio</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Redes Sociales</h4>
-                <ul>
-                    <li><a href="#">LinkedIn</a></li>
-                    <li><a href="#">GitHub</a></li>
-                    <li><a href="#">Twitter</a></li>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Instagram</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2024 GYMASSIST | Todos los derechos reservados..</p>
-    </div>
-</footer>
+    <!-- Links Scripts -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script >
+        const menuBtn = document.getElementById("menu-btn");
+const navLinks = document.getElementById("nav-links");
+const menuBtnIcon = menuBtn.querySelector("i");
 
-</body>
+menuBtn.addEventListener("click", (e) => {
+  navLinks.classList.toggle("open");
+
+  const isOpen = navLinks.classList.contains("open");
+  menuBtnIcon.setAttribute("class", isOpen ? "ri-close-line" : "ri-menu-line");
+});
+
+navLinks.addEventListener("click", (e) => {
+  navLinks.classList.remove("open");
+  menuBtnIcon.setAttribute("class", "ri-menu-line");
+});
+
+const scrollRevealOption = {
+  distance: "50px",
+  origin: "bottom",
+  duration: 1000,
+};
+
+// header container
+ScrollReveal().reveal(".header__image img", {
+  ...scrollRevealOption,
+});
+
+ScrollReveal().reveal(
+  ".header__content h4, .header__content .section__header",
+  {
+    ...scrollRevealOption,
+    delay: 500,
+  }
+);
+
+ScrollReveal().reveal(".header__content p", {
+  ...scrollRevealOption,
+  delay: 1000,
+});
+
+ScrollReveal().reveal(".header__btn", {
+  ...scrollRevealOption,
+  delay: 1500,
+});
+
+// about container
+ScrollReveal().reveal(".about__image img", {
+  ...scrollRevealOption,
+  origin: "left",
+});
+
+ScrollReveal().reveal(".about__content .section__header", {
+  ...scrollRevealOption,
+  delay: 500,
+});
+
+ScrollReveal().reveal(".about__content .section__description", {
+  ...scrollRevealOption,
+  delay: 1000,
+});
+
+ScrollReveal().reveal(".about__card", {
+  ...scrollRevealOption,
+  delay: 1500,
+  interval: 500,
+});
+
+// price container
+ScrollReveal().reveal(".price__card", {
+  ...scrollRevealOption,
+  interval: 500,
+});
+
+const swiper = new Swiper(".swiper", {
+  loop: true,
+  slidesPerView: "auto",
+  spaceBetween: 20,
+});
+
+function isInViewport(element) {
+  const rect = element.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+
+// Añadir la clase 'show' cuando las tarjetas estén en la vista
+function revealCards() {
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    if (isInViewport(card)) {
+      card.classList.add('show');
+    }
+  });
+}
+
+// Detectar el scroll
+window.addEventListener('scroll', revealCards);
+window.addEventListener('resize', revealCards);
+    </script>
+  </body>
 </html>

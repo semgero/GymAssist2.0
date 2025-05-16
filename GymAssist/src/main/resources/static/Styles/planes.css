@@ -382,13 +382,13 @@ body.theme-dark .btn:hover {
     }
 
     /* Anchos relativos ajustados */
-    .plan-list thead th:nth-child(1) { width: 14%; }  /* Nombre */
-    .plan-list thead th:nth-child(2) { width: 24%; }  /* Descripción reducido */
-    .plan-list thead th:nth-child(3) { width: 10%; }  /* Precio */
-    .plan-list thead th:nth-child(4) { width: 10%; }  /* Duración */
+    .plan-list thead th:nth-child(1) { width: 10%; }  /* Nombre */
+    .plan-list thead th:nth-child(2) { width: 20%; }  /* Descripción reducido */
+    .plan-list thead th:nth-child(3) { width: 11%; }  /* Precio */
+    .plan-list thead th:nth-child(4) { width: 11%; }  /* Duración */
     .plan-list thead th:nth-child(5) { width: 20%; }  /* Beneficios incrementado */
-    .plan-list thead th:nth-child(6) { width: 15%; }  /* Acciones */
-    .plan-list thead th:nth-child(7) { width: 17%; }  /* Suscriptores incrementado */
+    .plan-list thead th:nth-child(6) { width: 20%; }  /* Acciones */
+    .plan-list thead th:nth-child(7) { width: 28%; }  /* Suscriptores incrementado */
 
     /* Scroll tras 4 filas */
     .plan-list tbody {

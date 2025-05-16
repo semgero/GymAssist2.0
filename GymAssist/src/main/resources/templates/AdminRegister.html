@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- PASAR A LA PARTE DE ADMINHOME -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GymAssist Admin</title>
+  <!-- FontAwesome para los iconos -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="home.css"/>
+  <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="navbar-brand">GymAssist Admin</div>
+    </div>
+    <div class="navbar-right">
+      <!-- Selector de tema -->
+      <button class="btn-theme"onclick="btnTheme()"><i class="fas fa-moon"></i></button>
+      <!-- Perfil -->
+      <div class="profile">
+        <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
+        <div id="dropdown" class="dropdown">
+          <a href="cuenta.html"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a href="#" class="danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <a href="#" class="active" title="Dashboard">
+        <i class="fas fa-home icon"></i>
+        <span class="text">home</span>
+      </a>
+      <a href="clientes.html" title="Usuarios">
+        <i class="fas fa-users icon"></i>
+        <span class="text">Clientes</span>
+      </a>
+      <a href="planes.html" title="Membresías">
+        <i class="fas fa-credit-card icon"></i>
+        <span class="text">Membresías</span>
+      </a>
+      <a href="musculos.html" title="musculos">
+        <i class="fas fa-calendar-alt icon"></i>
+        <span class="text">Rutinas</span>
+      </a>
+      <a href="#" title="Reportes">
+        <i class="fas fa-chart-pie icon"></i>
+        <span class="text">dashboard</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <h1>Home</h1>
+    <div class="card ">
+        <div class="bienvenida-contenido">
+          <div class="texto-bienvenida">
+            <h1 class="home-title">
+              <span class="saludo">Bienvenido,</span> <span class="nombre">Samuel 👋</span>
+            </h1>
+            <p class="home-description">Veamos cómo va tu gimnasio hoy 💪</p>
+          </div>
+          <div class="logo">
+            <img class="logo" src="https://monodigital.mx/wp-content/uploads/2019/09/slide01_03.png" alt="Ilustración bienvenida">
+          </div>
+        </div>
+      </div>                      
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    &copy; 2025 GymAssist. Todos los derechos reservados.
+  </footer>
+</body>
+<script src="home.js"></script>
+</html>

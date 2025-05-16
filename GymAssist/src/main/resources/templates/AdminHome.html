@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- PASAR A LA PARTE DE ADMINREGISTER -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GymAssist Admin</title>
@@ -21,7 +22,7 @@
     </div>
     <div class="navbar-right">
       <!-- Selector de tema -->
-      <button class="btn-theme" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+      <button class="btn-theme" onclick="btnTheme()"><i class="fas fa-moon"></i></button>
       <!-- Perfil -->
       <div class="profile">
         <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
@@ -42,9 +43,9 @@
         <i class="fas fa-home icon"></i>
         <span class="text">Home</span>
       </a>
-      <a href="#" title="Usuarios">
+      <a href="#" class="active" title="Usuarios">
         <i class="fas fa-users icon"></i>
-        <span class="text">prueba</span>
+        <span class="text">Cliente</span>
       </a>
         <a th:href="@{/planes/gimnasio/{gymId}(gymId=${gymId})}" title="Membresías">
           <i class="fas fa-credit-card icon"></i>
@@ -54,7 +55,7 @@
         <i class="fas fa-calendar-alt icon"></i>
         <span class="text">Rutinas</span>
       </a>
-      <a href="#" class="active" title="dashboard">
+      <a href="#" title="dashboard">
         <i class="fas fa-chart-pie icon"></i>
         <span class="text">dashboard</span>
       </a>
@@ -65,7 +66,7 @@
   <main class="main-content">
     <h1>Dashboard</h1>
     <div class="card">
-        <div class="tarjetas_usuarios">
+        <div class="tarjetas_contenedor">
 
             <div class="tarjetas_usuarios">
                 <i class="fas fa-user-check"></i>
@@ -174,12 +175,11 @@
                 <span th:if="${cliente.estado.name() == 'SUSPENDIDO'}" class="badge badge-danger">Suspendido</span>
               </td>
               <td>
-                  <a th:if="${cliente.estado.name() == 'PENDIENTE'}" class="btn-pagar" th:href="@{/Api/Admin/pagar/{id}(id=${cliente.id})}">💰 Pagar</a>
-                  <a th:if="${cliente.estado.name() == 'ACTIVO'}" class="btn-detener"th:href="@{/Api/Admin/detener/{id}(id=${cliente.id})}">⏸️ Detener</a>
-                  <a th:if="${cliente.estado.name() != 'SUSPENDIDO'}"class="btn-suspender"th:href="@{/Api/Admin/suspender/{id}(id=${cliente.id})}">🚫 Suspender</a>
-                  <a th:if="${cliente.estado.name() == 'SUSPENDIDO'}"class="btn-activar" th:href="@{/Api/Admin/activar/{id}(id=${cliente.id})}">✅ Activar</a>
+                  <a th:if="${cliente.estado.name() == 'PENDIENTE'}" class="btn-pagar" th:href="@{/Api/Admin/pagar/{id}(id=${cliente.id})}"><i class="fas fa-money-bill-wave"></i> Pagar</a>
+                  <a th:if="${cliente.estado.name() == 'ACTIVO'}" class="btn-detener"th:href="@{/Api/Admin/detener/{id}(id=${cliente.id})}"><i class="fas fa-pause-circle"></i>Detener</a>
+                  <a th:if="${cliente.estado.name() != 'SUSPENDIDO'}"class="btn-suspender"th:href="@{/Api/Admin/suspender/{id}(id=${cliente.id})}"><i class="fas fa-ban"></i> Suspender</a>
+                  <a th:if="${cliente.estado.name() == 'SUSPENDIDO'}"class="btn-activar" th:href="@{/Api/Admin/activar/{id}(id=${cliente.id})}"><i class="fas fa-check-circle"></i>Activar</a>
               </td>
-              <td>
               </td>
             </tr>
           </tbody>

@@ -28,6 +28,11 @@ public class AuthController {
         this.adminService = adminService;
     }
 
+    @GetMapping("/index")
+    public String index() {
+        return "index"; // <-- tu vista de index
+    }
+
     @GetMapping("/login")
     public String mostrarLoginForm() {
         return "login"; // <-- tu vista de login
@@ -79,4 +84,5 @@ public class AuthController {
 
         return "redirect:/Api/Auth/login";
     }
+
 }
