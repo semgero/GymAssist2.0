@@ -7,7 +7,10 @@
     --card-bg: #ffffff;
     --accent: #2563eb;         
     --input-bg: #f9fafb;
-    --input-border: #d1d5db; 
+    --input-border: #d1d5db;
+    --btn-grey: #95a5a6;
+    --color: #000000;
+    --btn-grey-hover: #7f8c8d;
     --transition: 0.3s ease;
     --sidebar-width: 250px;
     --sidebar-collapsed-width: 60px;
@@ -21,7 +24,10 @@
     --sidebar-end: #111827;
     --card-bg: #111827;
     --input-bg: #1e293b;
+    --color: #ffffff;
     --input-border: #374151;
+    --btn-grey: #4b5563;
+    --btn-grey-hover: #6b7280;
   }
   
   * {
@@ -514,7 +520,7 @@ body.theme-dark .btn:hover {
     }
     .input-group {
       position: relative;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.2rem;
     }
     .input-group i {
       position: absolute;
@@ -540,7 +546,7 @@ body.theme-dark .btn:hover {
     }
 
     .modal-footer {
-      padding: 1.25rem 1.5rem;
+      padding: 0.5rem 1.5rem;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
@@ -555,6 +561,7 @@ body.theme-dark .btn:hover {
       color: #fff;
       padding: .55rem 1.1rem;
       border-radius: .5rem;
+      border: none;
       font-weight: 600;
       cursor: pointer;
       transition: background var(--transition), transform var(--transition);
