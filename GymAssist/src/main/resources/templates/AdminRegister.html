@@ -10,7 +10,7 @@
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="home.css"/>
+  <link rel="stylesheet" href="/Styles/dashboard.css"/>
   <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
 </head>
 
@@ -28,7 +28,7 @@
       <div class="profile">
         <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
         <div id="dropdown" class="dropdown">
-          <a href="#"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a href="/Api/Admin/CuentaAdmin"><i class="fas fa-user-cog"></i> Cuenta</a>
           <a th:href="@{/Api/Auth/Logout}" class="danger">
             <i class="fas fa-sign-out-alt"></i> Logout
           </a>
@@ -46,7 +46,7 @@
       </a>
       <a href="#" class="active" title="Usuarios">
         <i class="fas fa-users icon"></i>
-        <span class="text">Cliente</span>
+        <span class="text">Clientes</span>
       </a>
       <a th:href="@{/planes/gimnasio/{gymId}(gymId=${gymId})}" title="Membresías">
         <i class="fas fa-credit-card icon"></i>

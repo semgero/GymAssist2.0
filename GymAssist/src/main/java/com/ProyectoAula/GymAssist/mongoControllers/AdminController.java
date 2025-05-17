@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
@@ -15,6 +16,7 @@ import com.ProyectoAula.GymAssist.mongoModels.ClienteResumenDTO;
 import com.ProyectoAula.GymAssist.mongoModels.GimnasiosEntity;
 import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
 import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
+import com.ProyectoAula.GymAssist.mongoServices.AdminService;
 import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
 import com.ProyectoAula.GymAssist.mongoRepository.AdminRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.GimnasiosRepository;
@@ -33,12 +35,14 @@ public class AdminController {
     private final AdminRepository adminRepository;
     private final GimnasiosRepository gimnasiosRepository;
     private final PlanService planService;
+    private final AdminService adminService;
 
     // Inyección de dependencias para ClienteService y BCryptPasswordEncoder
     public AdminController(ClienteService clienteService, BCryptPasswordEncoder passwordEncoder,
             UserRepository userRepository, AdminRepository adminRepository, GimnasiosRepository gimnasiosRepository,
-            PlanService planService) {
+            PlanService planService, AdminService adminService) {
         this.planService = planService;
+        this.adminService = adminService;
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
         this.gimnasiosRepository = gimnasiosRepository;
@@ -63,6 +67,21 @@ public class AdminController {
         }
 
         return "AdminHome";
+    }
+
+    @PostMapping("/actualizar-admin")
+    public String actualizarCorreoYPasswordAdmin(@RequestParam String correo,
+            @RequestParam(required = false) String password,
+            Principal principal,
+            RedirectAttributes redirectAttributes) {
+        try {
+            adminService.actualizarCorreoYPasswordAdmin(correo, password, principal.getName());
+            redirectAttributes.addFlashAttribute("exito", "Datos actualizados correctamente.");
+            return "redirect:/Api/Auth/Logout";
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/Api/Admin/CuentaAdmin"; // ✅ Volver a la página de cuenta si hay error
+        }
     }
 
     // Mostrar la lista de clientes en AdminHome
@@ -105,7 +124,7 @@ public class AdminController {
         return "redirect:/Api/Admin/AdminRegister"; // Regresar a AdminHome
     }
 
-     @GetMapping("/CuentaAdmin")
+    @GetMapping("/CuentaAdmin")
     public String CuentaAdmin() {
         return "CuentaAdmin"; // <-- tu vista de CuentaAdmin
     }

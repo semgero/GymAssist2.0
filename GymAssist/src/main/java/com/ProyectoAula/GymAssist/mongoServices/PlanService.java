@@ -54,7 +54,9 @@ public class PlanService {
 
         Query query = new Query(Criteria.where("planId").is(id));
         Update update = new Update().set("nombrePlan", planDetails.getNombre());
-        mongoTemplate.updateMulti(query, update, ClientEntity.class);
+        var result = mongoTemplate.updateMulti(query, update, ClientEntity.class);
+
+        System.out.println("🔎 Clientes actualizados con nuevo nombre de plan: " + result.getModifiedCount());
 
         return updatedPlan;
     }
@@ -64,7 +66,9 @@ public class PlanService {
 
         Query query = new Query(Criteria.where("planId").is(id));
         Update update = new Update().unset("planId");
-        mongoTemplate.updateMulti(query, update, ClientEntity.class);
+        var result = mongoTemplate.updateMulti(query, update, ClientEntity.class);
+
+        System.out.println("❌ Clientes que quedaron sin plan: " + result.getModifiedCount());
     }
 
     public String obtenerNombreDelPlan(ObjectId planId) {

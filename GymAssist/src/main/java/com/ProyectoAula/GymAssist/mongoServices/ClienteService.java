@@ -68,7 +68,6 @@ public class ClienteService {
         cliente.setEstado(EstadoCliente.PENDIENTE);
         cliente.setGymId(gymId);
 
-        // 📅 Generar fechas según duración del plan
         LocalDate fechaInicio = LocalDate.now();
         LocalDate fechaFin = fechaInicio.plusMonths(duracionMeses);
         cliente.setFechaInicioMembresia(fechaInicio);
@@ -200,5 +199,4 @@ public class ClienteService {
         userRepository.save(user);
         clientRepository.save(cliente); // importante: guardar también el cliente
     }
-
 }

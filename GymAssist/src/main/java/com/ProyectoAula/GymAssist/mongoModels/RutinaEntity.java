@@ -20,6 +20,9 @@ public class RutinaEntity {
   @BsonProperty("_id")
   private ObjectId id = null;
 
+  @BsonProperty("nombreEjercicio")
+  private String nombreEjercicio;
+
   @BsonProperty("grupoMuscular")
   private String grupoMuscular;
 
@@ -40,6 +43,19 @@ public class RutinaEntity {
 
   @BsonProperty("updatedAt")
   private LocalDateTime updatedAt;
+
+  public RutinaEntity nombreEjercicio(String nombreEjercicio) {
+    this.nombreEjercicio = nombreEjercicio;
+    return this;
+  }
+
+  public String getNombreEjercicio() {
+    return nombreEjercicio;
+  }
+
+  public void setNombreEjercicio(String nombreEjercicio) {
+    this.nombreEjercicio = nombreEjercicio;
+  }
 
   public RutinaEntity createdAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
@@ -162,6 +178,7 @@ public class RutinaEntity {
     RutinaEntity rutina = (RutinaEntity) o;
     return Objects.equals(this.id, rutina.id) &&
         Objects.equals(this.grupoMuscular, rutina.grupoMuscular) &&
+        Objects.equals(this.nombreEjercicio, rutina.nombreEjercicio) &&
         Objects.equals(this.repeticiones, rutina.repeticiones) &&
         Objects.equals(this.series, rutina.series) &&
         Objects.equals(this.gymId, rutina.gymId) &&
@@ -172,7 +189,8 @@ public class RutinaEntity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, grupoMuscular, repeticiones, series, gymId, fotosRutina, createdAt, updatedAt);
+    return Objects.hash(id, grupoMuscular, nombreEjercicio, repeticiones, series, gymId, fotosRutina, createdAt,
+        updatedAt);
   }
 
   @Override
@@ -181,6 +199,7 @@ public class RutinaEntity {
     sb.append("class RutinaEntity {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    grupoMuscular: ").append(toIndentedString(grupoMuscular)).append("\n");
+    sb.append("    nombreEjercicio: ").append(toIndentedString(nombreEjercicio)).append("\n");
     sb.append("    repeticiones: ").append(toIndentedString(repeticiones)).append("\n");
     sb.append("    series: ").append(toIndentedString(series)).append("\n");
     sb.append("    gymId: ").append(toIndentedString(gymId)).append("\n");
@@ -199,28 +218,17 @@ public class RutinaEntity {
   }
 
   public static class FotoRutina {
-    private String nombreEjercicio;
     private String nombreArchivo;
     private String descripcion;
     private String rutaImagen;
     private String contentType;
 
-    public FotoRutina(String nombreEjercicio, String nombreArchivo, String descripcion,
+    public FotoRutina(String nombreArchivo, String descripcion,
         String rutaImagen, String contentType) {
-      this.nombreEjercicio = nombreEjercicio;
       this.nombreArchivo = nombreArchivo;
       this.descripcion = descripcion;
       this.rutaImagen = rutaImagen;
       this.contentType = contentType;
-    }
-
-    @JsonProperty("nombreEjercicio")
-    public String getNombreEjercicio() {
-      return nombreEjercicio;
-    }
-
-    public void setNombreEjercicio(String nombreEjercicio) {
-      this.nombreEjercicio = nombreEjercicio;
     }
 
     @JsonProperty("nombreArchivo")
@@ -266,8 +274,7 @@ public class RutinaEntity {
       if (o == null || getClass() != o.getClass())
         return false;
       FotoRutina that = (FotoRutina) o;
-      return Objects.equals(nombreEjercicio, that.nombreEjercicio) &&
-          Objects.equals(nombreArchivo, that.nombreArchivo) &&
+      return Objects.equals(nombreArchivo, that.nombreArchivo) &&
           Objects.equals(descripcion, that.descripcion) &&
           Objects.equals(rutaImagen, that.rutaImagen) &&
           Objects.equals(contentType, that.contentType);
@@ -275,13 +282,12 @@ public class RutinaEntity {
 
     @Override
     public int hashCode() {
-      return Objects.hash(nombreEjercicio, nombreArchivo, descripcion, rutaImagen, contentType);
+      return Objects.hash(nombreArchivo, descripcion, rutaImagen, contentType);
     }
 
     @Override
     public String toString() {
       return "FotoRutina{" +
-          "nombreEjercicio='" + nombreEjercicio + '\'' +
           ", nombreArchivo='" + nombreArchivo + '\'' +
           ", descripcion='" + descripcion + '\'' +
           ", rutaImagen='" + rutaImagen + '\'' +

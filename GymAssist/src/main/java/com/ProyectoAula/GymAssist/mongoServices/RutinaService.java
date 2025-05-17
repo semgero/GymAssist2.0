@@ -26,8 +26,7 @@ public class RutinaService {
     @Autowired
     private S3Service s3Service;
 
-    public RutinaEntity createRutina(RutinaEntity rutina, List<MultipartFile> archivos, List<String> descripciones,
-            List<String> nombreEjercicio) {
+    public RutinaEntity createRutina(RutinaEntity rutina, List<MultipartFile> archivos, List<String> descripciones) {
         List<RutinaEntity.FotoRutina> fotos = new ArrayList<>();
 
         for (int i = 0; i < archivos.size(); i++) {
@@ -40,12 +39,9 @@ public class RutinaService {
 
                     String urlImagen = s3Service.subirImagen(nombreArchivo, rutaTemp);
 
-                    // Corrección aquí: Ahora nombreEjercicio viene de nombresEjercicios en el
-                    // controlador
                     fotos.add(new RutinaEntity.FotoRutina(
-                            nombreEjercicio.get(i), // NombreEjercicio correcto
                             nombreArchivo,
-                            descripciones.get(i),
+                            (i < descripciones.size()) ? descripciones.get(i) : "Sin descripción",
                             urlImagen,
                             archivo.getContentType()));
                 } catch (IOException e) {
@@ -134,9 +130,5 @@ public class RutinaService {
         RutinaEntity rutina = rutinaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se puede eliminar: Rutina no encontrada con id: " + id));
         rutinaRepository.deleteById(id);
-    }
-
-    public List<RutinaEntity> findByNombreEjercicio(String nombreEjercicio) {
-        return rutinaRepository.findByFotosRutina_NombreEjercicioIgnoreCase(nombreEjercicio);
     }
 }

@@ -17,7 +17,6 @@ import org.bson.types.ObjectId;
  */
 public interface RutinaRepository extends MongoRepository<RutinaEntity, ObjectId> {
     List<RutinaEntity> findByGymId(ObjectId gymId);
-    List<RutinaEntity> findByFotosRutina_NombreEjercicioIgnoreCase(String nombreEjercicio);
     List<RutinaEntity> findByGrupoMuscular(String grupoMuscular);
     List<RutinaEntity> findByGrupoMuscularIgnoreCaseAndGymId(String grupoMuscular, ObjectId gymId);
 }

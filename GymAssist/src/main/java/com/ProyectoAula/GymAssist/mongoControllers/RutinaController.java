@@ -65,29 +65,23 @@ public class RutinaController {
 
     @PostMapping("/gym/{gymId}/guardar")
     public String guardarRutina(@PathVariable String gymId,
-            @RequestParam List<String> nombreEjercicio, // Ahora es lista
+            @RequestParam String nombreEjercicio,
             @RequestParam String grupoMuscular,
             @RequestParam String repeticiones,
             @RequestParam String series,
             @RequestParam("fotosRutina") List<MultipartFile> archivos,
             @RequestParam("descripciones") List<String> descripciones) {
 
-        String grupoCorregido = rutinaService.sugerirGrupoMuscular(grupoMuscular);
-        if (grupoCorregido == null) {
-            grupoCorregido = grupoMuscular;
-        }
-
-        // Crear la rutina con el grupo muscular corregido
         RutinaEntity rutina = new RutinaEntity();
-        rutina.setGrupoMuscular(grupoCorregido);
+        rutina.setNombreEjercicio(nombreEjercicio); // ✅ Se establece correctamente
+        rutina.setGrupoMuscular(grupoMuscular);
         rutina.setRepeticiones(repeticiones);
         rutina.setSeries(series);
         rutina.setGymId(new ObjectId(gymId));
         rutina.setCreatedAt(LocalDateTime.now());
         rutina.setUpdatedAt(LocalDateTime.now());
 
-        // Ahora enviamos la lista de nombresEjercicios al servicio
-        rutinaService.createRutina(rutina, archivos, descripciones, nombreEjercicio);
+        rutinaService.createRutina(rutina, archivos, descripciones);
 
         return "redirect:/rutinas/gym/" + gymId;
     }
@@ -151,7 +145,6 @@ public class RutinaController {
                     String urlImagen = s3Service.subirImagen(nombreArchivo, rutaTemp);
 
                     rutina.getFotosRutina().add(new RutinaEntity.FotoRutina(
-                            nombreEjercicio.get(i), // Asegurar que cada imagen tenga su nombreEjercicio correcto
                             nombreArchivo,
                             descripciones.get(i),
                             urlImagen,

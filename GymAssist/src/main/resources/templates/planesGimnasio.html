@@ -25,7 +25,7 @@
             <div class="profile">
                 <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
                 <div id="dropdown" class="dropdown">
-                    <a href=""><i class="fas fa-user-cog"></i> Cuenta</a>
+                    <a href="/Api/Admin/CuentaAdmin"><i class="fas fa-user-cog"></i> Cuenta</a>
                     <a href="#" class="danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
             </div>
@@ -35,7 +35,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <nav>
-            <a href="home.html" title="Home">
+            <a th:href="@{/Api/Admin/AdminHome}" title="Home">
                 <i class="fas fa-home icon"></i>
                 <span class="text">Home</span>
             </a>
