@@ -2,66 +2,199 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Editar Rutina</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GymAssist Admin</title>
+    <!-- FontAwesome para los iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/Styles/EditarRutinas.css" />
+    <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
 </head>
 
 <body>
-    <h1>Editar Rutina</h1>
-
-    <form th:action="@{'/rutinas/' + ${rutina.id} + '/actualizar'}" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id" th:value="${rutina.id}" />
-        <input type="hidden" name="gymId" th:value="${gymId}" />
-
-        <label>Nombre del Ejercicio:</label>
-        <input type="text" name="nombreEjercicio" th:value="${rutina.nombreEjercicio}" required /><br>
-
-        <label>Grupo Muscular:</label>
-        <input type="text" name="grupoMuscular" th:value="${rutina.grupoMuscular}" required /><br>
-
-        <label>Repeticiones:</label>
-        <input type="text" name="repeticiones" th:value="${rutina.repeticiones}" required /><br>
-
-        <label>Series:</label>
-        <input type="text" name="series" th:value="${rutina.series}" required /><br>
-
-        <h3>Fotos actuales:</h3>
-        <div th:each="foto, stat : ${rutina.fotosRutina}">
-            <!-- Cambio importante aquí: ahora usamos la ruta de la imagen -->
-            <img th:src="@{${foto.rutaImagen}}" width="150" />
-            <p><b>Descripción:</b> <span th:text="${foto.descripcion}"></span></p>
-            <label><input type="checkbox" name="fotosAEliminar" th:value="${stat.index}"> Eliminar esta foto</label>
-            <hr>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="navbar-brand">GymAssist Admin</div>
         </div>
-
-        <h3>Agregar nuevas fotos:</h3>
-        <div id="nuevas-fotos-container">
-            <div class="foto-item">
-                <label>Foto:</label>
-                <input type="file" name="fotosRutina" />
-                <label>Descripción:</label>
-                <input type="text" name="descripciones" placeholder="Descripción" />
+        <div class="navbar-right">
+            <!-- Selector de tema -->
+            <button class="btn-theme" onclick="btnTheme()"><i class="fas fa-moon"></i></button>
+            <!-- Perfil -->
+            <div class="profile">
+                <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
+                <div id="dropdown" class="dropdown">
+                    <a href="/Api/Admin/CuentaAdmin"><i class="fas fa-user-cog"></i> Cuenta</a>
+                    <a href="#" class="danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
             </div>
         </div>
+    </header>
 
-        <button type="button" onclick="agregarFoto()">Agregar otra foto</button><br><br>
-        <button type="submit">Actualizar</button>
-    </form>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <nav>
+            <a th:href="@{/Api/Admin/AdminHome}" title="Home">
+                <i class="fas fa-home icon"></i>
+                <span class="text">Home</span>
+            </a>
+            <a th:href="@{/Api/Admin/AdminRegister}" title="Usuarios">
+                <i class="fas fa-users icon"></i>
+                <span class="text">Clientes</span>
+            </a>
+            <a th:href="@{/planes/gimnasio/{gymId}(gymId=${gymId})}" title="Membresías">
+                <i class="fas fa-credit-card icon"></i>
+                <span class="text">Membresías</span>
+            </a>
+            <a href="#" class="active" title="Rutinas">
+                <i class="fas fa-calendar-alt icon"></i>
+                <span class="text">Rutinas</span>
+            </a>
+            <a href="#" title="dashboard">
+                <i class="fas fa-chart-pie icon"></i>
+                <span class="text">dashboard</span>
+            </a>
+        </nav>
+    </aside>
 
-    <a th:href="@{'/rutinas/gym/' + ${gymId}}">Volver</a>
+    <!-- Main -->
+    <main class="main-content">
+        <div class="container">
+            <div class="card">
+            <h2><i class="fas fa-edit"></i> Editar Rutina</h2>
+            <form th:action="@{'/rutinas/' + ${rutina.id} + '/actualizar'}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:value="${rutina.id}" />
+                <input type="hidden" name="gymId" th:value="${gymId}" />
 
+                <div class="input-group">
+                <i class="fas fa-tag"></i>
+                <input type="text" name="nombreEjercicio"
+                        th:value="${rutina.nombreEjercicio}"
+                        placeholder="Nombre del ejercicio" required />
+                </div>
+
+                <div class="input-group">
+                <i class="fas fa-users"></i>
+                <input type="text" name="grupoMuscular"
+                        th:value="${rutina.grupoMuscular}"
+                        placeholder="Grupo Muscular" required />
+                </div>
+
+                <div class="input-group">
+                <i class="fas fa-repeat"></i>
+                <input type="text" name="repeticiones"
+                        th:value="${rutina.repeticiones}"
+                        placeholder="Repeticiones" required />
+                </div>
+
+                <div class="input-group">
+                <i class="fas fa-layer-group"></i>
+                <input type="text" name="series"
+                        th:value="${rutina.series}"
+                        placeholder="Series" required />
+                </div>
+
+                <h3><i class="fas fa-images"></i> Fotos actuales</h3>
+                <div class="existing-photos">
+                <div class="existing-photo" th:each="foto, stat : ${rutina.fotosRutina}">
+                    <img th:src="${foto.rutaImagen}" alt="Foto Rutina" />
+                    <p><b>Descripción:</b> <span th:text="${foto.descripcion}"></span></p>
+                    <label>
+                    <input type="checkbox" name="fotosAEliminar" th:value="${stat.index}"> Eliminar
+                    </label>
+                </div>
+                </div>
+
+                <h3><i class="fas fa-plus-circle"></i> Agregar nuevas fotos</h3>
+                <div id="nuevas-fotos-container">
+                <div class="foto-item">
+                    <div class="file-group">
+                    <label class="file-btn"><i class="fas fa-upload"></i> Seleccionar Archivo
+                        <input type="file" name="fotosRutina" class="file-input" onchange="mostrarNombreArchivo(this)" />
+                    </label>
+                    <span class="file-name"></span>
+                    </div>
+                    <div class="input-desc">
+                    <i class="fas fa-align-left"></i>
+                    <input type="text" name="descripciones" placeholder="Descripción breve" />
+                    </div>
+                </div>
+                </div>
+
+                <div class="actions">
+                <button type="button" class="btn" onclick="agregarFoto()">
+                    <i class="fas fa-plus"></i> Agregar Foto
+                </button>
+                <button type="submit" class="btn">
+                    <i class="fas fa-save"></i> Actualizar
+                </button>
+                </div>
+
+                <a th:href="@{'/rutinas/gym/' + ${gymId}}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Volver
+                </a>
+            </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        &copy; 2025 GymAssist. Todos los derechos reservados.
+    </footer>
     <script>
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+        }
+        function toggleDropdown(e) {
+            e.stopPropagation();
+            document.getElementById('dropdown').classList.toggle('show');
+        }
+
+        document.addEventListener('click', () => {
+            document.getElementById('dropdown').classList.remove('show');
+        })
+
+        // Al cargar la página, aplica el tema guardado:
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+            document.body.classList.add('theme-dark');
+            }
+        });
+
+        // Función única para alternar tema y guardarlo
+        function btnTheme() {
+            const isDark = document.body.classList.toggle('theme-dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Exponemos la función al scope global
+        window.btnTheme = btnTheme;
+
         function agregarFoto() {
-            const container = document.getElementById('nuevas-fotos-container');
-            const nuevo = document.createElement('div');
-            nuevo.classList.add('foto-item');
-            nuevo.innerHTML = `
-            <label>Foto:</label>
-            <input type="file" name="fotosRutina" />
-            <label>Descripción:</label>
-            <input type="text" name="descripciones" placeholder="Descripción" />
+        const cont = document.getElementById('nuevas-fotos-container');
+        const nuevo = document.createElement('div');
+        nuevo.classList.add('foto-item');
+        nuevo.innerHTML = `
+            <div class="file-group">
+            <label class="file-btn"><i class="fas fa-upload"></i> Seleccionar Archivo
+                <input type="file" name="fotosRutina" class="file-input" onchange="mostrarNombreArchivo(this)" required />
+            </label>
+            <span class="file-name"></span>
+            </div>
+            <div class="input-desc">
+            <i class="fas fa-align-left"></i>
+            <input type="text" name="descripciones" placeholder="Descripción breve" required />
+            </div>
         `;
-            container.appendChild(nuevo);
+        cont.appendChild(nuevo);
+        }
+        function mostrarNombreArchivo(input) {
+        const name = input.files[0]?.name || '';
+        input.closest('.file-group').querySelector('.file-name').textContent = name;
         }
     </script>
 </body>
