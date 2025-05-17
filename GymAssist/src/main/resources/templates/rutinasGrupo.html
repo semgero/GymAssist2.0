@@ -1,258 +1,177 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-    <title th:text="'Rutinas de ' + ${grupoMuscular}">GymAssist Cliente</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-        }
-
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #111;
-        }
-
-        .cols {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        .col {
-            width: 260px;
-            height: 350px;
-            perspective: 1000px;
-        }
-
-        .container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        }
-
-        .col:hover .container {
-            transform: rotateY(180deg);
-        }
-
-        .front, .back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-            backface-visibility: hidden;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            padding: 1rem;
-            box-sizing: border-box;
-        }
-
-        .front {
-            background-color: #444;
-        }
-
-        .front p {
-            font-size: 1.4rem;
-            font-weight: bold;
-            text-shadow: 1px 1px 5px #000;
-            text-align: center;
-        }
-
-        .back {
-            background-color: #222;
-            transform: rotateY(180deg);
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 1.5rem;
-        }
-
-        .back p {
-            font-size: 1rem;
-            text-align: center;
-        }
-
-        .back button {
-            padding: 0.6rem 1rem;
-            border: none;
-            background-color: #ff5c5c;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.95rem;
-        }
-
-        .rutina-imagenes {
-            display: none;
-        }
-
-        .no-rutinas {
-            text-align: center;
-            margin-top: 3rem;
-        }
-
-        .no-rutinas p {
-            font-size: 1.2rem;
-        }
-
-        .no-rutinas .btn {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.6rem 1.2rem;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-        }
-
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            background-color: rgba(0,0,0,0.7);
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 10px;
-            max-width: 700px;
-            position: relative;
-        }
-
-        .close {
-            color: #aaa;
-            font-size: 28px;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            cursor: pointer;
-        }
-
-        .foto-item {
-            margin-bottom: 1.5rem;
-        }
-
-        .foto-item img {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .foto-item p {
-            margin-top: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: #222;
-            color: white;
-            margin-top: 3rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GymAssist Admin</title>
+  <!-- FontAwesome para los iconos -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/Styles/RutinasGrupo.css"/>
+  <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
 </head>
 <body>
-    <main class="main-content">
-        <h1 th:text="'Rutinas de ' + ${grupoMuscular}">Rutinas</h1>
-
-        <div class="rutinas-container cols">
-            <div th:each="rutina : ${rutinas}" class="col">
-                <div class="container">
-                    <div class="front"
-                         th:style="'background-image: url(' + ${#lists.isEmpty(rutina.fotosRutina) ? '/img/default.jpg' : rutina.fotosRutina[0].rutaImagen} + ');'">
-                        <p th:text="${rutina.grupoMuscular}">Grupo Muscular</p>
-                    </div>
-                    <div class="back">
-                        <p th:text="'Haz click para ver tu rutina de ' + ${rutina.grupoMuscular}">Ver rutina</p>
-                        <button onclick="abrirModal(this)" th:attr="data-rutina=${rutina.id}">Ver detalles</button>
-                    </div>
-                </div>
-
-                <!-- Oculto: info de imagenes para el modal -->
-                <div class="rutina-imagenes" style="display:none;">
-                    <div th:each="imagen : ${rutina.fotosRutina}">
-                        <img th:src="${imagen.rutaImagen}" alt="Ejercicio">
-                        <p th:text="${imagen.descripcion}">Descripcion del ejercicio</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div th:if="${#lists.isEmpty(rutinas)}" class="no-rutinas">
-            <p>No hay rutinas disponibles para este grupo muscular.</p>
-            <a th:href="@{/Api/Cliente/ClienteRutinas}" class="btn">Volver a todas las rutinas</a>
-        </div>
-    </main>
-
-    <!-- MODAL -->
-    <div id="modalRutina" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="cerrarModal()">&times;</span>
-            <h2 id="tituloModal"></h2>
-            <div id="contenidoRutina"></div>
-        </div>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="navbar-brand">GymAssist Admin</div>
     </div>
+    <div class="navbar-right">
+      <!-- Selector de tema -->
+      <button class="btn-theme" onclick="btnTheme()"><i class="fas fa-moon"></i></button>
+      <!-- Perfil -->
+      <div class="profile">
+        <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
+        <div id="dropdown" class="dropdown">
+          <a href="cuenta.html"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a href="#" class="danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+        <nav>
+        <a th:href="@{/Api/Cliente/ClienteHome}" title="home">
+            <i class="fas fa-home icon"></i>
+            <span class="text">Home</span>
+        </a> 
+        <a th:href="@{/Api/Cliente/ClienteDashboard}" title="dashboard">
+            <i class="fas fa-chart-line icon"></i>
+            <span class="text">Dashboard</span>
+        </a>
+        <a th:href="@{/Api/Cliente/Clienteimc}"title="IMC">
+            <i class="fas fa-weight icon"></i>
+            <span class="text">IMC</span>
+        </a>
+        <a th:href="@{/Api/Cliente/ClienteRutinas}" class="active" title="rutinas">
+            <i class="fa-solid fa-dumbbell icon"></i>
+            <span class="text">Rutinas</span>
+        </a>
+        <a th:href="@{/Api/Cliente/ClienteAsistencia}" title="Asistencia">
+            <i class="fas fa-calendar-check icon"></i>
+            <span class="text">Asistencia</span>
+        </a>
+        </nav>
+  </aside>
+
+  <!-- Main -->
+<main class="main-content">
+    <h1 th:text="'Rutinas de ' + ${grupoMuscular}">Rutinas</h1>
+    <div class="card">
+        <div class="wrapper">
+
+            <div class="cols">
+                <div th:each="rutina : ${rutinas}" class="col" ontouchstart="this.classList.toggle('hover');">
+                        <div class="container">
+
+                            <div class="front" th:style="|background-image: url('${#lists.isEmpty(rutina.fotosRutina) ? '/img/default-placeholder.png' : rutina.fotosRutina[0].rutaImagen}');|" >
+                                <div class="inner">
+                                    <p th:text="${rutina.grupoMuscular}">Grupo Muscular</p>
+                                </div>
+                            </div>
+                            <div class="back">
+                                <div class="inner">
+                                    <p th:text="'Haz click para ver tu rutina de ' + ${rutina.grupoMuscular}">Ver rutina</p>
+                                    <button onclick="abrirModal(this)" th:attr="data-rutina=${rutina.id}">Ver detalles</button>
+                                </div>
+                            </div>
+
+                            <div class="rutina-imagenes" style="display:none;">
+                            <div th:each="imagen : ${rutina.fotosRutina}">
+                                <img th:src="${imagen.rutaImagen}" alt="Ejercicio">
+                                <p th:text="${imagen.descripcion}">Descripcion del ejercicio</p>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+
+                 <div th:if="${#lists.isEmpty(rutinas)}" class="no-rutinas">
+                    <img src="/Imagenes/NoDisponible.png" alt="">
+                    <p>No hay rutinas disponibles para este grupo muscular.</p>
+                    <a th:href="@{/Api/Cliente/ClienteRutinas}" class="btn">Volver a todas las rutinas</a>
+                </div>
+  </main>
+
+  <!-- MODAL -->
+    <div id="modalRutina" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-dumbbell"></i> <span id="tituloModal">Detalles Rutina</span></h2>
+        <button class="close" onclick="cerrarModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="contenidoRutina">
+      
+      </div>
+    </div>
+  </div>
 
     <footer class="footer">
         &copy; 2025 GymAssist. Todos los derechos reservados.
     </footer>
 
     <script>
-        function abrirModal(btn) {
-            const rutina = btn.closest(".col");
-            const titulo = rutina.querySelector(".front p").innerText;
-            const fotos = rutina.querySelectorAll(".rutina-imagenes div");
 
-            document.getElementById("tituloModal").innerText = titulo;
-            document.getElementById("contenidoRutina").innerHTML = "";
+    function toggleSidebar() {
+    document.body.classList.toggle('sidebar-collapsed');
+  }
+  function toggleDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('dropdown').classList.toggle('show');
+  }
 
-            fotos.forEach(foto => {
-                const img = foto.querySelector("img");
-                const desc = foto.querySelector("p");
+  document.addEventListener('click', () => {
+    document.getElementById('dropdown').classList.remove('show');
+  })
 
-                if (img && desc) {
-                    document.getElementById("contenidoRutina").innerHTML += `
-                        <div class="foto-item">
-                            <img src="${img.src}" alt="Ejercicio">
-                            <p>${desc.innerText}</p>
-                        </div>
-                    `;
-                }
-            });
+  // Al cargar la página, aplica el tema guardado:
+  document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+      document.body.classList.add('theme-dark');
+    }
+  });
 
-            document.getElementById("modalRutina").style.display = "block";
+  // Función única para alternar tema y guardarlo
+  function btnTheme() {
+    const isDark = document.body.classList.toggle('theme-dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }
+
+  // Exponemos la función al scope global
+  window.btnTheme = btnTheme;
+
+      function abrirModal(btn) {
+      const rutina = btn.closest(".col");
+      const titulo = rutina.querySelector(".front p").innerText;
+      const fotos = rutina.querySelectorAll(".rutina-imagenes div");
+
+      document.getElementById("tituloModal").innerText = titulo;
+      document.getElementById("contenidoRutina").innerHTML = "";
+
+      fotos.forEach(foto => {
+        const img = foto.querySelector("img");
+        const desc = foto.querySelector("p");
+
+        if (img && desc) {
+          document.getElementById("contenidoRutina").innerHTML += `
+            <div class="foto-item">
+              <img src="${img.src}" alt="Ejercicio">
+              <p>${desc.innerText}</p>
+            </div>
+          `;
         }
+      });
 
-        function cerrarModal() {
-            document.getElementById("modalRutina").style.display = "none";
-        }
+      document.getElementById("modalRutina").style.display = "block";
+    }
+
+    function cerrarModal() {
+      document.getElementById("modalRutina").style.display = "none";
+    }
     </script>
 </body>
 </html>
