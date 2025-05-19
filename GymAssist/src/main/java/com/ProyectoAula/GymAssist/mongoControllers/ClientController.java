@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
@@ -49,6 +48,12 @@ public class ClientController {
     public String ClienteHome(Model model, Principal principal){
         String username = principal.getName(); 
         ClientEntity cliente = clienteService.buscarPorUsername(username); // tu método para encontrar al cliente
+
+        LocalDate ultimaFecha = cliente.getAsistencias().isEmpty()
+        ? null
+        : cliente.getAsistencias().get(cliente.getAsistencias().size() - 1).getFecha();
+
+        model.addAttribute("ultimaFechaAsistencia", ultimaFecha != null ? ultimaFecha.toString() : "");
 
         model.addAttribute("cliente", cliente);
         return "ClienteHome";

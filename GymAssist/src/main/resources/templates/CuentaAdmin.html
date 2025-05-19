@@ -25,8 +25,8 @@
       <div class="profile">
         <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
         <div id="dropdown" class="dropdown">
-          <a href="#"><i class="fas fa-user-cog"></i> Cuenta</a>
-          <a href="/Api/Admin/CuentaAdmin"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a th:href="@{/Api/Admin/CuentaAdmin}"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a th:href="@{/Api/Admin/AdminHome}"><i class="fas fa-user-cog"></i>Salir</a>
         </div>
       </div>
     </div>
@@ -35,23 +35,23 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <nav>
-      <a th:href="@{/Api/Admin/AdminHome}">
+      <a th:href="@{/Api/Admin/AdminHome}" title="Dashboard">
         <i class="fas fa-home icon"></i>
         <span class="text">Home</span>
       </a>
-      <a th:href="@{/Api/Admin/AdminHome}" title="Usuarios">
+      <a th:href="@{/Api/Admin/AdminRegister}" title="Usuarios">
         <i class="fas fa-users icon"></i>
         <span class="text">Clientes</span>
       </a>
-      <a href="@{/Api/Admin/planesGimnasio}" class="active" title="Membresías">
+      <a th:href="@{/planes/gimnasio/{gymId}(gymId=${gymId})}" title="Membresías">
         <i class="fas fa-credit-card icon"></i>
         <span class="text">Membresías</span>
       </a>
-      <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" title="Rutinas">
+      <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" title="musculos">
         <i class="fas fa-calendar-alt icon"></i>
         <span class="text">Rutinas</span>
       </a>
-      <a href="#" title="dashboard">
+      <a href="#" title="Reportes">
         <i class="fas fa-chart-pie icon"></i>
         <span class="text">dashboard</span>
       </a>

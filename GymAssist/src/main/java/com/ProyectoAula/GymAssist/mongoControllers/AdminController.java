@@ -45,16 +45,18 @@ public class AdminController {
     private final AdminService adminService;
 
     // Inyección de dependencias para ClienteService y BCryptPasswordEncoder
-    public AdminController(ClienteService clienteService, BCryptPasswordEncoder passwordEncoder,
-            UserRepository userRepository, AdminRepository adminRepository, GimnasiosRepository gimnasiosRepository,
-            PlanService planService, AdminService adminService) {
-        this.planService = planService;
-        this.adminService = adminService;
-        this.userRepository = userRepository;
-        this.adminRepository = adminRepository;
-        this.gimnasiosRepository = gimnasiosRepository;
-        this.clienteService = clienteService;
-        this.passwordEncoder = passwordEncoder;
+    public AdminController  (ClienteService clienteService, 
+                            BCryptPasswordEncoder passwordEncoder,
+                            UserRepository userRepository, AdminRepository adminRepository,
+                            GimnasiosRepository gimnasiosRepository,
+                            PlanService planService, AdminService adminService) {
+            this.planService = planService;
+            this.adminService = adminService;
+            this.userRepository = userRepository;
+            this.adminRepository = adminRepository;
+            this.gimnasiosRepository = gimnasiosRepository;
+            this.clienteService = clienteService;
+            this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/check-session")

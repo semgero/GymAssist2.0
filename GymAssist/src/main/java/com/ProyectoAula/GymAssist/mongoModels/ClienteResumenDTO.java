@@ -6,10 +6,10 @@ public class ClienteResumenDTO {
     private long suspendidos;
     private long total;
 
-    public ClienteResumenDTO(long activos, long suspendidos) {
+    public ClienteResumenDTO(long activos, long suspendidos, long total) {
         this.activos = activos;
         this.suspendidos = suspendidos;
-        this.total = activos + suspendidos;
+        this.total = total;
     }
 
     public long getActivos() {
@@ -23,4 +23,4 @@ public class ClienteResumenDTO {
     public long getTotal() {
         return total;
     }
-}
+}  

@@ -43,7 +43,6 @@ public class GimnasiosController {
     // Procesar registro de gimnasio
     @PostMapping("/register")
     public String registerGym(@ModelAttribute GimnasiosEntity gimnasio,
-            @RequestParam("fotos") MultipartFile fotos,
             Principal principal,
             Model model) {
         try {
@@ -52,7 +51,6 @@ public class GimnasiosController {
             AdminEntity admin = adminRepository.findByUserId(user.getId()).orElseThrow();
 
             gimnasio.setAdminId(admin.getId());
-            gimnasio.setFotos(fotos.getBytes());
 
             gimnasiosServices.createGym(gimnasio);
 

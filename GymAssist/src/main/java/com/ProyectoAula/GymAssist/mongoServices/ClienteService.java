@@ -1,7 +1,6 @@
 package com.ProyectoAula.GymAssist.mongoServices;
 
 import org.bson.types.ObjectId;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
@@ -16,7 +15,10 @@ import com.ProyectoAula.GymAssist.mongoRepository.PlanRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -129,11 +131,28 @@ public class ClienteService {
     public void registrarAsistencia(ObjectId clienteId, LocalDate fecha, List<String> musculos) {
         ClientEntity cliente = buscarClientePorId(clienteId);
 
+        Optional<LocalDate> ultimaFechaOptional = cliente.getAsistencias().stream()
+        .map(Asistencia::getFecha)
+        .max(Comparator.naturalOrder());
+
+    // Comparar la fecha ingresada con la última registrada
+        if (ultimaFechaOptional.isPresent()) {
+            LocalDate ultimaFecha = ultimaFechaOptional.get();
+            long diasEntre = ChronoUnit.DAYS.between(ultimaFecha, fecha);
+
+            // Si pasaron más de 1 día desde la última asistencia, contar inasistencias
+            if (diasEntre > 1) {
+                int inasistenciasNuevas = (int) (diasEntre - 1); // no se cuenta el día actual
+                cliente.setInasistencias(cliente.getInasistencias() + inasistenciasNuevas);
+            }
+        }
+
+        // Registrar nueva asistencia
         Asistencia asistencia = new Asistencia();
         asistencia.setFecha(fecha);
         asistencia.setMusculos(musculos);
-
         cliente.getAsistencias().add(asistencia);
+
         clientRepository.save(cliente);
     }
 
@@ -151,14 +170,18 @@ public class ClienteService {
     public ClienteResumenDTO obtenerResumenPorGym(ObjectId gymId) {
         List<ClientEntity> clientes = clientRepository.findByGymId(gymId);
 
-        long activos = clientes.stream()
-                .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.ACTIVO)
-                .count();
-        long suspendidos = clientes.stream()
-                .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.SUSPENDIDO)
-                .count();
+        long activosYPendientes = clientes.stream()
+            .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.ACTIVO 
+                    || c.getEstado() == ClientEntity.EstadoCliente.PENDIENTE)
+            .count();
 
-        return new ClienteResumenDTO(activos, suspendidos);
+        long suspendidos = clientes.stream()
+            .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.SUSPENDIDO)
+            .count();
+
+        long total = clientes.size();
+
+        return new ClienteResumenDTO(activosYPendientes, suspendidos, total);
     }
 
     public void actualizarCliente(ClientEntity clienteActualizado) {

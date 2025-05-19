@@ -73,6 +73,7 @@
           <div>
             <label for="fecha">Fecha</label>
             <input type="date" id="fecha" name="fecha" required />
+            <input type="hidden" id="inasistenciasNuevas" name="inasistenciasNuevas" value="0" />
           </div>
           <div>
             <label class="form-label">Músculos trabajados</label>
@@ -115,6 +116,28 @@
     &copy; 2025 GymAssist. Todos los derechos reservados.
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+
+  <script th:inline="javascript">
+  const DateTime = luxon.DateTime;
+
+  /*[[${ultimaFechaAsistencia != null}]]*/ // Validamos que exista
+  const ultimaFechaAsistenciaStr = /*[['${ultimaFechaAsistencia}']]*/ null;
+  const ultimaFecha = ultimaFechaAsistenciaStr ? DateTime.fromISO(ultimaFechaAsistenciaStr) : null;
+
+  document.getElementById("fecha").addEventListener("change", function () {
+    const fechaSeleccionada = DateTime.fromISO(this.value);
+
+    let inasistencias = 0;
+    if (ultimaFecha && fechaSeleccionada.isValid && ultimaFecha.isValid) {
+      const diferencia = fechaSeleccionada.diff(ultimaFecha, "days").days;
+      inasistencias = Math.max(0, Math.floor(diferencia) - 1); // restamos 1 porque el día actual no cuenta como inasistencia
+    }
+
+    document.getElementById("inasistenciasNuevas").value = inasistencias;
+  });
+</script>
+  
   <script >
     function toggleSidebar() {
     document.body.classList.toggle('sidebar-collapsed');
@@ -164,5 +187,4 @@
   }
   </script>
 </body>
-
 </html>
