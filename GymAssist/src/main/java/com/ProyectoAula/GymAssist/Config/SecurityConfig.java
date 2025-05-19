@@ -1,4 +1,4 @@
-package com.ProyectoAula.GymAssist.Security;
+package com.ProyectoAula.GymAssist.Config;
 
 import java.util.Optional;
 
@@ -58,10 +58,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securedFilterChain(final HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
+        http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/Api/Auth/index", "/Api/Auth/login", "/Api/Auth/logout", "/Api/Auth/register").permitAll()
+                        .requestMatchers("/", "/Api/Auth/index", "/Api/Auth/login", "/Api/Auth/logout",
+                                "/Api/Auth/register")
+                        .permitAll()
                         .requestMatchers("/Styles/**", "/Imagenes/**", "/Js/**", "/uploads/**", "/content/**")
                         .permitAll()
                         .requestMatchers("/Error/**", "/Error").permitAll()
@@ -85,9 +86,9 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .permitAll())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .invalidSessionUrl("/Api/Auth/Login")
-                        .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::newSession))
+                        .sessionFixation().newSession())
                 .authenticationProvider(authenticationProvider(userDetailsService(userRepository), passwordEncoder())) // SOLO
                 // ESTA
                 // LÍNEA
@@ -155,16 +156,15 @@ public class SecurityConfig {
      */
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return (request, response, authentication) -> { // Agrega `request` para acceder a la sesión
+        return (request, response, authentication) -> {
             String username = authentication.getName();
             String role = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .findFirst()
                     .orElse("");
 
-            HttpSession session = request.getSession(); // Obtén la sesión
-
-            String redirectUrl = "/Api/Auth/login"; // Default
+            HttpSession session = request.getSession(); 
+            String redirectUrl = "/Api/Auth/login";
 
             if ("ROLE_ADMIN".equals(role)) {
                 UserEntity user = userRepository.findByUsername(username).orElse(null);
@@ -176,7 +176,6 @@ public class SecurityConfig {
                             redirectUrl = "/gimnasios/register";
                         } else {
                             redirectUrl = "/Api/Admin/AdminHome";
-                            // ⚡ Guardar gymId en la sesión
                             ObjectId gymId = gimnasiosRepository.findByAdminId(admin.getId())
                                     .map(GimnasiosEntity::getId)
                                     .orElse(null);
@@ -187,12 +186,23 @@ public class SecurityConfig {
             } else if ("ROLE_CLIENTE".equals(role)) {
                 UserEntity user = userRepository.findByUsername(username).orElse(null);
                 if (user != null) {
-                    Optional<ClientEntity> cliente = clientRepository.findByUsername(username);
-                    if (cliente != null) {
-                        redirectUrl = "/Api/Cliente/ClienteHome";
-                        // ⚡ Guardar gymId en la sesión
-                        ObjectId gymId = cliente.map(ClientEntity::getGymId).orElse(null);
+                    Optional<ClientEntity> clienteOpt = clientRepository.findByUsername(username);
+                    if (clienteOpt.isPresent()) {
+                        ClientEntity cliente = clienteOpt.get();
+                        ObjectId gymId = cliente.getGymId();
                         session.setAttribute("gymId", gymId);
+
+                        switch (cliente.getEstado()) {
+                            case SUSPENDIDO:
+                                redirectUrl = "/Api/Auth/login?error=accesoDenegado";
+                                break;
+                            case PENDIENTE:
+                                redirectUrl = "/Api/Cliente/ClientePago";
+                                break;
+                            case ACTIVO:
+                                redirectUrl = "/Api/Cliente/ClienteHome";
+                                break;
+                        }
                     }
                 }
             }

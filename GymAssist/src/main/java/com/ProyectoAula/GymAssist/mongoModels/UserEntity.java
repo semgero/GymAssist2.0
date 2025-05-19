@@ -3,6 +3,8 @@ package com.ProyectoAula.GymAssist.mongoModels;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.codecs.pojo.annotations.BsonProperty;
@@ -15,11 +17,11 @@ import jakarta.persistence.Id;
 @JsonTypeName("user")
 @Generated(value = "com.mongodb.migrator.application.codegen.config.java.JavaSpringCodegenConfig", date = "2025-04-23T20:32:34.385757600-05:00[America/Bogota]", comments = "Generator version: 7.10.0")
 @Document("user")
-public class UserEntity {
+public class UserEntity implements Serializable{
 
     @Id
     @BsonProperty("_id")
-    private ObjectId id; // Identificador principal de MongoDB
+    private ObjectId id;
 
     @BsonProperty("email")
     private String email;

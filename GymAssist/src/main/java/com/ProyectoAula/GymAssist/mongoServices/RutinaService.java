@@ -6,9 +6,15 @@ import com.ProyectoAula.GymAssist.utils.GrupoMuscularConstants;
 import com.ProyectoAula.GymAssist.utils.LevenshteinUtils;
 
 import org.bson.types.ObjectId;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -26,7 +32,15 @@ public class RutinaService {
     @Autowired
     private S3Service s3Service;
 
+    private static final Logger logger = LoggerFactory.getLogger(RutinaService.class);
+
+    /*@Caching(evict = {
+            @CacheEvict(value = "rutinasPorGymId", allEntries = true),
+            @CacheEvict(value = "rutinasPorGrupo", allEntries = true),
+            @CacheEvict(value = "rutinasPorId", allEntries = true)
+    })*/
     public RutinaEntity createRutina(RutinaEntity rutina, List<MultipartFile> archivos, List<String> descripciones) {
+        logger.info("📥 Creando nueva rutina para gymId: {}", rutina.getGymId());
         List<RutinaEntity.FotoRutina> fotos = new ArrayList<>();
 
         for (int i = 0; i < archivos.size(); i++) {
@@ -38,6 +52,7 @@ public class RutinaService {
                     archivo.transferTo(rutaTemp.toFile());
 
                     String urlImagen = s3Service.subirImagen(nombreArchivo, rutaTemp);
+                    logger.debug("✅ Imagen subida correctamente: {}", urlImagen);
 
                     fotos.add(new RutinaEntity.FotoRutina(
                             nombreArchivo,
@@ -45,24 +60,33 @@ public class RutinaService {
                             urlImagen,
                             archivo.getContentType()));
                 } catch (IOException e) {
+                    logger.error("❌ Error al subir la imagen a S3: {}", e.getMessage());
                     throw new RuntimeException("Error al subir la imagen a S3: " + e.getMessage());
                 }
             }
         }
 
         rutina.setFotosRutina(fotos);
-        return rutinaRepository.save(rutina);
+        RutinaEntity saved = rutinaRepository.save(rutina);
+        logger.info("✅ Rutina guardada con ID: {}", saved.getId());
+        return saved;
     }
 
+    //@Cacheable(value = "rutinasPorGymId", key = "#gymId")
     public List<RutinaEntity> getRutinasByGymId(ObjectId gymId) {
+        logger.info("📦 Buscando rutinas por gymId: {} (NO CACHE)", gymId);
         return rutinaRepository.findByGymId(gymId);
     }
 
+    //@Cacheable(value = "rutinaPorId", key = "#id")
     public Optional<RutinaEntity> getRutinaById(ObjectId id) {
+        logger.info("📦 Buscando rutina por ID: {} (NO CACHE)", id);
         return rutinaRepository.findById(id);
     }
 
+    //@Cacheable(value = "rutinasPorGrupo", key = "#grupoMuscular")
     public List<RutinaEntity> getRutinasPorGrupoMuscular(String grupoMuscular) {
+        logger.info("📦 Buscando rutinas por grupo muscular: {} (NO CACHE)", grupoMuscular);
         return rutinaRepository.findByGrupoMuscular(grupoMuscular);
     }
 
@@ -79,56 +103,73 @@ public class RutinaService {
             }
         }
 
+        logger.debug("🔎 Sugerencia para '{}': {} (Distancia: {})", entradaUsuario, mejorCoincidencia, menorDistancia);
         return (menorDistancia <= 2) ? mejorCoincidencia : null;
     }
 
+    //@Cacheable(value = "rutinasPorGrupo", key = "#grupoUsuario")
     public List<RutinaEntity> buscarRutinasPorGrupoMuscular(String grupoUsuario) {
+        logger.info("🔍 Buscando rutinas con entrada de usuario: {}", grupoUsuario);
         String grupoCorregido = sugerirGrupoMuscular(grupoUsuario);
 
         if (grupoCorregido != null) {
-            System.out.println("🔎 Grupo muscular corregido: " + grupoCorregido); // Debug para validar
+            logger.info("✅ Grupo corregido: {}", grupoCorregido);
             List<RutinaEntity> rutinas = rutinaRepository.findByGrupoMuscular(grupoCorregido);
-            System.out.println("✅ Rutinas encontradas: " + rutinas.size()); // Debug para revisar si Mongo devuelve
-                                                                            // datos
+            logger.debug("📊 Rutinas encontradas: {}", rutinas.size());
             return rutinas;
         } else {
-            System.out.println("⚠️ No se encontró un grupo muscular válido para: " + grupoUsuario);
+            logger.warn("⚠️ No se encontró un grupo muscular válido para: {}", grupoUsuario);
             return List.of();
         }
     }
 
+    //@Cacheable(value = "rutinasPorGrupoGym", key = "#grupoMuscular + '_' + #gymId")
     public List<RutinaEntity> findByGrupoMuscularAndGymId(String grupoMuscular, ObjectId gymId) {
+        logger.info("📦 Buscando rutinas por grupo: {} y gymId: {} (NO CACHE)", grupoMuscular, gymId);
         return rutinaRepository.findByGrupoMuscularIgnoreCaseAndGymId(grupoMuscular, gymId);
     }
 
+    /*@Caching(evict = {
+            @CacheEvict(value = "rutinasPorId", key = "#id"),
+            @CacheEvict(value = "rutinasPorGymId", allEntries = true),
+            @CacheEvict(value = "rutinasPorGrupo", allEntries = true),
+            @CacheEvict(value = "rutinasPorGrupoYGym", allEntries = true)
+    })*/
     public RutinaEntity updateRutina(ObjectId id, RutinaEntity rutinaEntity) {
+        logger.info("✏️ Actualizando rutina con ID: {}", id);
         RutinaEntity existingRutina = rutinaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rutina no encontrada con id: " + id));
 
-        if (rutinaEntity.getGrupoMuscular() != null) {
+        if (rutinaEntity.getNombreEjercicio() != null)
+            existingRutina.setNombreEjercicio(rutinaEntity.getNombreEjercicio());
+        if (rutinaEntity.getGrupoMuscular() != null)
             existingRutina.setGrupoMuscular(rutinaEntity.getGrupoMuscular());
-        }
-        if (rutinaEntity.getRepeticiones() != null) {
+        if (rutinaEntity.getRepeticiones() != null)
             existingRutina.setRepeticiones(rutinaEntity.getRepeticiones());
-        }
-        if (rutinaEntity.getSeries() != null) {
+        if (rutinaEntity.getSeries() != null)
             existingRutina.setSeries(rutinaEntity.getSeries());
-        }
-        if (rutinaEntity.getGymId() != null) {
+        if (rutinaEntity.getGymId() != null)
             existingRutina.setGymId(rutinaEntity.getGymId());
-        }
-
-        if (rutinaEntity.getFotosRutina() != null) {
+        if (rutinaEntity.getFotosRutina() != null)
             existingRutina.setFotosRutina(rutinaEntity.getFotosRutina());
-        }
 
         existingRutina.setUpdatedAt(LocalDateTime.now());
-        return rutinaRepository.save(existingRutina);
+        RutinaEntity updated = rutinaRepository.save(existingRutina);
+        logger.info("✅ Rutina actualizada: {}", updated.getId());
+        return updated;
     }
 
+    /*@Caching(evict = {
+            @CacheEvict(value = "rutinasPorId", key = "#id"),
+            @CacheEvict(value = "rutinasPorGymId", allEntries = true),
+            @CacheEvict(value = "rutinasPorGrupo", allEntries = true),
+            @CacheEvict(value = "rutinasPorGrupoYGym")
+    })*/
     public void deleteRutinaById(ObjectId id) {
+        logger.warn("🗑️ Eliminando rutina con ID: {}", id);
         RutinaEntity rutina = rutinaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se puede eliminar: Rutina no encontrada con id: " + id));
         rutinaRepository.deleteById(id);
+        logger.info("✅ Rutina eliminada: {}", id);
     }
 }

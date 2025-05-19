@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Rutinas del Gimnasio</title>
@@ -20,7 +21,8 @@
             background-color: white;
         }
 
-        th, td {
+        th,
+        td {
             padding: 15px;
             text-align: center;
             border-bottom: 1px solid #ddd;
@@ -45,6 +47,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <h1>Rutinas Disponibles</h1>
@@ -61,14 +64,14 @@
         </thead>
         <tbody>
             <tr th:each="rutina : ${rutinas}">
-                <td th:text="${#lists.isEmpty(rutina.fotosRutina) ? 'Sin ejercicio' : rutina.fotosRutina[0].nombreEjercicio}">Nombre</td>
+                <td th:text="${rutina.nombreEjercicio}">Nombre</td>
                 <td th:text="${rutina.grupoMuscular}">Grupo</td>
                 <td th:text="${rutina.repeticiones}">Reps</td>
                 <td th:text="${rutina.series}">Series</td>
                 <td>
                     <div class="foto-container" th:each="foto : ${rutina.fotosRutina}">
                         <div class="foto-ejercicio">
-                            <img th:src="${foto.rutaImagen}" alt="Imagen ejercicio"/>
+                            <img th:src="${foto.rutaImagen}" alt="Imagen ejercicio" />
                             <p th:text="${foto.descripcion}">Descripción</p>
                         </div>
                     </div>
@@ -77,4 +80,5 @@
         </tbody>
     </table>
 </body>
+
 </html>

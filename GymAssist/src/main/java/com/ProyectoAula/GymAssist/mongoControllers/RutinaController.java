@@ -60,7 +60,7 @@ public class RutinaController {
         System.out.println("🔎 Rutinas encontradas: " + rutinas.size());
         model.addAttribute("rutinas", rutinas);
         model.addAttribute("grupoMuscular", grupoMuscular);
-        return "/rutinasGrupo";
+        return "rutinasGrupo";
     }
 
     @PostMapping("/gym/{gymId}/guardar")
@@ -98,7 +98,7 @@ public class RutinaController {
     @PostMapping("/{id}/actualizar")
     public String actualizarRutina(
             @PathVariable String id,
-            @RequestParam List<String> nombreEjercicio, // Ahora lista
+            @RequestParam String nombreEjercicio, // Ahora lista
             @RequestParam String grupoMuscular,
             @RequestParam String repeticiones,
             @RequestParam String series,
@@ -109,6 +109,7 @@ public class RutinaController {
         RutinaEntity rutina = rutinaService.getRutinaById(new ObjectId(id))
                 .orElseThrow(() -> new RuntimeException("Rutina no encontrada con id: " + id));
 
+        rutina.setNombreEjercicio(nombreEjercicio);
         rutina.setGrupoMuscular(grupoMuscular);
         rutina.setRepeticiones(repeticiones);
         rutina.setSeries(series);

@@ -1,6 +1,7 @@
 package com.ProyectoAula.GymAssist.mongoControllers;
 
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
@@ -25,9 +27,14 @@ import java.security.Principal;
 import java.util.List;
 import com.ProyectoAula.GymAssist.mongoServices.PlanService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/Api/Admin")
 public class AdminController {
+
+    @Autowired
+    private HttpSession httpSession;
 
     private final ClienteService clienteService;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -50,11 +57,24 @@ public class AdminController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @GetMapping("/check-session")
+    public String checkSession() {
+        return "ID de sesión: " + httpSession.getId();
+    }
+
     @GetMapping("/AdminHome")
     public String mostrarAdminHome(Model model, Principal principal) {
 
         UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+
+        model.addAttribute("nombreUsuario", user.getUsername());
+
         GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
         ClienteResumenDTO resumen = clienteService.obtenerResumenPorGym(gym.getId());
         model.addAttribute("resumen", resumen);

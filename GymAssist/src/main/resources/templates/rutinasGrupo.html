@@ -25,8 +25,8 @@
       <div class="profile">
         <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
         <div id="dropdown" class="dropdown">
-          <a href="cuenta.html"><i class="fas fa-user-cog"></i> Cuenta</a>
-          <a href="#" class="danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          <a th:href="@{ClienteCuenta}"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a th:href="@{/Api/Auth/Logout}" class="danger"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@
 
                             <div class="front" th:style="|background-image: url('${#lists.isEmpty(rutina.fotosRutina) ? '/img/default-placeholder.png' : rutina.fotosRutina[0].rutaImagen}');|" >
                                 <div class="inner">
-                                    <p th:text="${rutina.grupoMuscular}">Grupo Muscular</p>
+                                    <p th:text="${rutina.nombreEjercicio}">Nombre de ejercicio</p>
                                 </div>
                             </div>
                             <div class="back">

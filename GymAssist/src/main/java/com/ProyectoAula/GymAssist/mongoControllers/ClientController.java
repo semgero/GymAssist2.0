@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
@@ -74,6 +75,19 @@ public class ClientController {
         model.addAttribute("cliente", cliente);
         model.addAttribute("nombrePlan", nombrePlan);
         return "ClienteCuenta"; // plantilla ClienteCuenta.html
+    }
+
+    @GetMapping("/ClientePago")
+    public String ClientePago(Model model, Principal principal){
+        String username = principal.getName(); // obtiene el username del usuario logueado
+        ClientEntity cliente = clienteService.buscarPorUsername(username); // tu método para encontrar al cliente
+
+        // Obtiene el nombre del plan (si tiene uno)
+        String nombrePlan = planService.obtenerNombreDelPlan(cliente.getPlanId());
+
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("nombrePlan", nombrePlan);
+        return "ClientePago"; // plantilla ClienteCuenta.html
     }
 
     @PostMapping("/actualizar-datos")
