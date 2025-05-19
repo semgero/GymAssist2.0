@@ -18,8 +18,8 @@ public class GimnasiosEntity {
   @BsonProperty("_id")
   private ObjectId id = null;
 
-  @BsonProperty("rut")
-  private Integer rut;
+  @BsonProperty("nit")
+  private Integer nit;
 
   @BsonProperty("descripcion")
   private String descripcion;
@@ -55,8 +55,8 @@ public class GimnasiosEntity {
     this.id = id;
   }
 
-  public GimnasiosEntity rut(Integer rut) {
-    this.rut = rut;
+  public GimnasiosEntity nit(Integer nit) {
+    this.nit = nit;
     return this;
   }
 
@@ -65,13 +65,13 @@ public class GimnasiosEntity {
    * @return rut
    */
   
-  @JsonProperty("rut")
-  public Integer getRut() {
-    return rut;
+  @JsonProperty("nit")
+  public Integer getNit() {
+    return nit;
   }
 
-  public void setRut(Integer rut) {
-    this.rut = rut;
+  public void setNit(Integer nit) {
+    this.nit = nit;
   }
 
   public GimnasiosEntity descripcion(String descripcion) {
@@ -178,7 +178,7 @@ public class GimnasiosEntity {
     }
     GimnasiosEntity gimnasios = (GimnasiosEntity) o;
     return Objects.equals(this.id, gimnasios.id) &&
-        Objects.equals(this.rut, gimnasios.rut) &&
+        Objects.equals(this.nit, gimnasios.nit) &&
         Objects.equals(this.descripcion, gimnasios.descripcion) &&
         Objects.equals(this.direccion, gimnasios.direccion) &&
         Arrays.equals(this.fotos, gimnasios.fotos) &&
@@ -188,7 +188,7 @@ public class GimnasiosEntity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, rut, descripcion, direccion, Arrays.hashCode(fotos), nombreGymnasio, adminId);
+    return Objects.hash(id, nit, descripcion, direccion, Arrays.hashCode(fotos), nombreGymnasio, adminId);
   }
 
   @Override
@@ -196,7 +196,7 @@ public class GimnasiosEntity {
     StringBuilder sb = new StringBuilder();
     sb.append("class GimnasiosEntity {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    rut: ").append(toIndentedString(rut)).append("\n");
+    sb.append("    nit: ").append(toIndentedString(nit)).append("\n");
     sb.append("    descripcion: ").append(toIndentedString(descripcion)).append("\n");
     sb.append("    direccion: ").append(toIndentedString(direccion)).append("\n");
     sb.append("    fotos: ").append(toIndentedString(fotos)).append("\n");

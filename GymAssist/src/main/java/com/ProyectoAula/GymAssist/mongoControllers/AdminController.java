@@ -147,7 +147,14 @@ public class AdminController {
     }
 
     @GetMapping("/CuentaAdmin")
-    public String CuentaAdmin() {
+    public String CuentaAdmin(Model model, Principal principal) {
+        UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+        AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+        GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+        ClienteResumenDTO resumen = clienteService.obtenerResumenPorGym(gym.getId());
+        model.addAttribute("resumen", resumen);
+        model.addAttribute("adminId", admin != null ? admin.getId() : null);
+        model.addAttribute("gymId", gym != null ? gym.getId() : null);
         return "CuentaAdmin"; // <-- tu vista de CuentaAdmin
     }
 

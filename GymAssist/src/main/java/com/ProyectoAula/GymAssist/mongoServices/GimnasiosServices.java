@@ -32,7 +32,7 @@ public class GimnasiosServices {
                 existingGimnasio.setDireccion(gimnasio.getDireccion());
                 existingGimnasio.setDescripcion(gimnasio.getDescripcion());
                 existingGimnasio.setFotos(gimnasio.getFotos());
-                existingGimnasio.setRut(gimnasio.getRut());
+                existingGimnasio.setNit(gimnasio.getNit());
         return gimnasiosRepository.save(existingGimnasio);
     }
 
