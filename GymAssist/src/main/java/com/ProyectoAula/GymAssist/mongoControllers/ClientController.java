@@ -3,10 +3,14 @@ package com.ProyectoAula.GymAssist.mongoControllers;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,11 +66,6 @@ public class ClientController {
     @GetMapping("/ClienteRutinas")
     public String ClienteRutinas(){
         return "ClienteRutinas";
-    }
-
-    @GetMapping("/ClienteDashboard")
-    public String ClienteDashboard(){
-        return "ClienteDashboard";
     }
 
     @GetMapping("/ClienteCuenta")
