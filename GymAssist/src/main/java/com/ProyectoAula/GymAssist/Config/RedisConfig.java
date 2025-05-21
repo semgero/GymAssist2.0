@@ -21,7 +21,11 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory();
+        String redisHost = System.getenv("SPRING_DATA_REDIS_HOST");
+        String redisPort = System.getenv("SPRING_DATA_REDIS_PORT");
+        return new LettuceConnectionFactory(
+                redisHost != null ? redisHost : "redis",
+                redisPort != null ? Integer.parseInt(redisPort) : 6379);
     }
 
     @Bean
@@ -37,7 +41,8 @@ public class RedisConfig {
     public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(30))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair
+                        .fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
         return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(config)
