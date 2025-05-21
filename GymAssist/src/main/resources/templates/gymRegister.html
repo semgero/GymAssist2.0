@@ -14,7 +14,7 @@
       <p>Antes de comenzar, cuéntanos sobre tu gimnasio.</p>
       <form th:action="@{/gimnasios/register}" method="post" enctype="multipart/form-data">
         <div class="form-group">
-          <label for="nombreGimnasio">🏋️ Nombre del Gimnasio</label>
+          <label for="nombreGimnasio">🏋 Nombre del Gimnasio</label>
           <input type="text" id="nombreGymnasio" name="nombreGymnasio" th:value="*{nombreGymnasio}" required>
         </div>
 
@@ -31,6 +31,11 @@
         <div class="form-group">
           <label for="descripcion">📝 Descripción</label>
           <textarea id="descripcion" name="descripcion" th:text="*{descripcion}" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="nit">💵Numero de cuenta</label>
+          <input type="number" id="nit" name="nit" required>
         </div>
 
         <button type="submit">✅ Registrar Gimnasio</button>
