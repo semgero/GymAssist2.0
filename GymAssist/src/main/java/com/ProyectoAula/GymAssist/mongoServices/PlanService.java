@@ -77,6 +77,12 @@ public class PlanService {
                 .orElse("Sin plan asignado");
     }
 
+    public String obtenerPrecioDelPlan(ObjectId planId) {
+        return planRepository.findById(planId)
+                .map(plan -> String.format("%.2f", plan.getPrecio()))
+                .orElse("0");
+    }
+
     public void actualizarNombreEnClientes(ObjectId planId, String nuevoNombre) {
         Query query = new Query(Criteria.where("planId").is(planId));
         Update update = new Update().set("nombrePlan", nuevoNombre);

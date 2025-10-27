@@ -62,6 +62,9 @@ public class ClientEntity {
     @BsonProperty("inasistencias")
     private int inasistencias = 0;
 
+    @BsonProperty("fechaIngresoCliente")
+    private LocalDate fechaIngresoCliente;
+
     @BsonProperty("fechaInicioMembresia")
     private LocalDate fechaInicioMembresia;
 
@@ -174,6 +177,14 @@ public class ClientEntity {
         this.inasistencias = inasistencias;
     }
 
+    public LocalDate getFechaIngresoCliente() {
+        return fechaIngresoCliente;
+    }
+
+    public void setFechaIngresoCliente(LocalDate fechaIngresoCliente) {
+        this.fechaIngresoCliente = fechaIngresoCliente;
+    }
+
     public LocalDate getFechaInicioMembresia() {
         return fechaInicioMembresia;
     }
@@ -195,12 +206,13 @@ public class ClientEntity {
     public static class Asistencia {
         @BsonProperty("fecha")
         private LocalDate fecha;
-        
+
         @BsonProperty("musculos")
         private List<String> musculos;
 
         // Constructor vacío (OBLIGATORIO para MongoDB)
-        public Asistencia() {}
+        public Asistencia() {
+        }
 
         // Constructor completo
         public Asistencia(LocalDate fecha, List<String> musculos) {
@@ -248,6 +260,7 @@ public class ClientEntity {
                 Objects.equals(password, that.password) &&
                 Objects.equals(asistencias, that.asistencias) &&
                 Objects.equals(inasistencias, that.inasistencias) &&
+                Objects.equals(fechaIngresoCliente, that.fechaIngresoCliente) &&
                 Objects.equals(fechaInicioMembresia, that.fechaInicioMembresia) &&
                 Objects.equals(fechaFinMembresia, that.fechaFinMembresia);
     }
@@ -255,7 +268,7 @@ public class ClientEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, correo, username, nombre, telefono, idDocumento, mensualidad, estado, planId, gymId,
-                password, asistencias, inasistencias, fechaInicioMembresia, fechaFinMembresia);
+                password, asistencias, inasistencias, fechaIngresoCliente, fechaInicioMembresia, fechaFinMembresia);
     }
 
     @Override
@@ -274,6 +287,7 @@ public class ClientEntity {
                 ", password='" + password + '\'' +
                 ", asistencias=" + asistencias +
                 ", inasistencias=" + inasistencias +
+                ", fechaIngresoCliente=" + fechaIngresoCliente +
                 ", fechaInicioMembresia=" + fechaInicioMembresia +
                 ", fechaFinMembresia=" + fechaFinMembresia +
                 '}';

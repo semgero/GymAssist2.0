@@ -66,83 +66,68 @@
 
             <!-- Tarjeta de perfil completa -->
             <div class="card profile-card">
-            <div class="profile-icon">
-                <i class="fas fa-user-cog"></i>
-            </div>
-            <p class="status-title">Estado de Cuenta</p>
-            <div>
-                <span class="status-badge">Activo</span>
-                <!-- o “Pendiente” -->
-            </div>
-            <div class="info">
-                <p><strong>Usuario:</strong> <span>usuario123</span></p>
-                <p><strong>Correo:</strong> <span>correo@example.com</span></p>
-                <p><strong>Teléfono:</strong> <span>123456789</span></p>
-                <p><strong>Plan actual:</strong> <span>Plan Básico</span></p>
-            </div>
-            <button class="edit-button" onclick="openModal()">✏ Editar Información</button>
+                <div class="profile-icon">
+                    <i class="fas fa-user-cog"></i>
+                </div>
+                <p class="status-title">Estado de Cuenta</p>
+                <div>
+                    <span class="status-badge" th:text="${cliente.estado}">Activo</span>
+                </div>
+                <div class="info">
+                    <p><strong>Usuario:</strong> <span th:text="${cliente.username}">usuario123</span></p>
+                    <p><strong>Correo:</strong> <span th:text="${cliente.correo}">correo@example.com</span></p>
+                    <p><strong>Teléfono:</strong> <span th:text="${cliente.telefono}">123456789</span></p>
+                    <p><strong>Plan actual:</strong> <span th:text="${nombrePlan}">Plan Básico</span></p>
+                    <p><strong>Precio:</strong> $<span th:text="${planPrecio}">0</span></p>
+                </div>
+                <button class="edit-button" onclick="openModal()">✏ Editar Información</button>
             </div>
 
             <!-- Panel de Pago -->
             <div class="payment-panel">
-            <h2>Pago Seguro</h2>
-            <div class="form-group">
-                <label for="paymentMethod">Método de Pago</label>
-                <div class="input-wrapper">
-                <i class="fas fa-wallet"></i>
-                <select id="paymentMethod">
-                    <option value="">-- Selecciona --</option>
-                    <option value="Bancolombia">Bancolombia</option>
-                    <option value="Nequi">Nequi</option>
-                    <option value="Davivienda">Davivienda</option>
-                </select>
+                <h2>Pago Seguro</h2>
+                <p>Haz clic en el botón para continuar con el pago de tu plan.</p>
+                <a href="/pagos/pago">Pagar Ahora</a>
+                <div id="history">
+                    <h3>Historial de Pagos</h3>
+                    <ul id="historyList"></ul>
                 </div>
             </div>
-            <div id="paymentDetails"></div>
-            <button id="payBtn" type="button"><i class="fas fa-paper-plane"></i> Pagar Ahora</button>
-
-            <div id="history">
-                <h3>Historial de Pagos</h3>
-                <ul id="historyList">
-                </ul>
-            </div>
-            </div>
-
         </div>
     </main>
 
-        <!-- Modal de editar perfil -->
+    <!-- Modal de editar perfil -->
     <div class="modal-container" id="modal">
         <div class="modal">
             <form id="editForm" action="/Api/Cliente/actualizar-datos" method="post">
-            <div class="modal-header">
-                <h2><i class="fas fa-user-edit"></i> Editar Información</h2>
-                <p>Modifica tus datos personales y actualiza tu contraseña.</p>
-            </div>
-            <div class="form-group">
-                <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
-                <input type="email" id="email" name="correo" required>
-            </div>
-            <div class="form-group">
-                <label for="username"><i class="fas fa-user"></i> Usuario</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password"><i class="fas fa-lock"></i> Nueva Contraseña</label>
-                <input type="password" id="password" name="password">
-            </div>
-            <div class="form-group">
-                <label for="confirm-password"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
-                <input type="password" id="confirm-password" name="confirm-password">
-            </div>
-            <div class="modal-actions">
-                <button type="submit" class="half-btn save-btn">
-                <i class="fas fa-save"></i> Guardar
-                </button>
-                <button type="button" class="half-btn cancel-btn" onclick="closeModal()">
-                <i class="fas fa-times"></i> Cancelar
-                </button>
-            </div>
+                <div class="modal-header">
+                    <h2><i class="fas fa-user-edit"></i> Editar Información</h2>
+                    <p>Modifica tus datos personales y actualiza tu contraseña.</p>
+                </div>
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
+                    <input type="email" id="email" name="correo" required th:value="${cliente.correo}">
+                </div>
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Usuario</label>
+                    <input type="text" id="username" name="username" required th:value="${cliente.username}">
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Nueva Contraseña</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
+                    <input type="password" id="confirm-password" name="confirm-password">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="half-btn save-btn">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                    <button type="button" class="half-btn cancel-btn" onclick="closeModal()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -163,9 +148,8 @@
 
         document.addEventListener('click', () => {
             document.getElementById('dropdown').classList.remove('show');
-        })
+        });
 
-        // Al cargar la página, aplica el tema guardado:
         document.addEventListener('DOMContentLoaded', () => {
             const saved = localStorage.getItem('theme');
             if (saved === 'dark') {
@@ -173,13 +157,10 @@
             }
         });
 
-        // Función única para alternar tema y guardarlo
         function btnTheme() {
             const isDark = document.body.classList.toggle('theme-dark');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         }
-
-        // Exponemos la función al scope global
         window.btnTheme = btnTheme;
 
         function openModal() {
@@ -196,56 +177,55 @@
         const historyList = document.getElementById('historyList');
 
         paymentSelect.addEventListener('change', () => {
-        const method = paymentSelect.value;
-        detailsDiv.innerHTML = '';
-        let content = '';
-        if (method === 'Bancolombia') {
-            content = `
-            <img class="payment-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Logo_Bancolombia.svg/2000px-Logo_Bancolombia.svg.png" alt="Logo Bancolombia">
-            <div class="form-group fade-in">
-                <label for="accountNumber">Número de cuenta</label>
-                <div class="input-wrapper">
-                <i class="fas fa-hashtag"></i>
-                <input type="text" id="accountNumber" placeholder="1234 5678 9012">
-                </div>
-            </div>`;
-        } else if (method === 'Nequi') {
-            content = `
-            <img class="payment-logo" src="https://logosenvector.com/logo/img/nequi-37254.png" alt="Logo Nequi">
-            <div class="form-group fade-in">
-                <label for="phoneNumber">Número Nequi</label>
-                <div class="input-wrapper">
-                <i class="fas fa-mobile-alt"></i>
-                <input type="text" id="phoneNumber" placeholder="300 123 4567">
-                </div>
-            </div>`;
-        } else if (method === 'Davivienda') {
-            content = `
-            <img class="payment-logo" src="https://paseosanrafael.com/wp-content/uploads/2013/06/1200px-Davivienda_logo.svg.png" alt="Logo Davivienda">
-            <div class="form-group fade-in">
-                <label for="accountDav">Cuenta Davivienda</label>
-                <div class="input-wrapper">
-                <i class="fas fa-university"></i>
-                <input type="text" id="accountDav" placeholder="1234 5678 9012">
-                </div>
-            </div>`;
-        }
-        detailsDiv.innerHTML = content;
+            const method = paymentSelect.value;
+            detailsDiv.innerHTML = '';
+            let content = '';
+            if (method === 'Bancolombia') {
+                content = `
+                <img class="payment-logo" src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Logo_Bancolombia.svg" alt="Logo Bancolombia">
+                <div class="form-group fade-in">
+                    <label for="accountNumber">Número de cuenta</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-hashtag"></i>
+                        <input type="text" id="accountNumber" placeholder="1234 5678 9012">
+                    </div>
+                </div>`;
+            } else if (method === 'Nequi') {
+                content = `
+                <img class="payment-logo" src="https://logosenvector.com/logo/img/nequi-37254.png" alt="Logo Nequi">
+                <div class="form-group fade-in">
+                    <label for="phoneNumber">Número Nequi</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-mobile-alt"></i>
+                        <input type="text" id="phoneNumber" placeholder="300 123 4567">
+                    </div>
+                </div>`;
+            } else if (method === 'Davivienda') {
+                content = `
+                <img class="payment-logo" src="https://paseosanrafael.com/wp-content/uploads/2013/06/1200px-Davivienda_logo.svg.png" alt="Logo Davivienda">
+                <div class="form-group fade-in">
+                    <label for="accountDav">Cuenta Davivienda</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-university"></i>
+                        <input type="text" id="accountDav" placeholder="1234 5678 9012">
+                    </div>
+                </div>`;
+            }
+            detailsDiv.innerHTML = content;
         });
 
         payBtn.addEventListener('click', () => {
-        const method = paymentSelect.value;
-        if (!method) {
-            return Swal.fire('Falta método', 'Selecciona un método de pago.', 'warning');
-        }
-        Swal.fire('¡Pago Exitoso!', 'Transferencia con ${method} realizada.', 'success');
-        const li = document.createElement('li');
-        const now = new Date().toLocaleString('es-CO');
-        li.innerHTML = "<span>${method}</span><span>${now}</span>";
-        historyList.prepend(li);
-        paymentSelect.value = '';
-        detailsDiv.innerHTML = '';
+            fetch('/crear-preferencia')
+                .then(response => response.text())
+                .then(initPoint => {
+                    window.location.href = initPoint; // redirige al checkout de MercadoPago
+                })
+                .catch(error => {
+                    console.error('Error al crear preferencia:', error);
+                    Swal.fire('Error', 'Hubo un problema al iniciar el pago.', 'error');
+                });
         });
+
     </script>
 </body>
 
