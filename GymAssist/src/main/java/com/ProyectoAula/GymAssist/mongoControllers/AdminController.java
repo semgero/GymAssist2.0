@@ -92,6 +92,7 @@ public class AdminController {
         return "AdminHome";
     }
 
+
     @GetMapping("/Dashboard/{gymId}")
     public String mostrarDashboard(Model model, Principal principal) {
         UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
@@ -103,6 +104,7 @@ public class AdminController {
         model.addAttribute("gymId", gym != null ? gym.getId() : null);
         return "Dashboard";
     }
+
 
     @PostMapping("/actualizar-admin")
     public String actualizarCorreoYPasswordAdmin(@RequestParam String correo,

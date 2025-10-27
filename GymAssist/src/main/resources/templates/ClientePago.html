@@ -8,7 +8,9 @@
     <!-- FontAwesome para los iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="/Styles/ClientePago.css" />
+    <link rel="stylesheet" href="/Styles/ClientePago.css" />
     <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -64,6 +66,8 @@
     <main class="main-content">
         <div class="forms-wrapper">
 
+        <div class="forms-wrapper">
+
             <!-- Tarjeta de perfil completa -->
             <div class="card profile-card">
                 <div class="profile-icon">
@@ -73,11 +77,29 @@
                 <div>
                     <span class="status-badge" th:text="${cliente.estado}">Activo</span>
                 </div>
+                <p class="status-title">Estado de Cuenta</p>
+                <div>
+                    <span class="status-badge" th:text="${cliente.estado}">Activo</span>
+                </div>
                 <div class="info">
                     <p><strong>Usuario:</strong> <span th:text="${cliente.username}">usuario123</span></p>
+                    <p><strong>Usuario:</strong> <span th:text="${cliente.username}">usuario123</span></p>
                     <p><strong>Correo:</strong> <span th:text="${cliente.correo}">correo@example.com</span></p>
-                    <p><strong>Teléfono:</strong> <span th:text="${cliente.telefono}">123456789</span></p>
+                    <p><strong>Teléfono:</strong> <span th:text="${cliente.telefono}">123456789789</span></p>
                     <p><strong>Plan actual:</strong> <span th:text="${nombrePlan}">Plan Básico</span></p>
+                    <p><strong>Precio:</strong> $<span th:text="${planPrecio}">0</span></p>
+                </div>
+                <button class="edit-button" onclick="openModal()">✏ Editar Información</button>
+            </div>
+
+            <!-- Panel de Pago -->
+            <div class="payment-panel">
+                <h2>Pago Seguro</h2>
+                <p>Haz clic en el botón para continuar con el pago de tu plan.</p>
+                <a href="/pagos/pago">Pagar Ahora</a>
+                <div id="history">
+                    <h3>Historial de Pagos</h3>
+                    <ul id="historyList"></ul>
                     <p><strong>Precio:</strong> $<span th:text="${planPrecio}">0</span></p>
                 </div>
                 <button class="edit-button" onclick="openModal()">✏ Editar Información</button>
@@ -95,7 +117,43 @@
             </div>
         </div>
     </main>
+    </main>
 
+    <!-- Modal de editar perfil -->
+    <div class="modal-container" id="modal">
+        <div class="modal">
+            <form id="editForm" action="/Api/Cliente/actualizar-datos" method="post">
+                <div class="modal-header">
+                    <h2><i class="fas fa-user-edit"></i> Editar Información</h2>
+                    <p>Modifica tus datos personales y actualiza tu contraseña.</p>
+                </div>
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
+                    <input type="email" id="email" name="correo" required th:value="${cliente.correo}">
+                </div>
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Usuario</label>
+                    <input type="text" id="username" name="username" required th:value="${cliente.username}">
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Nueva Contraseña</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
+                    <input type="password" id="confirm-password" name="confirm-password">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="half-btn save-btn">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                    <button type="button" class="half-btn cancel-btn" onclick="closeModal()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     <!-- Modal de editar perfil -->
     <div class="modal-container" id="modal">
         <div class="modal">
@@ -148,7 +206,7 @@
 
         document.addEventListener('click', () => {
             document.getElementById('dropdown').classList.remove('show');
-        });
+        });;
 
         document.addEventListener('DOMContentLoaded', () => {
             const saved = localStorage.getItem('theme');
