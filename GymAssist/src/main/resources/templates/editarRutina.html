@@ -36,7 +36,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <nav>
-            <a th:href="@{/Api/Admin/AdminHome}" title="Home">
+            <a th:href="@{/Api/Admin/AdminHome}"  title="Dashboard">
                 <i class="fas fa-home icon"></i>
                 <span class="text">Home</span>
             </a>
@@ -48,13 +48,17 @@
                 <i class="fas fa-credit-card icon"></i>
                 <span class="text">Membresías</span>
             </a>
-            <a href="#" class="active" title="Rutinas">
+            <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" class="active" title="musculos">
                 <i class="fas fa-calendar-alt icon"></i>
                 <span class="text">Rutinas</span>
             </a>
-            <a th:href="@{/Api/Admin/Dashboard}">
+            <a th:href="@{/Api/Admin/Dashboard/{gymId}}" title="Reportes">
                 <i class="fas fa-chart-pie icon"></i>
-                <span class="text">dashboard</span>
+                <span class="text">Dashboard</span>
+            </a>
+            <a th:href="@{/Api/Admin/Predicciones}" title="Predicciones IA">
+                <i class="fas fa-brain icon"></i>
+                <span class="text">Predicciones</span>
             </a>
         </nav>
     </aside>
@@ -63,79 +67,76 @@
     <main class="main-content">
         <div class="container">
             <div class="card">
-            <h2><i class="fas fa-edit"></i> Editar Rutina</h2>
-            <form th:action="@{'/rutinas/' + ${rutina.id} + '/actualizar'}" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="id" th:value="${rutina.id}" />
-                <input type="hidden" name="gymId" th:value="${gymId}" />
+                <h2><i class="fas fa-edit"></i> Editar Rutina</h2>
+                <form th:action="@{'/rutinas/' + ${rutina.id} + '/actualizar'}" method="post"
+                    enctype="multipart/form-data">
+                    <input type="hidden" name="id" th:value="${rutina.id}" />
+                    <input type="hidden" name="gymId" th:value="${gymId}" />
 
-                <div class="input-group">
-                <i class="fas fa-tag"></i>
-                <input type="text" name="nombreEjercicio"
-                        th:value="${rutina.nombreEjercicio}"
-                        placeholder="Nombre del ejercicio" required />
-                </div>
-
-                <div class="input-group">
-                <i class="fas fa-users"></i>
-                <input type="text" name="grupoMuscular"
-                        th:value="${rutina.grupoMuscular}"
-                        placeholder="Grupo Muscular" required />
-                </div>
-
-                <div class="input-group">
-                <i class="fas fa-repeat"></i>
-                <input type="text" name="repeticiones"
-                        th:value="${rutina.repeticiones}"
-                        placeholder="Repeticiones" required />
-                </div>
-
-                <div class="input-group">
-                <i class="fas fa-layer-group"></i>
-                <input type="text" name="series"
-                        th:value="${rutina.series}"
-                        placeholder="Series" required />
-                </div>
-
-                <h3><i class="fas fa-images"></i> Fotos actuales</h3>
-                <div class="existing-photos">
-                <div class="existing-photo" th:each="foto, stat : ${rutina.fotosRutina}">
-                    <img th:src="${foto.rutaImagen}" alt="Foto Rutina" />
-                    <p><b>Descripción:</b> <span th:text="${foto.descripcion}"></span></p>
-                    <label>
-                    <input type="checkbox" name="fotosAEliminar" th:value="${stat.index}"> Eliminar
-                    </label>
-                </div>
-                </div>
-
-                <h3><i class="fas fa-plus-circle"></i> Agregar nuevas fotos</h3>
-                <div id="nuevas-fotos-container">
-                <div class="foto-item">
-                    <div class="file-group">
-                    <label class="file-btn"><i class="fas fa-upload"></i> Seleccionar Archivo
-                        <input type="file" name="fotosRutina" class="file-input" onchange="mostrarNombreArchivo(this)" />
-                    </label>
-                    <span class="file-name"></span>
+                    <div class="input-group">
+                        <i class="fas fa-tag"></i>
+                        <input type="text" name="nombreEjercicio" th:value="${rutina.nombreEjercicio}"
+                            placeholder="Nombre del ejercicio" required />
                     </div>
-                    <div class="input-desc">
-                    <i class="fas fa-align-left"></i>
-                    <input type="text" name="descripciones" placeholder="Descripción breve" />
+
+                    <div class="input-group">
+                        <i class="fas fa-users"></i>
+                        <input type="text" name="grupoMuscular" th:value="${rutina.grupoMuscular}"
+                            placeholder="Grupo Muscular" required />
                     </div>
-                </div>
-                </div>
 
-                <div class="actions">
-                <button type="button" class="btn" onclick="agregarFoto()">
-                    <i class="fas fa-plus"></i> Agregar Foto
-                </button>
-                <button type="submit" class="btn">
-                    <i class="fas fa-save"></i> Actualizar
-                </button>
-                </div>
+                    <div class="input-group">
+                        <i class="fas fa-repeat"></i>
+                        <input type="text" name="repeticiones" th:value="${rutina.repeticiones}"
+                            placeholder="Repeticiones" required />
+                    </div>
 
-                <a th:href="@{'/rutinas/gym/' + ${gymId}}" class="back-link">
-                <i class="fas fa-arrow-left"></i> Volver
-                </a>
-            </form>
+                    <div class="input-group">
+                        <i class="fas fa-layer-group"></i>
+                        <input type="text" name="series" th:value="${rutina.series}" placeholder="Series" required />
+                    </div>
+
+                    <h3><i class="fas fa-images"></i> Fotos actuales</h3>
+                    <div class="existing-photos">
+                        <div class="existing-photo" th:each="foto, stat : ${rutina.fotosRutina}">
+                            <img th:src="${foto.rutaImagen}" alt="Foto Rutina" />
+                            <p><b>Descripción:</b> <span th:text="${foto.descripcion}"></span></p>
+                            <label>
+                                <input type="checkbox" name="fotosAEliminar" th:value="${stat.index}"> Eliminar
+                            </label>
+                        </div>
+                    </div>
+
+                    <h3><i class="fas fa-plus-circle"></i> Agregar nuevas fotos</h3>
+                    <div id="nuevas-fotos-container">
+                        <div class="foto-item">
+                            <div class="file-group">
+                                <label class="file-btn"><i class="fas fa-upload"></i> Seleccionar Archivo
+                                    <input type="file" name="fotosRutina" class="file-input"
+                                        onchange="mostrarNombreArchivo(this)" />
+                                </label>
+                                <span class="file-name"></span>
+                            </div>
+                            <div class="input-desc">
+                                <i class="fas fa-align-left"></i>
+                                <input type="text" name="descripciones" placeholder="Descripción breve" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="btn" onclick="agregarFoto()">
+                            <i class="fas fa-plus"></i> Agregar Foto
+                        </button>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-save"></i> Actualizar
+                        </button>
+                    </div>
+
+                    <a th:href="@{'/rutinas/gym/' + ${gymId}}" class="back-link">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                </form>
             </div>
         </div>
     </main>
@@ -161,7 +162,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const saved = localStorage.getItem('theme');
             if (saved === 'dark') {
-            document.body.classList.add('theme-dark');
+                document.body.classList.add('theme-dark');
             }
         });
 
@@ -175,10 +176,10 @@
         window.btnTheme = btnTheme;
 
         function agregarFoto() {
-        const cont = document.getElementById('nuevas-fotos-container');
-        const nuevo = document.createElement('div');
-        nuevo.classList.add('foto-item');
-        nuevo.innerHTML = `
+            const cont = document.getElementById('nuevas-fotos-container');
+            const nuevo = document.createElement('div');
+            nuevo.classList.add('foto-item');
+            nuevo.innerHTML = `
             <div class="file-group">
             <label class="file-btn"><i class="fas fa-upload"></i> Seleccionar Archivo
                 <input type="file" name="fotosRutina" class="file-input" onchange="mostrarNombreArchivo(this)" required />
@@ -190,11 +191,11 @@
             <input type="text" name="descripciones" placeholder="Descripción breve" required />
             </div>
         `;
-        cont.appendChild(nuevo);
+            cont.appendChild(nuevo);
         }
         function mostrarNombreArchivo(input) {
-        const name = input.files[0]?.name || '';
-        input.closest('.file-group').querySelector('.file-name').textContent = name;
+            const name = input.files[0]?.name || '';
+            input.closest('.file-group').querySelector('.file-name').textContent = name;
         }
     </script>
 </body>

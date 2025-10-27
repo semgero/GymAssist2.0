@@ -7,10 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GymAssist Admin</title>
   <!-- FontAwesome para los iconos -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="/Styles/dashboarddd.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/Styles/dashboarddd.css" />
   <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
 </head>
 
@@ -44,7 +42,7 @@
         <i class="fas fa-home icon"></i>
         <span class="text">Home</span>
       </a>
-      <a href="#" class="active" title="Usuarios">
+      <a th:href="@{/Api/Admin/AdminRegister}" class="active" title="Usuarios">
         <i class="fas fa-users icon"></i>
         <span class="text">Clientes</span>
       </a>
@@ -52,13 +50,17 @@
         <i class="fas fa-credit-card icon"></i>
         <span class="text">Membresías</span>
       </a>
-      <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" title="Rutinas">
+      <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" title="musculos">
         <i class="fas fa-calendar-alt icon"></i>
         <span class="text">Rutinas</span>
       </a>
-      <a th:href="@{/Api/Admin/Dashboard/{gymId}}">
+      <a th:href="@{/Api/Admin/Dashboard/{gymId}}" title="Reportes">
         <i class="fas fa-chart-pie icon"></i>
-        <span class="text">dashboard</span>
+        <span class="text">Dashboard</span>
+      </a>
+      <a th:href="@{/Api/Admin/Predicciones}" title="Predicciones IA">
+        <i class="fas fa-brain icon"></i>
+        <span class="text">Predicciones IA</span>
       </a>
     </nav>
   </aside>
