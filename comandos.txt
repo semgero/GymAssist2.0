@@ -1,0 +1,2 @@
+docker exec -it gymassist-app bash
+redis-cli -h redis -p 6379 scan 0

@@ -6,32 +6,32 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+      <link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:1024/quality:100/uri:ifs%3A%2F%2FM%2F6293492d-90de-4ff2-8521-44571fe13397/watermark:F/width:1024?csig=AAAAAAAAAAAAAAAAAAAAAOLV6xCRNfqeXx4kabpivLv81cm2L12Fl0_78GK7TPjt&exp=1761598823&osig=AAAAAAAAAAAAAAAAAAAAAO_rfXfN2kovLoSwAcy-QVMbV69lhfqYhD4qPePG-u0-&signer=media-rpc&x-canva-quality=screen_2x" type="image/png">
     <title>GymAssist - Iniciar Sesión</title>
     <link rel="stylesheet" href="/Styles/loginN.css">
 </head>
 <body>
+  <a th:href="@{/}"><button class="back-button"><i class="fa-solid fa-arrow-left"></i></button></a>
     <div class="container" id="container">
         <div class="form-container sign-up">
           <form th:action="@{/Api/Auth/register}" method="post">
-            <img src="/Imagenes/logo_icon.png" class="logo" alt="Logo del gimnasio">         
+            <img src="/Imagenes/icono.png" class="logo" alt="Logo del gimnasio">         
               <h1>Register</h1>
               <input type="text" name="username" placeholder="Username" required>
               <input type="email" name="email" placeholder="Email" required>
               <input type="password" name="password" placeholder="Password" required>
               <input type="password" name="confirmPassword" placeholder="Confirm Password" required>                
-              <a href="/login" class="forgot-password">Already have an account? Login</a>
                <p th:if="${error}" th:text="${error}" style="color: red;"></p>
-              <button type="submit" class="btn">Register</button>
+              <button type="submit" class="btn">Registrar</button>
           </form>
         </div>
         <div class="form-container sign-in">
           <form th:action="@{/Api/Auth/login}" method="post">
-            <img src="/Imagenes/logo_icon.png" class="logo" alt="Logo del gimnasio">
+            <img src="/Imagenes/icono.png" class="logo" alt="Logo del gimnasio">
             <h1>Login</h1>
               <input type="text" name="username" placeholder="username" required>
               <input type="password" name="password" placeholder="Password" required>
-              <button type="submit" class="btn">Login</button>
-               <a href="/Api/Auth/register" class="forgot-password">Don't have an account? Register</a>
+              <button type="submit" class="btn">Iniciar Sesion</button>
               <p th:if="${error}" th:text="${error}" style="color: red;"></p>
           </form>
         </div>
