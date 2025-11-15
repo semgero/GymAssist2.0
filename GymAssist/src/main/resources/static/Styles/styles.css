@@ -116,7 +116,7 @@ nav {
 }
 
 .nav__logo img {
-  width: 180px;
+  width: 200px;
   position: absolute;
 }
 
@@ -351,10 +351,10 @@ nav {
 }
 
 .footer__logo img {
-  width: 180px;
+  width: 250px;
   position: absolute;
   margin-bottom: 2rem;
-  margin-left: 1rem;
+  margin-left: 0.1rem;
 }
 
 .footer__col p {

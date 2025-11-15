@@ -26,7 +26,7 @@
                 <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
                 <div id="dropdown" class="dropdown">
                     <a href="/Api/Admin/CuentaAdmin"><i class="fas fa-user-cog"></i> Cuenta</a>
-                    <a href="#" class="danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a th:href="@{/Api/Auth/Logout}" class="danger"><i class="fas fa-sign-out-alt"></i>Cerrar sesion</a>
                 </div>
             </div>
         </div>
