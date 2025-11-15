@@ -24,6 +24,7 @@ import com.ProyectoAula.GymAssist.mongoRepository.AdminRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.GimnasiosRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import com.ProyectoAula.GymAssist.mongoServices.PlanService;
 
@@ -45,18 +46,18 @@ public class AdminController {
     private final AdminService adminService;
 
     // Inyección de dependencias para ClienteService y BCryptPasswordEncoder
-    public AdminController  (ClienteService clienteService, 
-                            BCryptPasswordEncoder passwordEncoder,
-                            UserRepository userRepository, AdminRepository adminRepository,
-                            GimnasiosRepository gimnasiosRepository,
-                            PlanService planService, AdminService adminService) {
-            this.planService = planService;
-            this.adminService = adminService;
-            this.userRepository = userRepository;
-            this.adminRepository = adminRepository;
-            this.gimnasiosRepository = gimnasiosRepository;
-            this.clienteService = clienteService;
-            this.passwordEncoder = passwordEncoder;
+    public AdminController(ClienteService clienteService,
+            BCryptPasswordEncoder passwordEncoder,
+            UserRepository userRepository, AdminRepository adminRepository,
+            GimnasiosRepository gimnasiosRepository,
+            PlanService planService, AdminService adminService) {
+        this.planService = planService;
+        this.adminService = adminService;
+        this.userRepository = userRepository;
+        this.adminRepository = adminRepository;
+        this.gimnasiosRepository = gimnasiosRepository;
+        this.clienteService = clienteService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/check-session")
@@ -103,7 +104,6 @@ public class AdminController {
         model.addAttribute("gymId", gym != null ? gym.getId() : null);
         return "Dashboard";
     }
-    
 
 
     @PostMapping("/actualizar-admin")
@@ -155,6 +155,9 @@ public class AdminController {
         PlanEntity plan = planService.getPlanById(planId).orElse(null);
         String mensualidad = plan != null ? plan.getNombre() : "Desconocido";
 
+        ClientEntity nuevoCliente = new ClientEntity();
+        nuevoCliente.setFechaIngresoCliente(LocalDate.now()); // solo al crear
+
         // Crear el cliente con el servicio
         clienteService.crearCliente(nombre, correo, idDocumento, telefono, mensualidad, username, password, gymId,
                 planId);
@@ -202,5 +205,42 @@ public class AdminController {
     public String activarCliente(@PathVariable ObjectId id) {
         clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.ACTIVO);
         return "redirect:/Api/Admin/AdminRegister";
+    }
+
+    @GetMapping("/Predicciones")
+    public String mostrarPredicciones(Model model, Principal principal) {
+        // Obtener el usuario actual
+        UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        // Obtener el admin
+        AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+
+        if (admin == null) {
+            return "redirect:/login";
+        }
+
+        // Obtener el gimnasio del admin
+        GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+
+        if (gym == null) {
+            model.addAttribute("error", "No se encontró gimnasio asociado");
+            return "error";
+        }
+
+        // Pasar datos al modelo
+        model.addAttribute("gymId", gym.getId().toHexString());
+        model.addAttribute("nombreUsuario", user.getUsername());
+        model.addAttribute("nombreGym", gym.getNombreGymnasio()); // Si tienes el campo nombre
+        model.addAttribute("adminId", admin.getId());
+
+        // Obtener resumen (si lo necesitas en la vista)
+        ClienteResumenDTO resumen = clienteService.obtenerResumenPorGym(gym.getId());
+        model.addAttribute("resumen", resumen);
+
+        return "Predicciones"; // Retorna la vista Predicciones.html
     }
 }

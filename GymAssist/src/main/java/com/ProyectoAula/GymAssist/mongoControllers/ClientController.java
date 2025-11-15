@@ -40,7 +40,8 @@ public class ClientController {
     private final GimnasiosServices gimnasiosServices;
 
     @Autowired
-    public ClientController(ClienteService clienteService, MedicionesService medicionesService, RutinaService rutinaService, PlanService planService, GimnasiosServices gimnasiosServices) {
+    public ClientController(ClienteService clienteService, MedicionesService medicionesService,
+            RutinaService rutinaService, PlanService planService, GimnasiosServices gimnasiosServices) {
         this.clienteService = clienteService;
         this.rutinaService = rutinaService;
         this.medicionesService = medicionesService;
@@ -49,13 +50,13 @@ public class ClientController {
     }
 
     @GetMapping("/ClienteHome")
-    public String ClienteHome(Model model, Principal principal){
-        String username = principal.getName(); 
+    public String ClienteHome(Model model, Principal principal) {
+        String username = principal.getName();
         ClientEntity cliente = clienteService.buscarPorUsername(username); // tu método para encontrar al cliente
 
         LocalDate ultimaFecha = cliente.getAsistencias().isEmpty()
-        ? null
-        : cliente.getAsistencias().get(cliente.getAsistencias().size() - 1).getFecha();
+                ? null
+                : cliente.getAsistencias().get(cliente.getAsistencias().size() - 1).getFecha();
 
         model.addAttribute("ultimaFechaAsistencia", ultimaFecha != null ? ultimaFecha.toString() : "");
 
@@ -64,12 +65,12 @@ public class ClientController {
     }
 
     @GetMapping("/ClienteRutinas")
-    public String ClienteRutinas(){
+    public String ClienteRutinas() {
         return "ClienteRutinas";
     }
 
     @GetMapping("/ClienteCuenta")
-    public String ClienteCuenta(Model model, Principal principal){
+    public String ClienteCuenta(Model model, Principal principal) {
         String username = principal.getName(); // obtiene el username del usuario logueado
         ClientEntity cliente = clienteService.buscarPorUsername(username); // tu método para encontrar al cliente
 
@@ -82,25 +83,27 @@ public class ClientController {
     }
 
     @GetMapping("/ClientePago")
-    public String ClientePago(Model model, Principal principal){
+    public String ClientePago(Model model, Principal principal) {
         String username = principal.getName(); // obtiene el username del usuario logueado
         ClientEntity cliente = clienteService.buscarPorUsername(username); // tu método para encontrar al cliente
 
         // Obtiene el nombre del plan (si tiene uno)
         String nombrePlan = planService.obtenerNombreDelPlan(cliente.getPlanId());
+        String planPrecio = planService.obtenerPrecioDelPlan(cliente.getPlanId());  
 
         model.addAttribute("cliente", cliente);
         model.addAttribute("nombrePlan", nombrePlan);
+        model.addAttribute("planPrecio", planPrecio);
         return "ClientePago"; // plantilla ClienteCuenta.html
     }
 
     @PostMapping("/actualizar-datos")
     public String actualizarDatosCliente(@RequestParam String correo,
-                                        @RequestParam String username,
-                                        @RequestParam(required = false) String password,
-                                        Principal principal,
-                                        RedirectAttributes redirectAttributes) {
-            try {
+            @RequestParam String username,
+            @RequestParam(required = false) String password,
+            Principal principal,
+            RedirectAttributes redirectAttributes) {
+        try {
             clienteService.actualizarDatosPersonales(correo, username, password, principal.getName());
             redirectAttributes.addFlashAttribute("exito", "Datos actualizados correctamente.");
             return "redirect:/Api/Auth/Logout"; // Forzar logout después de cambio de username
@@ -119,7 +122,7 @@ public class ClientController {
         Optional<GimnasiosEntity> gymOpt = gimnasiosServices.getGymById(gymId);
 
         String nombreGimnasio = gymOpt.map(GimnasiosEntity::getNombreGymnasio)
-                                    .orElse("Gimnasio no encontrado");
+                .orElse("Gimnasio no encontrado");
 
         model.addAttribute("nombreGimnasio", nombreGimnasio);
         model.addAttribute("cliente", cliente);
@@ -127,19 +130,19 @@ public class ClientController {
         // Puedes pasar más atributos si lo deseas
         return "ClienteAsistencia"; // o el nombre correcto de tu vista
     }
-    
+
     @PostMapping("/registrar-asistencia")
-    public String registrarAsistencia(@ RequestParam("fecha") String fechaStr,
-                                        @RequestParam("musculos") List<String> musculos,
-                                        Principal principal) {
-    ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
-    LocalDate fecha = LocalDate.parse(fechaStr);
-    clienteService.registrarAsistencia(cliente.getId(), fecha, musculos);
-    return "redirect:/Api/Cliente/ClienteAsistencia";
+    public String registrarAsistencia(@RequestParam("fecha") String fechaStr,
+            @RequestParam("musculos") List<String> musculos,
+            Principal principal) {
+        ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
+        LocalDate fecha = LocalDate.parse(fechaStr);
+        clienteService.registrarAsistencia(cliente.getId(), fecha, musculos);
+        return "redirect:/Api/Cliente/ClienteAsistencia";
     }
 
     @GetMapping("/Clienteimc")
-        public String mostrarFormularioIMC(Model model, Principal principal) {
+    public String mostrarFormularioIMC(Model model, Principal principal) {
         ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
         ObjectId clienteId = cliente.getId();
 
@@ -164,18 +167,18 @@ public class ClientController {
 
     @PostMapping("/imc/guardar")
     public String guardarIMC(@RequestParam Double peso,
-                         @RequestParam Double estatura,
-                         Principal principal,
-                         Model model) {
-    ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
+            @RequestParam Double estatura,
+            Principal principal,
+            Model model) {
+        ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
 
-    // Asegúrate de pasar el tipo correcto según la definición de guardarMedicion
-    MedicionesEntity medicion = medicionesService.guardarMedicion(peso, estatura, cliente.getId());
-    double imc = medicionesService.calcularIMC(peso, estatura); // ✅
-    String resultado = medicionesService.interpretarIMC(imc);   // ✅
+        // Asegúrate de pasar el tipo correcto según la definición de guardarMedicion
+        MedicionesEntity medicion = medicionesService.guardarMedicion(peso, estatura, cliente.getId());
+        double imc = medicionesService.calcularIMC(peso, estatura); // ✅
+        String resultado = medicionesService.interpretarIMC(imc); // ✅
 
-    model.addAttribute("imc", imc);
-    model.addAttribute("resultado", resultado);
-    return "redirect:/Api/Cliente/Clienteimc";
+        model.addAttribute("imc", imc);
+        model.addAttribute("resultado", resultado);
+        return "redirect:/Api/Cliente/Clienteimc";
     }
 }

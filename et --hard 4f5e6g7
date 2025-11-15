@@ -1,0 +1,97 @@
+* [33m2b69048[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdesarrollo[m[33m)[m Modelo predictivo listo y funcionando. Guardado.
+* [33m604e3ce[m Alguna cosas actualizadas
+[31m|[m * [33mae88657[m[33m ([m[1;31morigin/desarrollo[m[33m)[m css clientepago corregido
+[31m|[m * [33m80cba28[m Docker listo, Bug del FRONT por arreglar, que lo arregle el del FROOOONT
+[31m|[m *   [33mafd4458[m Resolví conflicto en DashboardAdmin.css
+[31m|[m [33m|[m[34m\[m  
+[31m|[m [33m|[m * [33m92270b6[m vistas completamente terminadas
+[31m|[m [33m|[m[31m/[m  
+[31m|[m[31m/[m[33m|[m   
+[31m|[m * [33m8a5f684[m Cambios locales antes del pull
+[31m|[m[31m/[m  
+* [33m2e7606b[m Agregado el dashboard al proyecto
+* [33me850482[m eliminado dashboard y completamente listo el apartado de cliente
+* [33m7588e33[m Tiempo de sessions en Redis actualizado a 30 min
+* [33m7961936[m Algunos problemas solucionados
+* [33m9d287c6[m proyecto casi listo, solucionado inasistencia, y usuarios activos y pendientes no se mostraban juntos ahora si
+* [33m418d28b[m Redis aplicando para guardar las sesiones de los usuarios en cache, problemas en rutinas actualizados y restricciones depende del estado del cliente listas
+* [33m39e8503[m Vistas terminadas del cliente
+* [33m76e7cd0[m vistas del cliente terminadas
+* [33mad4adfe[m Cambio realizado en las rutinas para que se editen
+* [33m4e140f6[m correccion de vistas
+* [33mafc402a[m Solucionado error en la parte de rutinas y agregada la vista para que el admin actualize sus datos ya funcional
+*   [33mbbbcba9[m Merge branch 'desarrollo' of https://github.com/semgero/GymAssist2.0 into desarrollo
+[35m|[m[36m\[m  
+[35m|[m * [33mebac068[m Cambios en algunas vistas del Admin y solucionado algunos bugs de Rutinas y mapping
+* [36m|[m [33m92fe027[m Cambios en la vista de rutinasGym y agg nueva vista sin mapping
+[36m|[m[36m/[m  
+*   [33m9a56c38[m Vistas actualizadas prueba
+[1;31m|[m[1;32m\[m  
+[1;31m|[m * [33mb0ac54b[m arreglado cliente y al gim al que pertenece
+[1;31m|[m * [33ma521c8b[m arreglado ClienteCuenta y los checkbox
+* [1;32m|[m [33mb9859e7[m Vistas admin actualizadas
+[1;32m|[m[1;32m/[m  
+*   [33m5fda6b3[m Merge branch 'desarrollo' of https://github.com/semgero/GymAssist2.0 into desarrollo
+[1;33m|[m[1;34m\[m  
+[1;33m|[m * [33ma169ac9[m Solucionando que se guarden las duraciones de los planes en la coleccion de los clientes
+* [1;34m|[m [33m9d58685[m Cambios en las vistas
+[1;34m|[m[1;34m/[m  
+* [33mf22822a[m todo cliente listo, faltando power bi
+* [33m8732713[m WIP: cambios temporales antes del rebase
+* [33m8254cfa[m Test para ver si no se agregan las credenciales
+* [33mcd12036[m Corrigiendo .gitignore y quitando Archivos sensibles
+* [33m209abe9[m Ignorando Archivos sensibles, y Rutinas ya visibles para los clientes
+* [33m2c05051[m Rutinas Visibles para los clientes ya estan listas
+[1;34m|[m *   [33m3ccb9ae[m[33m ([m[1;35mrefs/stash[m[33m)[m WIP on desarrollo: 37c4d43 Ignorando Archivos sensibles, y Rutinas ya visibles para los clientes
+[1;34m|[m [1;35m|[m[1;36m\[m  
+[1;34m|[m [1;35m|[m * [33mb7c58ac[m index on desarrollo: 37c4d43 Ignorando Archivos sensibles, y Rutinas ya visibles para los clientes
+[1;34m|[m [1;35m|[m[1;35m/[m  
+[1;34m|[m * [33m37c4d43[m Ignorando Archivos sensibles, y Rutinas ya visibles para los clientes
+[1;34m|[m * [33mebd6956[m Rutinas Visibles para los clientes ya estan listas
+[1;34m|[m[1;34m/[m  
+* [33mb23a98c[m vistas actualizadas con logica
+* [33mb7a85aa[m Refactor: Se eliminaron claves sensibles y se usan variables de entorno
+* [33maaa5a62[m Rutinas Funcionales guardandose en
+* [33m209e2e9[m Campo de Rutinas actualizadas.
+* [33m4a52deb[m filtros, mostrar y ocultar, imc, y asistencia completamente listos
+* [33m93b38d4[m imc completo
+* [33mecfe18f[m imc terminado 90% falta agregar persistencia
+* [33m935b148[m Solucionado el problema de los planes y el estado del cliente(activo,pendiente,etc) para mañana tratare de solucionar el problemas de las rutinas, que por lo menos ya se crean
+* [33m3d6c4ef[m Proyecto 2.0
+* [33md4786e6[m asistencia 1.0
+* [33m04661c4[m Actualizando el apartado de planes
+* [33meeeeb70[m Consistencia de Datos lista. Y nueva plantilla de LogIn agregada
+* [33md10e3da[m arreglado redireccionamiento cliente Home
+* [33m0a4db90[m Actualizando CRUD de Clientes
+* [33m980829f[m Proyecto actualizado antes de la tutoria
+* [33m1d0285f[m Resubiendo todo actualizado, y quitando packages redundantes.
+* [33m18b6a49[m Subiendo mi parte
+* [33mf76133b[m Register funcional, inicio de sesion de los admin, el admin agrega clientes, falta que el admin los borre y actualize, el admin crea los clientes, con sus campos username y password, pero los clientes no se redireccionan, en la base de datos se guarda, clientes y users, los usuarios salen todos los usuarios tanto admin como cliente, y en cliente salen los clientes
+* [33m4aa2cf0[m Resubiendo todo actualizado
+*   [33m1642024[m Solucionando conflictos
+[31m|[m[32m\[m  
+[31m|[m * [33ma6323fa[m Entidades de Mongo con sus respectivos Repositorios ya estan creados
+[31m|[m * [33m33bf96a[m CRUD's Realizados y esperando a que actualizen el Log In para probarlos y hacer los respectivos cambios
+[31m|[m * [33m6428ea5[m CRUD's Realizados, esperando a que actualizen el proceso del Log In para probarlos y actualizarlos
+[31m|[m * [33m72fdbbb[m login y register con roles guarda correctamente en las tablas admin, user, user_roles, y roles unicamente el rol de admin, ya que tenemos que esperar los crud para poder guardar los clientes normales implementacion de carpetas y mas archivos falta organizarlos
+[31m|[m *   [33m4ccf5fb[m Merge remote-tracking branch 'origin/front-end' into front-end
+[31m|[m [33m|[m[34m\[m  
+[31m|[m * [34m|[m [33m682e02b[m Relaciones agregadas y entidad no relacional tambien
+[31m|[m * [34m|[m [33m65623eb[m Relaciones agregadas y entidad no relacional tambien
+[31m|[m * [34m|[m [33m15b24bd[m Relaciones agregadas y entidad no relacional tambien
+* [34m|[m [34m|[m [33m6c2ba70[m Inicializando nueva rama con los  nuevo cambios
+* [34m|[m [34m|[m [33m6eb1b53[m Inicializando rama con Entidades nuevas de MongoDB
+* [34m|[m [34m|[m [33m632d10e[m rename
+[34m|[m [34m|[m[34m/[m  
+[34m|[m[34m/[m[34m|[m   
+* [34m|[m [33md5f770c[m Merge branch 'front-end' of https://github.com/semgero/GymAssist2.0 into front-end
+[35m|[m[34m\[m[34m|[m 
+[35m|[m * [33m305feb2[m actualizacion models
+[35m|[m * [33m1f61232[m actualizacion de entitys
+* [36m|[m [33m9cd227a[m configuracion de spring security
+[36m|[m[36m/[m  
+* [33m7f52b6b[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m Repositorios
+* [33mb3db59d[m Tablas de roles
+* [33mfa3d037[m Mapping y conexion con base de datos
+* [33m1cc42df[m banner
+* [33m6a5f9a4[m first commit

@@ -69,7 +69,8 @@ public class ClienteService {
         cliente.setPlanId(planId);
         cliente.setEstado(EstadoCliente.PENDIENTE);
         cliente.setGymId(gymId);
-
+        LocalDate fechaIngreso = LocalDate.now();
+        cliente.setFechaIngresoCliente(fechaIngreso);
         LocalDate fechaInicio = LocalDate.now();
         LocalDate fechaFin = fechaInicio.plusMonths(duracionMeses);
         cliente.setFechaInicioMembresia(fechaInicio);

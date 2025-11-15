@@ -27,7 +27,7 @@
         <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
         <div id="dropdown" class="dropdown">
           <a th:href="@{/Api/Admin/CuentaAdmin}"><i class="fas fa-user-cog"></i> Cuenta</a>
-          <a th:href="@{/Api/Auth/Logout}" class="danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          <a th:href="@{/Api/Auth/Logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
       </div>
     </div>
@@ -55,6 +55,10 @@
       <a th:href="@{/Api/Admin/Dashboard/{gymId}}" title="Reportes">
         <i class="fas fa-chart-pie icon"></i>
         <span class="text">Dashboard</span>
+      </a>
+      <a th:href="@{/Api/Admin/Predicciones}" title="Predicciones IA">
+        <i class="fas fa-brain icon"></i>
+        <span class="text">Predicciones IA</span>
       </a>
     </nav>
   </aside>
