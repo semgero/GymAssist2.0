@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="/Styles/ClientePago.css" />
     <link rel="stylesheet" href="/Styles/ClientePago.css" />
-    <link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:1024/quality:100/uri:ifs%3A%2F%2FM%2F6293492d-90de-4ff2-8521-44571fe13397/watermark:F/width:1024?csig=AAAAAAAAAAAAAAAAAAAAAOLV6xCRNfqeXx4kabpivLv81cm2L12Fl0_78GK7TPjt&exp=1761598823&osig=AAAAAAAAAAAAAAAAAAAAAO_rfXfN2kovLoSwAcy-QVMbV69lhfqYhD4qPePG-u0-&signer=media-rpc&x-canva-quality=screen_2x" type="image/png">
+    <link rel="icon"
+        href="https://media.canva.com/v2/image-resize/format:PNG/height:1024/quality:100/uri:ifs%3A%2F%2FM%2F6293492d-90de-4ff2-8521-44571fe13397/watermark:F/width:1024?csig=AAAAAAAAAAAAAAAAAAAAAOLV6xCRNfqeXx4kabpivLv81cm2L12Fl0_78GK7TPjt&exp=1761598823&osig=AAAAAAAAAAAAAAAAAAAAAO_rfXfN2kovLoSwAcy-QVMbV69lhfqYhD4qPePG-u0-&signer=media-rpc&x-canva-quality=screen_2x"
+        type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -66,56 +68,58 @@
     <main class="main-content">
         <div class="forms-wrapper">
 
-        <div class="forms-wrapper">
+            <div class="forms-wrapper">
 
-            <!-- Tarjeta de perfil completa -->
-            <div class="card profile-card">
-                <div class="profile-icon">
-                    <i class="fas fa-user-cog"></i>
+                <!-- Tarjeta de perfil completa -->
+                <div class="card profile-card">
+                    <div class="profile-icon">
+                        <i class="fas fa-user-cog"></i>
+                    </div>
+                    <p class="status-title">Estado de Cuenta</p>
+                    <div>
+                        <span class="status-badge" th:text="${cliente.estado}">Activo</span>
+                    </div>
+                    <div class="info">
+                        <p><strong>Usuario:</strong> <span th:text="${cliente.username}">usuario123</span></p>
+                        <p><strong>Usuario:</strong> <span th:text="${cliente.username}">usuario123</span></p>
+                        <p><strong>Correo:</strong> <span th:text="${cliente.correo}">correo@example.com</span></p>
+                        <p><strong>Teléfono:</strong> <span th:text="${cliente.telefono}">123456789789</span></p>
+                        <p><strong>Plan actual:</strong> <span th:text="${nombrePlan}">Plan Básico</span></p>
+                        <p><strong>Precio:</strong> $<span th:text="${planPrecio}">0</span></p>
+                    </div>
+                    <button class="edit-button" onclick="openModal()">✏ Editar Información</button>
                 </div>
-                <p class="status-title">Estado de Cuenta</p>
-                <div>
-                    <span class="status-badge" th:text="${cliente.estado}">Activo</span>
-                </div>
-                <p class="status-title">Estado de Cuenta</p>
-                <div>
-                    <span class="status-badge" th:text="${cliente.estado}">Activo</span>
-                </div>
-                <div class="info">
-                    <p><strong>Usuario:</strong> <span th:text="${cliente.username}">usuario123</span></p>
-                    <p><strong>Usuario:</strong> <span th:text="${cliente.username}">usuario123</span></p>
-                    <p><strong>Correo:</strong> <span th:text="${cliente.correo}">correo@example.com</span></p>
-                    <p><strong>Teléfono:</strong> <span th:text="${cliente.telefono}">123456789789</span></p>
-                    <p><strong>Plan actual:</strong> <span th:text="${nombrePlan}">Plan Básico</span></p>
-                    <p><strong>Precio:</strong> $<span th:text="${planPrecio}">0</span></p>
-                </div>
-                <button class="edit-button" onclick="openModal()">✏ Editar Información</button>
-            </div>
 
-            <!-- Panel de Pago -->
-            <div class="payment-panel">
-                <h2>Pago Seguro</h2>
-                <p>Haz clic en el botón para continuar con el pago de tu plan.</p>
-                <a href="/pagos/pago">Pagar Ahora</a>
-                <div id="history">
-                    <h3>Historial de Pagos</h3>
-                    <ul id="historyList"></ul>
-                    <p><strong>Precio:</strong> $<span th:text="${planPrecio}">0</span></p>
-                </div>
-                <button class="edit-button" onclick="openModal()">✏ Editar Información</button>
-            </div>
+                <!-- Panel de Pago -->
+                <div class="payment-section">
+                    <h3>Estado de Suscripción</h3>
 
-            <!-- Panel de Pago -->
-            <div class="payment-panel">
-                <h2>Pago Seguro</h2>
-                <p>Haz clic en el botón para continuar con el pago de tu plan.</p>
-                <a href="/pagos/pago">Pagar Ahora</a>
-                <div id="history">
-                    <h3>Historial de Pagos</h3>
-                    <ul id="historyList"></ul>
+                    <div th:if="${cliente.subscriptionStatus == 'PENDING'}">
+                        <p>Tu plan <strong th:text="${nombrePlan}"></strong> está pendiente de pago.</p>
+                        <p>Precio: <strong th:text="'$' + ${planPrecio}"></strong></p>
+
+                        <a th:href="@{/Api/Payment/checkout}" class="btn-pay-button">
+                            🎯 Realizar Pago
+                        </a>
+                    </div>
+
+                    <div th:if="${cliente.subscriptionStatus == 'ACTIVE'}">
+                        <p>✅ Tu suscripción a <strong th:text="${nombrePlan}"></strong> está <strong>ACTIVA</strong></p>
+                        <p>Válida hasta: <strong th:text="${cliente.fechaFinMembresia}"></strong></p>
+                    </div>
+                </div>
+
+                <!-- Panel de Pago -->
+                <div class="payment-panel">
+                    <h2>Pago Seguro</h2>
+                    <p>Haz clic en el botón para continuar con el pago de tu plan.</p>
+                    <a href="/pagos/pago">Pagar Ahora</a>
+                    <div id="history">
+                        <h3>Historial de Pagos</h3>
+                        <ul id="historyList"></ul>
+                    </div>
                 </div>
             </div>
-        </div>
     </main>
     </main>
 

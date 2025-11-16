@@ -9,9 +9,17 @@ import java.util.List;
 
 public interface ClientRepository extends MongoRepository<ClientEntity, ObjectId> {
     Optional<ClientEntity> findByCorreo(String correo);
+
     ClientEntity findUsernameById(Long id);
+
     List<ClientEntity> findByGymId(ObjectId gymId);
+
     Optional<ClientEntity> findByUsername(String username);
+
     long countByPlanId(ObjectId planId);
-    Optional <ClientEntity> findById(ObjectId id);
+
+    Optional<ClientEntity> findById(ObjectId id);
+
+    List<ClientEntity> findByEstado(ClientEntity.EstadoCliente estado);
+
 }

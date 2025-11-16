@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoModels.GimnasiosEntity;
 import com.ProyectoAula.GymAssist.mongoModels.MedicionesEntity;
+import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
 import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
 import com.ProyectoAula.GymAssist.mongoServices.GimnasiosServices;
 
@@ -89,11 +90,14 @@ public class ClientController {
 
         // Obtiene el nombre del plan (si tiene uno)
         String nombrePlan = planService.obtenerNombreDelPlan(cliente.getPlanId());
-        String planPrecio = planService.obtenerPrecioDelPlan(cliente.getPlanId());  
+        String planPrecio = planService.obtenerPrecioDelPlan(cliente.getPlanId());
+        PlanEntity plan = planService.getPlanById(cliente.getPlanId())
+                .orElseThrow(() -> new RuntimeException("Plan not found for client")); 
 
         model.addAttribute("cliente", cliente);
         model.addAttribute("nombrePlan", nombrePlan);
         model.addAttribute("planPrecio", planPrecio);
+        model.addAttribute("plan", plan);
         return "ClientePago"; // plantilla ClienteCuenta.html
     }
 

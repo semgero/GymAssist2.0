@@ -11,8 +11,8 @@ import java.io.File;
 @Service
 public class ClientePredictionService {
 
-    private static final String MODEL_PATH = "C:/Users/DELL/Desktop/GymAssist2.0/GymAssist/src/main/resources/modeloEntrenado.model";
-    private static final String DATASET_PATH = "C:/Users/DELL/Desktop/GymAssist2.0/GymAssist/src/main/resources/dataset.arff";
+    private static final String MODEL_PATH = "C:/Users/pes20/OneDrive/Documentos/GymAssist2.0/GymAssist/src/main/resources/modeloEntrenado.model";
+    private static final String DATASET_PATH = "C:/Users/pes20/OneDrive/Documentos/GymAssist2.0/GymAssist/src/main/resources/dataset.arff";
 
     public String predecirRenovacion(ClienteFeaturesDTO features) {
         try {

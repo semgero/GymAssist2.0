@@ -62,6 +62,13 @@ public class ClientEntity {
     @BsonProperty("inasistencias")
     private int inasistencias = 0;
 
+      // NUEVOS CAMPOS PARA SUSCRIPCIÓN
+    @BsonProperty("subscriptionStatus")
+    private String subscriptionStatus = "PENDING"; // PENDING, ACTIVE, CANCELLED
+
+    @BsonProperty("mercadoPagoPreferenceId")
+    private String mercadoPagoPreferenceId;
+
     @BsonProperty("fechaIngresoCliente")
     private LocalDate fechaIngresoCliente;
 
@@ -72,6 +79,22 @@ public class ClientEntity {
     private LocalDate fechaFinMembresia;
 
     // --- Getters and Setters ---
+
+    public String getSubscriptionStatus() {
+        return subscriptionStatus;
+    }
+
+    public void setSubscriptionStatus(String subscriptionStatus) {
+        this.subscriptionStatus = subscriptionStatus;
+    }
+
+    public String getMercadoPagoPreferenceId() {
+        return mercadoPagoPreferenceId;
+    }
+
+    public void setMercadoPagoPreferenceId(String mercadoPagoPreferenceId) {
+        this.mercadoPagoPreferenceId = mercadoPagoPreferenceId;
+    }
 
     public ObjectId getId() {
         return id;

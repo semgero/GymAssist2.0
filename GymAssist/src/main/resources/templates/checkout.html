@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - GymAssist</title>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .plan-info {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .subscription-badge {
+            background: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .error {
+            background: #ffecec;
+            color: #d63031;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #d63031;
+        }
+
+        .success {
+            background: #e8f5e8;
+            color: #2d5016;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #28a745;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .test-mode {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .test-cards {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+        }
+
+        .init-point-link {
+            display: block;
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .init-point-link:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎯 Finalizar Suscripción</h1>
+
+        <!-- Indicador de Modo Prueba -->
+        <div th:if="${isTest}" class="test-mode">
+            <strong>🧪 MODO PRUEBA ACTIVADO</strong>
+            <p>Estás en ambiente de pruebas. Usa las tarjetas de prueba abajo.</p>
+        </div>
+
+        <!-- Agrega esto en tu checkout.html -->
+        <div style="text-align: center; margin-top: 20px;">
+            <p style="color: #666; font-size: 14px; margin-bottom: 10px;">
+                ¿Ya pagaste? Haz clic aquí para activar tu cuenta:
+            </p>
+            <a th:href="@{/Api/Payment/success}" class="init-point-link" style="background: #28a745;">
+                ✅ Ya Pagué - Activar Mi Cuenta
+            </a>
+        </div>
+
+        <div class="plan-info">
+            <div class="subscription-badge">🔄 SUSCRIPCIÓN MENSUAL</div>
+            <h3 th:text="${plan.nombre}">Plan</h3>
+            <p th:text="${plan.descripcion} ?: 'Suscripción mensual recurrente'">Descripción</p>
+            <p><strong
+                    th:text="'$' + ${#numbers.formatDecimal(plan.precio, 0, 'COMMA', 0, 'POINT')} + ' COP/mes'">Precio</strong>
+            </p>
+            <p style="font-size: 12px; color: #666; margin-top: 5px;">
+                🔄 Se renovará automáticamente cada mes
+            </p>
+        </div>
+
+        <div style="background: #f0f8ff; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <p><strong>👤 Cliente:</strong> <span th:text="${cliente.nombre}"></span></p>
+            <p><strong>📧 Email:</strong> <span th:text="${cliente.correo}"></span></p>
+            <p><strong>📅 Tipo:</strong> Suscripción Recurrente Mensual</p>
+        </div>
+
+        <!-- ✅ OPCIÓN 1: REDIRECCIÓN DIRECTA (MÁS SIMPLE) -->
+        <div th:if="${initPoint}">
+            <div class="success">
+                <p>✅ Tu suscripción está lista. Haz clic en el botón para completar el pago en MercadoPago.</p>
+            </div>
+
+            <a th:href="${initPoint}" class="init-point-link">
+                🚀 Completar Suscripción en MercadoPago
+            </a>
+
+            <p style="text-align: center; color: #666; font-size: 14px;">
+                Serás redirigido a MercadoPago para completar tu suscripción
+            </p>
+        </div>
+
+        <!-- ✅ OPCIÓN 2: BRICKS EMBEBIDO (ALTERNATIVA) -->
+        <div th:unless="${initPoint}" id="payment-container">
+            <div id="payment-form" style="margin: 20px 0; min-height: 200px;">
+                <div class="loading" id="loading">
+                    <p>🔄 Cargando métodos de pago...</p>
+                </div>
+            </div>
+            <div id="payment-error" class="error" style="display: none;"></div>
+        </div>
+
+        <!-- Información de pago seguro -->
+        <div style="text-align: center; margin: 30px 0;">
+            <p style="color: #666; font-size: 14px;">
+                🔒 Pago seguro procesado por MercadoPago
+            </p>
+        </div>
+
+        <!-- Botón de volver -->
+        <div style="text-align: center;">
+            <a th:href="@{/Api/Cliente/ClienteHome}" class="btn-back">
+                ← Volver al inicio
+            </a>
+        </div>
+
+        <!-- Sección de Tarjetas de Prueba -->
+        <div class="test-mode">
+            <strong>💳 TARJETAS DE PRUEBA</strong>
+            <div class="test-cards">
+                <p><strong>VISA (Aprobada):</strong> 4509 9535 6623 3704</p>
+                <p><strong>Mastercard (Aprobada):</strong> 5031 7557 3453 0604</p>
+                <p><strong>Fecha:</strong> 11/25 | <strong>CVV:</strong> 123</p>
+                <p><strong>Nombre:</strong> APRO</p>
+                <p style="color: #d63031; margin-top: 8px;">
+                    <strong>⚠ IMPORTANTE:</strong> Para suscripciones, el pago se repetirá automáticamente cada mes
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ SCRIPT PARA BRICKS (OPCIONAL - SI PREFIERES FORMA EMBEBIDA) -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.addEventListener("DOMContentLoaded", () => {
+            const publicKey = /*[[${publicKey}]]*/ null;
+            const initPoint = /*[[${initPoint}]]*/ null;
+
+            // Si hay initPoint, ocultamos el loading de bricks
+            if (initPoint) {
+                console.log("✅ Usando redirección directa a:", initPoint);
+                return;
+            }
+
+            // Solo ejecutar bricks si no hay initPoint
+            if (!publicKey) {
+                console.error("❌ ERROR: publicKey no disponible");
+                document.getElementById('payment-error').style.display = 'block';
+                document.getElementById('payment-error').innerHTML =
+                    'Error de configuración: Public Key no disponible';
+                return;
+            }
+
+            console.log("🔑 Inicializando Bricks con Public Key:", publicKey.substring(0, 10) + "...");
+
+            const mp = new MercadoPago(publicKey, {
+                locale: 'es-CO'
+            });
+
+            const bricksBuilder = mp.bricks();
+
+            // Para suscripciones necesitamos un approach diferente
+            // ya que Bricks está más orientado a pagos únicos
+            bricksBuilder.create("wallet", "payment-form", {
+                initialization: {
+                    preferenceId: /*[[${preferenceId}]]*/ null,
+                },
+                callbacks: {
+                    onReady: () => {
+                        document.getElementById("loading").style.display = "none";
+                        console.log("🟢 Wallet Brick cargado");
+                    },
+                    onError: (error) => {
+                        console.error("❌ Error en Brick:", error);
+                        document.getElementById('payment-error').style.display = 'block';
+                        document.getElementById('payment-error').innerHTML =
+                            'Error al cargar métodos de pago. <a href="' + initPoint + '">Click aquí para pagar</a>';
+                    }
+                }
+            });
+        });
+        /*]]>*/
+    </script>
+</body>
+
+</html>
