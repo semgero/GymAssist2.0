@@ -9,17 +9,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoModels.ClienteResumenDTO;
+import com.ProyectoAula.GymAssist.mongoModels.DashboardDTO;
 import com.ProyectoAula.GymAssist.mongoModels.GimnasiosEntity;
 import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
 import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
 import com.ProyectoAula.GymAssist.mongoServices.AdminService;
 import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
+import com.ProyectoAula.GymAssist.mongoServices.DashboardService;
 import com.ProyectoAula.GymAssist.mongoRepository.AdminRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.GimnasiosRepository;
 import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
@@ -36,6 +39,9 @@ public class AdminController {
 
     @Autowired
     private HttpSession httpSession;
+
+    @Autowired
+    private DashboardService dashboardService;
 
     private final ClienteService clienteService;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -92,19 +98,50 @@ public class AdminController {
         return "AdminHome";
     }
 
-
-    @GetMapping("/Dashboard/{gymId}")
+    @GetMapping("/Dashboard")
     public String mostrarDashboard(Model model, Principal principal) {
         UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+        if (admin == null) {
+            return "redirect:/login";
+        }
+
         GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
-        ClienteResumenDTO resumen = clienteService.obtenerResumenPorGym(gym.getId());
-        model.addAttribute("resumen", resumen);
-        model.addAttribute("adminId", admin != null ? admin.getId() : null);
-        model.addAttribute("gymId", gym != null ? gym.getId() : null);
+        if (gym == null) {
+            model.addAttribute("error", "No se encontró gimnasio asociado");
+            return "error";
+        }
+
+        // Obtener datos del dashboard
+        DashboardDTO dashboardData = dashboardService.obtenerDatosDashboard(gym.getId());
+
+        model.addAttribute("dashboard", dashboardData);
+        model.addAttribute("resumen", clienteService.obtenerResumenPorGym(gym.getId()));
+        model.addAttribute("adminId", admin.getId());
+        model.addAttribute("gymId", gym.getId());
+        model.addAttribute("nombreGym", gym.getNombreGymnasio());
+
         return "Dashboard";
     }
 
+    // ✅ ENDPOINT PARA DATOS EN TIEMPO REAL (JSON)
+    @GetMapping("/dashboard-data")
+    @ResponseBody
+    public DashboardDTO obtenerDatosDashboardJson(Principal principal) {
+        UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+        AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+        GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+
+        if (gym == null) {
+            throw new RuntimeException("No se encontró gimnasio asociado");
+        }
+
+        return dashboardService.obtenerDatosDashboard(gym.getId());
+    }
 
     @PostMapping("/actualizar-admin")
     public String actualizarCorreoYPasswordAdmin(@RequestParam String correo,

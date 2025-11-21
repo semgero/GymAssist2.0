@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- PASAR A LA PARTE DE ADMINHOME -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GymAssist Admin</title>
-    <!-- FontAwesome para los iconos -->
+    <title>Dashboard - GymAssist</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="/Styles/dashboarddd.css" />
-    <link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:1024/quality:100/uri:ifs%3A%2F%2FM%2F6293492d-90de-4ff2-8521-44571fe13397/watermark:F/width:1024?csig=AAAAAAAAAAAAAAAAAAAAAOLV6xCRNfqeXx4kabpivLv81cm2L12Fl0_78GK7TPjt&exp=1761598823&osig=AAAAAAAAAAAAAAAAAAAAAO_rfXfN2kovLoSwAcy-QVMbV69lhfqYhD4qPePG-u0-&signer=media-rpc&x-canva-quality=screen_2x" type="image/png">
 </head>
 
 <body>
@@ -20,14 +26,12 @@
             <div class="navbar-brand">GymAssist Admin</div>
         </div>
         <div class="navbar-right">
-            <!-- Selector de tema -->
             <button class="btn-theme" onclick="btnTheme()"><i class="fas fa-moon"></i></button>
-            <!-- Perfil -->
             <div class="profile">
                 <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
                 <div id="dropdown" class="dropdown">
                     <a th:href="@{/Api/Admin/CuentaAdmin}"><i class="fas fa-user-cog"></i> Cuenta</a>
-                    <a th:href="@{/Api/Auth/Logout}" class="danger"><i class="fas fa-sign-out-alt"></i>Cerrar sesion</a>
+                    <a th:href="@{/Api/Auth/Logout}" class="danger"><i class="fas fa-sign-out-alt"></i>Cerrar sesión</a>
                 </div>
             </div>
         </div>
@@ -48,11 +52,11 @@
                 <i class="fas fa-credit-card icon"></i>
                 <span class="text">Membresías</span>
             </a>
-            <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" title="musculos">
+            <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" title="Rutinas">
                 <i class="fas fa-calendar-alt icon"></i>
                 <span class="text">Rutinas</span>
             </a>
-            <a href="#" title="Reportes" class="active">
+            <a th:href="@{/Api/Admin/Dashboard}" title="Dashboard" class="active">
                 <i class="fas fa-chart-pie icon"></i>
                 <span class="text">Dashboard</span>
             </a>
@@ -64,50 +68,376 @@
     </aside>
 
     <main class="main-content">
-    <h1>Dashboard</h1>
-    <div class="card">
-        <div class="iframe-container">
-            <iframe 
-                title="GymAssist Power BI Report" 
-                src="https://app.powerbi.com/view?r=eyJrIjoiMTlmZDYzNTUtMjUyOC00NjVlLWFhN2ItNzJkZTJlNWFkYmJmIiwidCI6IjlkMTJiZjNmLWU0ZjYtNDdhYi05MTJmLTFhMmYwZmM0OGFhNCIsImMiOjR9" 
-                allowfullscreen="true">
-            </iframe>
+        <div class="header-section">
+            <h1><i class="fas fa-chart-line"></i> Dashboard - <span th:text="${nombreGym}">Mi Gimnasio</span></h1>
+            <button class="btn-refresh" onclick="actualizarDashboard()">
+                <i class="fas fa-sync-alt"></i> Actualizar
+            </button>
         </div>
-    </div>                      
-</main>
 
+        <!-- Métricas Principales -->
+        <div class="dashboard-grid">
+            <div class="metric-card card-success">
+                <div class="metric-header">
+                    <div>
+                        <div class="metric-label">Ingresos del Mes</div>
+                        <div class="metric-value" id="ingresosMes">$0</div>
+                        <div class="metric-desc">Total recaudado en el mes actual</div>
+                    </div>
+                    <div class="metric-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card card-info">
+                <div class="metric-header">
+                    <div>
+                        <div class="metric-label">Clientes Nuevos</div>
+                        <div class="metric-value" id="clientesNuevos">0</div>
+                        <div class="metric-desc">Registrados este mes</div>
+                    </div>
+                    <div class="metric-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card card-warning">
+                <div class="metric-header">
+                    <div>
+                        <div class="metric-label">Por Vencer</div>
+                        <div class="metric-value" id="suscripcionesVencer">0</div>
+                        <div class="metric-desc">Vencen en los próximos 7 días</div>
+                    </div>
+                    <div class="metric-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card card-info">
+                <div class="metric-header">
+                    <div>
+                        <div class="metric-label">Clientes Activos</div>
+                        <div class="metric-value" id="clientesActivos">0</div>
+                        <div class="metric-desc">Con membresía vigente</div>
+                    </div>
+                    <div class="metric-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-title">
+                    <i class="fas fa-chart-pie"></i>
+                    Distribución de Estados
+                </div>
+                <canvas id="estadosChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">
+                    <i class="fas fa-chart-line"></i>
+                    Tendencia de Ingresos (Últimos 6 Meses)
+                </div>
+                <canvas id="ingresosChart"></canvas>
+            </div>
+        </div>
+
+        <div class="last-updated">
+            <i class="fas fa-clock"></i> Última actualización: <span id="lastUpdate">--</span>
+        </div>
+    </main>
 
     <footer class="footer">
         &copy; 2025 GymAssist. Todos los derechos reservados.
     </footer>
 
     <script>
+        let estadosChart, ingresosChart;
+
+        // Cargar datos iniciales
+        document.addEventListener('DOMContentLoaded', function () {
+            cargarDashboard();
+            setInterval(cargarDashboard, 30000); // Actualizar cada 30s
+
+            // Cargar tema guardado
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+                document.body.classList.add('theme-dark');
+                document.querySelector('.btn-theme i').className = 'fas fa-sun';
+            }
+        });
+
+        function cargarDashboard() {
+            fetch('/Api/Admin/dashboard-data')
+                .then(response => response.json())
+                .then(data => {
+                    actualizarMetricas(data);
+                    actualizarGraficos(data);
+                    document.getElementById('lastUpdate').textContent =
+                        new Date().toLocaleTimeString('es-CO', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        });
+                })
+                .catch(error => {
+                    console.error('Error al cargar dashboard:', error);
+                });
+        }
+
+        function actualizarMetricas(data) {
+            const formatter = new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            });
+
+            document.getElementById('ingresosMes').textContent =
+                formatter.format(data.ingresosMesActual || 0);
+            document.getElementById('clientesNuevos').textContent =
+                data.clientesNuevosEsteMes || 0;
+            document.getElementById('suscripcionesVencer').textContent =
+                data.suscripcionesPorVencer || 0;
+            document.getElementById('clientesActivos').textContent =
+                data.clientesActivos || 0;
+        }
+
+        function actualizarGraficos(data) {
+            // Obtener colores del tema actual
+            const textColor = getComputedStyle(document.body).getPropertyValue('--fg').trim();
+            const borderColor = getComputedStyle(document.body).getPropertyValue('--border').trim();
+
+            // Gráfico de estados (Doughnut)
+            const ctxEstados = document.getElementById('estadosChart').getContext('2d');
+            if (estadosChart) estadosChart.destroy();
+
+            const estadosData = data.distribucionEstados || {};
+            const labels = Object.keys(estadosData);
+            const values = Object.values(estadosData);
+
+            // Plugin para texto central
+            const centerTextPlugin = {
+                id: 'centerText',
+                beforeDraw: function (chart) {
+                    if (chart.config.type !== 'doughnut') return;
+
+                    const width = chart.width;
+                    const height = chart.height;
+                    const ctx = chart.ctx;
+
+                    ctx.restore();
+                    const active = chart.data.datasets[0].data[0] || 0;
+                    const fontSize = (height / 114).toFixed(2);
+
+                    ctx.font = `bold ${fontSize}em sans-serif`;
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = textColor;
+
+                    const text = active.toString();
+                    const textX = Math.round((width - ctx.measureText(text).width) / 2);
+                    const textY = height / 2;
+
+                    ctx.fillText(text, textX, textY);
+
+                    // Etiqueta "Activos"
+                    ctx.font = `normal ${(fontSize * 0.4).toFixed(2)}em sans-serif`;
+                    const label = 'Activos';
+                    const labelX = Math.round((width - ctx.measureText(label).width) / 2);
+                    const labelY = height / 2 + (height * 0.15);
+
+                    ctx.globalAlpha = 0.7;
+                    ctx.fillText(label, labelX, labelY);
+                    ctx.globalAlpha = 1;
+
+                    ctx.save();
+                }
+            };
+
+            estadosChart = new Chart(ctxEstados, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: [
+                            '#10b981', // Verde - ACTIVO
+                            '#f59e0b', // Amarillo - PENDIENTE
+                            '#ef4444', // Rojo - VENCIDO
+                            '#6b7280'  // Gris - INACTIVO
+                        ],
+                        borderWidth: 0,
+                        borderRadius: 8,
+                        hoverOffset: 10,
+                        spacing: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    cutout: '75%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 12,
+                                    weight: '500'
+                                },
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                color: textColor
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            padding: 12,
+                            titleFont: { family: "'Outfit', sans-serif", size: 14 },
+                            bodyFont: { family: "'Inter', sans-serif", size: 13 },
+                            cornerRadius: 8,
+                            displayColors: true
+                        }
+                    }
+                },
+                plugins: [centerTextPlugin]
+            });
+
+            // Gráfico de ingresos (Line)
+            const ctxIngresos = document.getElementById('ingresosChart').getContext('2d');
+            if (ingresosChart) ingresosChart.destroy();
+
+            // Crear gradiente
+            const gradient = ctxIngresos.createLinearGradient(0, 0, 0, 350);
+            gradient.addColorStop(0, 'rgba(37, 99, 235, 0.2)');
+            gradient.addColorStop(1, 'rgba(37, 99, 235, 0)');
+
+            const tendencia = data.tendenciaIngresos || [];
+            const meses = tendencia.map(item => item.mes);
+            const ingresos = tendencia.map(item => item.ingresos);
+
+            ingresosChart = new Chart(ctxIngresos, {
+                type: 'line',
+                data: {
+                    labels: meses,
+                    datasets: [{
+                        label: 'Ingresos',
+                        data: ingresos,
+                        borderColor: '#2563eb',
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#2563eb',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: borderColor,
+                                borderDash: [3, 3],
+                                drawBorder: false
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return '$' + (value / 1000000).toFixed(1) + 'M';
+                                },
+                                font: { family: "'Inter', sans-serif", size: 11 },
+                                color: textColor,
+                                padding: 8
+                            },
+                            border: { display: false }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: { family: "'Inter', sans-serif", size: 11 },
+                                color: textColor,
+                                padding: 8
+                            },
+                            border: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            padding: 12,
+                            titleFont: { family: "'Outfit', sans-serif", size: 14 },
+                            bodyFont: { family: "'Inter', sans-serif", size: 13 },
+                            cornerRadius: 8,
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    return 'Ingresos: $' + context.parsed.y.toLocaleString('es-CO');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function actualizarDashboard() {
+            const btn = document.querySelector('.btn-refresh i');
+            btn.style.transform = 'rotate(360deg)';
+            setTimeout(() => btn.style.transform = 'rotate(0deg)', 500);
+            cargarDashboard();
+        }
+
+        // Funciones del navbar/sidebar
         function toggleSidebar() {
             document.body.classList.toggle('sidebar-collapsed');
         }
+
         function toggleDropdown(e) {
             e.stopPropagation();
             document.getElementById('dropdown').classList.toggle('show');
         }
+
         document.addEventListener('click', () => {
             document.getElementById('dropdown').classList.remove('show');
-        })
-
-        // Al cargar la página, aplica el tema guardado:
-        document.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('theme');
-            if (saved === 'dark') {
-            document.body.classList.add('theme-dark');
-            }
         });
 
-        // Función única para alternar tema y guardarlo
         function btnTheme() {
             const isDark = document.body.classList.toggle('theme-dark');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        }
+            const icon = document.querySelector('.btn-theme i');
+            icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
 
-        // Exponemos la función al scope global
-        window.btnTheme = btnTheme;
+            // Recargar gráficos con nuevos colores del tema
+            if (estadosChart || ingresosChart) {
+                fetch('/Api/Admin/dashboard-data')
+                    .then(response => response.json())
+                    .then(data => actualizarGraficos(data))
+                    .catch(error => console.error('Error al recargar gráficos:', error));
+            }
+        }
     </script>
 </body>
+
+</html>
