@@ -588,6 +588,94 @@ body.sidebar-collapsed .icon {
   max-width: 1400px;
 }
 
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
+  overflow: hidden !important;
+  padding-right: 0 !important;
+}
+
+body.swal2-height-auto {
+  height: 100% !important;
+}
+
+.swal2-container {
+  padding: 0 !important;
+}
+
+.swal2-popup {
+  border-radius: 20px !important;
+  padding: 2rem !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+.swal2-title {
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+  color: #2c3e50 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.swal2-html-container {
+  font-size: 1.1rem !important;
+  color: #5a6c7d !important;
+  margin: 1rem 0 !important;
+}
+
+.swal2-icon.swal2-success {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+}
+
+.swal2-icon.swal2-error {
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+.swal2-confirm {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px 30px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4) !important;
+}
+
+.swal2-confirm:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6) !important;
+}
+
+.swal2-cancel {
+  background: #ef4444 !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px 30px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3) !important;
+}
+
+.swal2-cancel:hover {
+  background: #dc2626 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5) !important;
+}
+
+.theme-dark .swal2-popup {
+  background: #1e293b !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.theme-dark .swal2-title {
+  color: #f1f5f9 !important;
+}
+
+.theme-dark .swal2-html-container {
+  color: #cbd5e1 !important;
+}
+
 /* ===== RESPONSIVE ADJUSTMENTS ===== */
 @media (max-width: 1024px) {
   .charts-grid {
