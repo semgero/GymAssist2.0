@@ -338,6 +338,7 @@ button[type="submit"]:hover {
   background-color: #0052a3;
 }
 
+
 /* Responsive */
 @media (max-width: 600px) {
   body {

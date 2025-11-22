@@ -6,202 +6,9 @@
     <title>Predicciones IA - GymAssist</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="/Styles/AdminRegister.css" />
-    <style>
-        .predicciones-container {
-            padding: 20px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .stat-card h3 {
-            font-size: 2.5em;
-            margin-bottom: 5px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-card p {
-            color: #6c757d;
-            font-size: 0.95em;
-        }
-
-        .filters {
-            background: white;
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .filter-btn {
-            padding: 10px 20px;
-            border: 2px solid #e0e0e0;
-            background: white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .filter-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .clientes-grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        .cliente-card {
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border-left: 4px solid #e0e0e0;
-            transition: all 0.3s;
-        }
-
-        .cliente-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        .cliente-card.renovara {
-            border-left-color: #10b981;
-        }
-
-        .cliente-card.no-renovara {
-            border-left-color: #ef4444;
-        }
-
-        .cliente-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 20px;
-        }
-
-        .cliente-info h3 {
-            font-size: 1.3em;
-            margin-bottom: 5px;
-        }
-
-        .cliente-info p {
-            color: #6c757d;
-            font-size: 0.9em;
-        }
-
-        .badge {
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .badge.renovara {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge.no-renovara {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .feature-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .feature-item strong {
-            display: block;
-            font-size: 1.5em;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-
-        .feature-item span {
-            color: #6c757d;
-            font-size: 0.85em;
-        }
-
-        .riesgo-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-
-        .riesgo-BAJO { background: #d1fae5; color: #065f46; }
-        .riesgo-MEDIO { background: #fef3c7; color: #92400e; }
-        .riesgo-ALTO { background: #fed7aa; color: #9a3412; }
-        .riesgo-CRITICO { background: #fee2e2; color: #991b1b; }
-        .riesgo-ESPERADO { background: #e5e7eb; color: #374151; }
-
-        .recomendacion {
-            background: #fef3c7;
-            padding: 15px;
-            border-radius: 12px;
-            border-left: 3px solid #f59e0b;
-            margin-top: 15px;
-        }
-
-        .recomendacion p {
-            color: #78350f;
-            font-size: 0.9em;
-            margin: 0;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 60px;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+    <link rel="stylesheet" href="/Styles/Predicciones.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:1024/quality:100/uri:ifs%3A%2F%2FM%2F6293492d-90de-4ff2-8521-44571fe13397/watermark:F/width:1024?csig=AAAAAAAAAAAAAAAAAAAAAOLV6xCRNfqeXx4kabpivLv81cm2L12Fl0_78GK7TPjt&exp=1761598823&osig=AAAAAAAAAAAAAAAAAAAAAO_rfXfN2kovLoSwAcy-QVMbV69lhfqYhD4qPePG-u0-&signer=media-rpc&x-canva-quality=screen_2x" type="image/png">
 </head>
 <body>
     <!-- Navbar -->
@@ -216,7 +23,9 @@
                 <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
                 <div id="dropdown" class="dropdown">
                     <a th:href="@{/Api/Admin/CuentaAdmin}"><i class="fas fa-user-cog"></i> Cuenta</a>
-                    <a th:href="@{/Api/Auth/Logout}" class="danger"><i class="fas fa-sign-out-alt"></i>Cerrar sesion</a>
+                    <a href="#" onclick="confirmLogout(event)" class="danger">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                    </a>
                 </div>
             </div>
         </div>
@@ -255,7 +64,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="predicciones-container">
-            <h1>🤖 Predicciones - Renovación de Membresías</h1>
+            <h1><i class="fas fa-brain"></i> Predicciones - Renovación de Membresías</h1>
             <p style="color: #6c757d; margin-bottom: 30px;">
                 Sistema de análisis predictivo para gestión de clientes
             </p>
@@ -264,34 +73,34 @@
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h3 id="totalClientes">0</h3>
-                        <p>Total Clientes</p>
+                        <p><i class="fas fa-users"></i> Total Clientes</p>
                     </div>
                     <div class="stat-card">
                         <h3 id="renovaran">0</h3>
-                        <p>Renovarán ✅</p>
+                        <p><i class="fas fa-check-circle"></i> Renovarán</p>
                     </div>
                     <div class="stat-card">
                         <h3 id="noRenovaran">0</h3>
-                        <p>No Renovarán ❌</p>
+                        <p><i class="fas fa-times-circle"></i> No Renovarán</p>
                     </div>
                     <div class="stat-card">
                         <h3 id="enRiesgo">0</h3>
-                        <p>En Riesgo ⚠️</p>
+                        <p><i class="fas fa-exclamation-triangle"></i> En Riesgo</p>
                     </div>
                 </div>
 
                 <div class="filters">
                     <button class="filter-btn active" onclick="filtrar('todos')">
-                        📊 Todos
+                        <i class="fas fa-chart-bar"></i> Todos
                     </button>
                     <button class="filter-btn" onclick="filtrar('renovara')">
-                        ✅ Renovarán
+                        <i class="fas fa-check-circle"></i> Renovarán
                     </button>
                     <button class="filter-btn" onclick="filtrar('no-renovara')">
-                        ❌ No Renovarán
+                        <i class="fas fa-times-circle"></i> No Renovarán
                     </button>
                     <button class="filter-btn" onclick="filtrar('critico')">
-                        🚨 Críticos
+                        <i class="fas fa-exclamation-circle"></i> Críticos
                     </button>
                 </div>
             </div>
@@ -345,7 +154,7 @@
                 if (clientesData.length === 0) {
                     document.getElementById('clientes').innerHTML = 
                         '<div style="text-align: center; padding: 60px; background: white; border-radius: 16px;">' +
-                        '<h3 style="color: #6c757d;">📋 No hay clientes registrados</h3></div>';
+                        '<h3 style="color: #6c757d;"><i class="fas fa-clipboard"></i> No hay clientes registrados</h3></div>';
                     return;
                 }
 
@@ -357,7 +166,7 @@
                 console.error('Error:', error);
                 document.getElementById('clientes').innerHTML = 
                     '<div style="text-align: center; padding: 60px; background: white; border-radius: 16px;">' +
-                    '<h3 style="color: #ef4444;">❌ Error al cargar predicciones</h3>' +
+                    '<h3 style="color: #ef4444;"><i class="fas fa-times-circle"></i> Error al cargar predicciones</h3>' +
                     '<p style="color: #6c757d;">' + error.message + '</p></div>';
             } finally {
                 ocultarLoading();
@@ -391,17 +200,17 @@
                 <div class="cliente-header">
                     <div class="cliente-info">
                         <h3>
-                            ${cliente.nombre}
+                            <i class="fas fa-user"></i> ${cliente.nombre}
                             <span class="riesgo-badge riesgo-${cliente.estadoRiesgo}">
                                 ${cliente.estadoRiesgo}
                             </span>
                         </h3>
-                        <p>📧 ${cliente.correo || 'Sin correo'}</p>
-                        <p>📱 ${cliente.telefono || 'Sin teléfono'}</p>
+                        <p><i class="fas fa-envelope"></i> ${cliente.correo || 'Sin correo'}</p>
+                        <p><i class="fas fa-phone"></i> ${cliente.telefono || 'Sin teléfono'}</p>
                     </div>
                     <div style="text-align: right;">
                         <span class="badge ${cliente.prediccion === 'Si' ? 'renovara' : 'no-renovara'}">
-                            ${cliente.prediccion === 'Si' ? '✅ Renovará' : '❌ No Renovará'}
+                            ${cliente.prediccion === 'Si' ? '<i class="fas fa-check-circle"></i> Renovará' : '<i class="fas fa-times-circle"></i> No Renovará'}
                         </span>
                         <div style="font-size: 0.75em; color: #6c757d; margin-top: 5px;">
                             Predicción: <strong>${cliente.prediccionOriginal}</strong>
@@ -412,24 +221,24 @@
                 <div class="features-grid">
                     <div class="feature-item">
                         <strong>${cliente.features.asistencias4Semanas}</strong>
-                        <span>Asistencias (4 sem)</span>
+                        <span><i class="fas fa-calendar-check"></i> Asistencias (4 sem)</span>
                     </div>
                     <div class="feature-item">
                         <strong>${cliente.features.pagoAlDia}</strong>
-                        <span>Pago al día</span>
+                        <span><i class="fas fa-credit-card"></i> Pago al día</span>
                     </div>
                     <div class="feature-item">
                         <strong>${cliente.features.antiguedadMeses}</strong>
-                        <span>Meses antigüedad</span>
+                        <span><i class="fas fa-clock"></i> Meses antigüedad</span>
                     </div>
                     <div class="feature-item">
                         <strong>${cliente.features.tipoPlan}</strong>
-                        <span>Tipo de plan</span>
+                        <span><i class="fas fa-medal"></i> Tipo de plan</span>
                     </div>
                 </div>
 
                 <div class="recomendacion">
-                    <p><strong>💡 Recomendación:</strong> ${cliente.recomendacion}</p>
+                    <p><strong><i class="fas fa-lightbulb"></i> Recomendación:</strong> ${cliente.recomendacion}</p>
                 </div>
             `;
 
@@ -488,6 +297,56 @@
         }
 
         window.btnTheme = btnTheme;
+
+        function confirmLogout(event) {
+            event.preventDefault();
+            
+            Swal.fire({
+                title: '¿Seguro que quieres cerrar sesión?',
+                text: "Tu sesión actual será cerrada",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: '<i class="fas fa-check"></i> Sí, cerrar sesión',
+                cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+                backdrop: 'rgba(0,0,0,0.7)',
+                customClass: {
+                    popup: 'animated-popup',
+                    confirmButton: 'btn-confirm-logout',
+                    cancelButton: 'btn-cancel-logout'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mostrar loading
+                    Swal.fire({
+                        title: 'Cerrando sesión...',
+                        html: '<i class="fas fa-spinner fa-spin fa-3x"></i>',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        timer: 1000
+                    });
+                    
+                    // Redirigir después de 1 segundo
+                    setTimeout(() => {
+                        window.location.href = '/Api/Auth/Logout';
+                    }, 1000);
+                }
+            });
+        }
+        window.confirmLogout = confirmLogout;
+
+        function openModal() {
+            document.getElementById('modal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
     </script>
 </body>
 </html>

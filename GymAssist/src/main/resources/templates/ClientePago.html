@@ -31,8 +31,9 @@
                 <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
                 <div id="dropdown" class="dropdown">
                     <a th:href="@{ClienteCuenta}"><i class="fas fa-user-cog"></i> Cuenta</a>
-                    <a th:href="@{/Api/Auth/Logout}" class="danger"><i class="fas fa-sign-out-alt"></i> Cerrar
-                        sesión</a>
+                    <a href="#" onclick="confirmLogout(event)" class="danger">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                    </a>
                 </div>
             </div>
         </div>
@@ -67,124 +68,126 @@
     <!-- Main -->
     <main class="main-content">
         <div class="forms-wrapper">
+            
+            <!-- Tarjeta de perfil (izquierda, ocupa 2 filas) -->
+            <div class="card profile-card">
+                <div class="profile-icon">
+                    <i class="fas fa-user-cog"></i>
+                </div>
+                <p class="status-title">Estado de Cuenta</p>
+                <div>
+                    <span class="status-badge" th:text="${cliente.estado}">Activo</span>
+                </div>
+                <div class="info">
+                    <p><strong>Usuario:</strong> <span th:text="${cliente.username}">usuario123</span></p>
+                    <p><strong>Correo:</strong> <span th:text="${cliente.correo}">correo@example.com</span></p>
+                    <p><strong>Teléfono:</strong> <span th:text="${cliente.telefono}">123456789789</span></p>
+                    <p><strong>Plan actual:</strong> <span th:text="${nombrePlan}">Plan Básico</span></p>
+                    <p><strong>Precio:</strong> $<span th:text="${planPrecio}">0</span></p>
+                </div>
+                <button class="edit-button" onclick="openModal()">
+                    <i class="fas fa-edit"></i> Editar Información
+                </button>
+            </div>
 
-            <div class="forms-wrapper">
+            <!-- Estado de Suscripción (derecha arriba) -->
+            <div class="payment-section">
+                <h3><i class="fas fa-credit-card"></i> Estado de Suscripción</h3>
 
-                <!-- Tarjeta de perfil completa -->
-                <div class="card profile-card">
-                    <div class="profile-icon">
-                        <i class="fas fa-user-cog"></i>
-                    </div>
-                    <p class="status-title">Estado de Cuenta</p>
-                    <div>
-                        <span class="status-badge" th:text="${cliente.estado}">Activo</span>
-                    </div>
-                    <div class="info">
-                        <p><strong>Usuario:</strong> <span th:text="${cliente.username}">usuario123</span></p>
-                        <p><strong>Usuario:</strong> <span th:text="${cliente.username}">usuario123</span></p>
-                        <p><strong>Correo:</strong> <span th:text="${cliente.correo}">correo@example.com</span></p>
-                        <p><strong>Teléfono:</strong> <span th:text="${cliente.telefono}">123456789789</span></p>
-                        <p><strong>Plan actual:</strong> <span th:text="${nombrePlan}">Plan Básico</span></p>
-                        <p><strong>Precio:</strong> $<span th:text="${planPrecio}">0</span></p>
-                    </div>
-                    <button class="edit-button" onclick="openModal()">✏ Editar Información</button>
+                <div th:if="${cliente.subscriptionStatus == 'PENDING'}">
+                    <p>Tu plan <strong th:text="${nombrePlan}"></strong> está pendiente de pago.</p>
+                    <p>Precio: <strong th:text="'$' + ${planPrecio}"></strong></p>
+
+                    <a th:href="@{/Api/Payment/checkout}" class="btn-pay-button">
+                        <i class="fas fa-shopping-cart"></i> Realizar Pago
+                    </a>
                 </div>
 
-                <!-- Panel de Pago -->
-                <div class="payment-section">
-                    <h3>Estado de Suscripción</h3>
-
-                    <div th:if="${cliente.subscriptionStatus == 'PENDING'}">
-                        <p>Tu plan <strong th:text="${nombrePlan}"></strong> está pendiente de pago.</p>
-                        <p>Precio: <strong th:text="'$' + ${planPrecio}"></strong></p>
-
-                        <a th:href="@{/Api/Payment/checkout}" class="btn-pay-button">
-                            🎯 Realizar Pago
-                        </a>
-                    </div>
-
-                    <div th:if="${cliente.subscriptionStatus == 'ACTIVE'}">
-                        <p>✅ Tu suscripción a <strong th:text="${nombrePlan}"></strong> está <strong>ACTIVA</strong></p>
-                        <p>Válida hasta: <strong th:text="${cliente.fechaFinMembresia}"></strong></p>
-                    </div>
+                 <div id="history">
+                    <h3><i class="fas fa-history"></i> Historial de Pagos</h3>
+                    <ul id="historyList">
+                        <li th:each="pago : ${pagos}">
+                            <span th:text="${#dates.format(pago.fechaPago, 'dd/MM/yyyy')}"></span> - 
+                            <strong th:text="'$' + ${pago.monto}"></strong> - 
+                            <span th:text="${pago.metodoPago}"></span>
+                        </li>
+                    </ul>
                 </div>
 
-                <!-- Panel de Pago -->
-                <div class="payment-panel">
-                    <h2>Pago Seguro</h2>
-                    <p>Haz clic en el botón para continuar con el pago de tu plan.</p>
-                    <a href="/pagos/pago">Pagar Ahora</a>
-                    <div id="history">
-                        <h3>Historial de Pagos</h3>
-                        <ul id="historyList"></ul>
-                    </div>
+                <div th:if="${cliente.subscriptionStatus == 'ACTIVE'}">
+                    <p><i class="fas fa-check-circle" style="color: var(--success);"></i> Tu suscripción a <strong th:text="${nombrePlan}">Plan Premium</strong> está <strong>ACTIVA</strong></p>
+                    <p><i class="fas fa-calendar-alt"></i> Válida hasta: <strong th:text="${cliente.fechaFinMembresia}">31/12/2024</strong></p>
                 </div>
             </div>
-    </main>
+
+        </div>
     </main>
 
-    <!-- Modal de editar perfil -->
+    <!-- Modal de editar perfil MEJORADO -->
     <div class="modal-container" id="modal">
         <div class="modal">
             <form id="editForm" action="/Api/Cliente/actualizar-datos" method="post">
                 <div class="modal-header">
                     <h2><i class="fas fa-user-edit"></i> Editar Información</h2>
-                    <p>Modifica tus datos personales y actualiza tu contraseña.</p>
+                    <p>Modifica tus datos personales y actualiza tu contraseña de forma segura.</p>
                 </div>
+
                 <div class="form-group">
-                    <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
-                    <input type="email" id="email" name="correo" required th:value="${cliente.correo}">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> 
+                        Correo electrónico
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="correo" 
+                        required 
+                        th:value="${cliente.correo}"
+                        placeholder="tu@email.com">
                 </div>
+
                 <div class="form-group">
-                    <label for="username"><i class="fas fa-user"></i> Usuario</label>
-                    <input type="text" id="username" name="username" required th:value="${cliente.username}">
+                    <label for="username">
+                        <i class="fas fa-user"></i> 
+                        Nombre de usuario
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        required 
+                        th:value="${cliente.username}"
+                        placeholder="tu_usuario">
                 </div>
+
                 <div class="form-group">
-                    <label for="password"><i class="fas fa-lock"></i> Nueva Contraseña</label>
-                    <input type="password" id="password" name="password">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> 
+                        Nueva Contraseña
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password"
+                        placeholder="Deja en blanco para no cambiar">
+                    <div class="password-strength"></div>
                 </div>
+
                 <div class="form-group">
-                    <label for="confirm-password"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
-                    <input type="password" id="confirm-password" name="confirm-password">
+                    <label for="confirm-password">
+                        <i class="fas fa-lock"></i> 
+                        Confirmar Contraseña
+                    </label>
+                    <input 
+                        type="password" 
+                        id="confirm-password" 
+                        name="confirm-password"
+                        placeholder="Confirma tu nueva contraseña">
                 </div>
+
                 <div class="modal-actions">
                     <button type="submit" class="half-btn save-btn">
-                        <i class="fas fa-save"></i> Guardar
-                    </button>
-                    <button type="button" class="half-btn cancel-btn" onclick="closeModal()">
-                        <i class="fas fa-times"></i> Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Modal de editar perfil -->
-    <div class="modal-container" id="modal">
-        <div class="modal">
-            <form id="editForm" action="/Api/Cliente/actualizar-datos" method="post">
-                <div class="modal-header">
-                    <h2><i class="fas fa-user-edit"></i> Editar Información</h2>
-                    <p>Modifica tus datos personales y actualiza tu contraseña.</p>
-                </div>
-                <div class="form-group">
-                    <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
-                    <input type="email" id="email" name="correo" required th:value="${cliente.correo}">
-                </div>
-                <div class="form-group">
-                    <label for="username"><i class="fas fa-user"></i> Usuario</label>
-                    <input type="text" id="username" name="username" required th:value="${cliente.username}">
-                </div>
-                <div class="form-group">
-                    <label for="password"><i class="fas fa-lock"></i> Nueva Contraseña</label>
-                    <input type="password" id="password" name="password">
-                </div>
-                <div class="form-group">
-                    <label for="confirm-password"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
-                    <input type="password" id="confirm-password" name="confirm-password">
-                </div>
-                <div class="modal-actions">
-                    <button type="submit" class="half-btn save-btn">
-                        <i class="fas fa-save"></i> Guardar
+                        <i class="fas fa-save"></i> Guardar Cambios
                     </button>
                     <button type="button" class="half-btn cancel-btn" onclick="closeModal()">
                         <i class="fas fa-times"></i> Cancelar
@@ -203,6 +206,7 @@
         function toggleSidebar() {
             document.body.classList.toggle('sidebar-collapsed');
         }
+        
         function toggleDropdown(e) {
             e.stopPropagation();
             document.getElementById('dropdown').classList.toggle('show');
@@ -210,7 +214,7 @@
 
         document.addEventListener('click', () => {
             document.getElementById('dropdown').classList.remove('show');
-        });;
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             const saved = localStorage.getItem('theme');
@@ -225,70 +229,134 @@
         }
         window.btnTheme = btnTheme;
 
+        // Función para confirmar cierre de sesión con SweetAlert2
+        function confirmLogout(event) {
+            event.preventDefault();
+            
+            Swal.fire({
+                title: '¿Seguro que quieres cerrar sesión?',
+                text: "Tu sesión actual será cerrada",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: '<i class="fas fa-check"></i> Sí, cerrar sesión',
+                cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+                backdrop: 'rgba(0,0,0,0.7)',
+                customClass: {
+                    popup: 'animated-popup',
+                    confirmButton: 'btn-confirm-logout',
+                    cancelButton: 'btn-cancel-logout'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mostrar loading
+                    Swal.fire({
+                        title: 'Cerrando sesión...',
+                        html: '<i class="fas fa-spinner fa-spin fa-3x"></i>',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        timer: 1000
+                    });
+                    
+                    // Redirigir después de 1 segundo
+                    setTimeout(() => {
+                        window.location.href = '/Api/Auth/Logout';
+                    }, 1000);
+                }
+            });
+        }
+        window.confirmLogout = confirmLogout;
+
         function openModal() {
             document.getElementById('modal').classList.add('show');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
-            document.getElementById('modal').classList.remove('show');
+            const modal = document.getElementById('modal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
         }
 
-        const paymentSelect = document.getElementById('paymentMethod');
-        const detailsDiv = document.getElementById('paymentDetails');
-        const payBtn = document.getElementById('payBtn');
-        const historyList = document.getElementById('historyList');
-
-        paymentSelect.addEventListener('change', () => {
-            const method = paymentSelect.value;
-            detailsDiv.innerHTML = '';
-            let content = '';
-            if (method === 'Bancolombia') {
-                content = `
-                <img class="payment-logo" src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Logo_Bancolombia.svg" alt="Logo Bancolombia">
-                <div class="form-group fade-in">
-                    <label for="accountNumber">Número de cuenta</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-hashtag"></i>
-                        <input type="text" id="accountNumber" placeholder="1234 5678 9012">
-                    </div>
-                </div>`;
-            } else if (method === 'Nequi') {
-                content = `
-                <img class="payment-logo" src="https://logosenvector.com/logo/img/nequi-37254.png" alt="Logo Nequi">
-                <div class="form-group fade-in">
-                    <label for="phoneNumber">Número Nequi</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-mobile-alt"></i>
-                        <input type="text" id="phoneNumber" placeholder="300 123 4567">
-                    </div>
-                </div>`;
-            } else if (method === 'Davivienda') {
-                content = `
-                <img class="payment-logo" src="https://paseosanrafael.com/wp-content/uploads/2013/06/1200px-Davivienda_logo.svg.png" alt="Logo Davivienda">
-                <div class="form-group fade-in">
-                    <label for="accountDav">Cuenta Davivienda</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-university"></i>
-                        <input type="text" id="accountDav" placeholder="1234 5678 9012">
-                    </div>
-                </div>`;
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
             }
-            detailsDiv.innerHTML = content;
         });
 
-        payBtn.addEventListener('click', () => {
-            fetch('/crear-preferencia')
-                .then(response => response.text())
-                .then(initPoint => {
-                    window.location.href = initPoint; // redirige al checkout de MercadoPago
-                })
-                .catch(error => {
-                    console.error('Error al crear preferencia:', error);
-                    Swal.fire('Error', 'Hubo un problema al iniciar el pago.', 'error');
-                });
+        // Cerrar modal con tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
         });
+
+        // Indicador de fuerza de contraseña
+        const passwordInput = document.getElementById('password');
+        if (passwordInput) {
+            passwordInput.addEventListener('input', (e) => {
+                const strength = e.target.value.length;
+                const strengthBar = e.target.parentElement.querySelector('.password-strength');
+                if (strengthBar) {
+                    const percentage = Math.min((strength / 12) * 100, 100);
+                    
+                    // Cambiar color según la fuerza
+                    let bgColor = '#ef4444'; // rojo
+                    if (percentage > 66) bgColor = '#10b981'; // verde
+                    else if (percentage > 33) bgColor = '#f59e0b'; // amarillo
+                    
+                    strengthBar.style.setProperty('--strength-width', `${percentage}%`);
+                    strengthBar.style.setProperty('--strength-color', bgColor);
+                }
+            });
+        }
+
+        // Validación de formulario
+        document.getElementById('editForm')?.addEventListener('submit', (e) => {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password && password !== confirmPassword) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Las contraseñas no coinciden',
+                    confirmButtonColor: '#2563eb',
+                    confirmButtonText: '<i class="fas fa-check"></i> Entendido'
+                });
+                return false;
+            }
+            
+            if (password && password.length < 6) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Contraseña débil',
+                    text: 'La contraseña debe tener al menos 6 caracteres',
+                    confirmButtonColor: '#2563eb',
+                    confirmButtonText: '<i class="fas fa-check"></i> Entendido'
+                });
+                return false;
+            }
+        });
+
+        // Animación de éxito al guardar
+        window.showSuccessAnimation = function() {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Guardado!',
+                text: 'Tus cambios se han guardado correctamente',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
+            });
+        };
 
     </script>
+
 </body>
 
 </html>

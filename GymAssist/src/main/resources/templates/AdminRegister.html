@@ -2,16 +2,16 @@
 <html lang="es">
 
 <head>
-  <!-- PASAR A LA PARTE DE ADMINREGISTER -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GymAssist Admin</title>
+  <title>GymAssist Admin - Registro</title>
   <!-- FontAwesome para los iconos -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="/Styles/DashboardAdmin.css"/>
-  <link rel="icon" href="https://www.iedepragapag.globalconsultor.com/images/logos/globalalog.png" type="image/png">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:1024/quality:100/uri:ifs%3A%2F%2FM%2F6293492d-90de-4ff2-8521-44571fe13397/watermark:F/width:1024?csig=AAAAAAAAAAAAAAAAAAAAAOLV6xCRNfqeXx4kabpivLv81cm2L12Fl0_78GK7TPjt&exp=1761598823&osig=AAAAAAAAAAAAAAAAAAAAAO_rfXfN2kovLoSwAcy-QVMbV69lhfqYhD4qPePG-u0-&signer=media-rpc&x-canva-quality=screen_2x" type="image/png">
 </head>
 
 <body>
@@ -29,8 +29,8 @@
         <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
         <div id="dropdown" class="dropdown">
           <a href="/Api/Admin/CuentaAdmin"><i class="fas fa-user-cog"></i> Cuenta</a>
-          <a th:href="@{/Api/Auth/Logout}" class="danger">
-            <i class="fas fa-sign-out-alt"></i>Cerrar sesion
+          <a href="#" onclick="confirmLogout(event)" class="danger">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
           </a>
         </div>
       </div>
@@ -96,6 +96,7 @@
 
       </div>
     </div>
+    
     <!-- Botón para abrir el modal -->
     <button id="abrirModal" class="btn-agregar-cliente">Agregar Cliente</button>
 
@@ -146,6 +147,7 @@
         </div>
       </div>
     </div>
+    
     <!-- tabla de clientes -->
     <div class="tabla-container">
       <div class="tabla-scroll">
@@ -179,12 +181,11 @@
                 <a th:if="${cliente.estado.name() == 'PENDIENTE'}" class="btn-pagar"
                   th:href="@{/Api/Admin/pagar/{id}(id=${cliente.id})}"><i class="fas fa-money-bill-wave"></i> Pagar</a>
                 <a th:if="${cliente.estado.name() == 'ACTIVO'}" class="btn-detener"
-                  th:href="@{/Api/Admin/detener/{id}(id=${cliente.id})}"><i class="fas fa-pause-circle"></i>Detener</a>
+                  th:href="@{/Api/Admin/detener/{id}(id=${cliente.id})}"><i class="fas fa-pause-circle"></i> Detener</a>
                 <a th:if="${cliente.estado.name() != 'SUSPENDIDO'}" class="btn-suspender"
                   th:href="@{/Api/Admin/suspender/{id}(id=${cliente.id})}"><i class="fas fa-ban"></i> Suspender</a>
                 <a th:if="${cliente.estado.name() == 'SUSPENDIDO'}" class="btn-activar"
-                  th:href="@{/Api/Admin/activar/{id}(id=${cliente.id})}"><i class="fas fa-check-circle"></i>Activar</a>
-              </td>
+                  th:href="@{/Api/Admin/activar/{id}(id=${cliente.id})}"><i class="fas fa-check-circle"></i> Activar</a>
               </td>
             </tr>
           </tbody>
@@ -192,14 +193,157 @@
       </div>
     </div>
   </main>
-  </div>
-  </main>
 
   <!-- Footer -->
   <footer class="footer">
     &copy; 2025 GymAssist. Todos los derechos reservados.
   </footer>
+
+  <script>
+    // ===== FUNCIONES BÁSICAS =====
+    function toggleSidebar() {
+      document.body.classList.toggle('sidebar-collapsed');
+    }
+
+    function toggleDropdown(e) {
+      e.stopPropagation();
+      document.getElementById('dropdown').classList.toggle('show');
+    }
+
+    document.addEventListener('click', () => {
+      document.getElementById('dropdown').classList.remove('show');
+    });
+
+    // Al cargar la página, aplica el tema guardado
+    document.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        document.body.classList.add('theme-dark');
+      }
+    });
+
+    // Función única para alternar tema y guardarlo
+    function btnTheme() {
+      const isDark = document.body.classList.toggle('theme-dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    window.btnTheme = btnTheme;
+
+    // ===== FUNCIÓN DE CERRAR SESIÓN CON SWEETALERT (PREMIUM) =====
+    function confirmLogout(event) {
+      event.preventDefault();
+      
+      Swal.fire({
+        title: '¿Seguro que quieres cerrar sesión?',
+        text: "Tu sesión actual será cerrada",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#2563eb',
+        cancelButtonColor: '#ef4444',
+        confirmButtonText: '<i class="fas fa-check"></i> Sí, cerrar sesión',
+        cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+        backdrop: 'rgba(0,0,0,0.7)',
+        reverseButtons: false,
+        focusCancel: false,
+        customClass: {
+          popup: 'animated-popup',
+          confirmButton: 'btn-confirm-logout',
+          cancelButton: 'btn-cancel-logout'
+        },
+        buttonsStyling: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Cerrando sesión...',
+            html: '<i class="fas fa-spinner fa-spin fa-3x"></i>',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            timer: 1500,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
+          
+          setTimeout(() => {
+            window.location.href = '/Api/Auth/Logout';
+          }, 1500);
+        }
+      });
+    }
+
+    window.confirmLogout = confirmLogout;
+
+    // ===== FUNCIONES DEL MODAL =====
+    const abrirBtn = document.getElementById("abrirModal");
+    const modal = document.getElementById("modalCliente");
+    const cerrarBtn = document.getElementById("cerrarModal");
+
+    abrirBtn.onclick = () => {
+      modal.style.display = "flex";
+    };
+
+    cerrarBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+
+    window.onclick = (e) => {
+      if (e.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    function confirmLogout(event) {
+            event.preventDefault();
+            
+            Swal.fire({
+                title: '¿Seguro que quieres cerrar sesión?',
+                text: "Tu sesión actual será cerrada",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: '<i class="fas fa-check"></i> Sí, cerrar sesión',
+                cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+                backdrop: 'rgba(0,0,0,0.7)',
+                customClass: {
+                    popup: 'animated-popup',
+                    confirmButton: 'btn-confirm-logout',
+                    cancelButton: 'btn-cancel-logout'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mostrar loading
+                    Swal.fire({
+                        title: 'Cerrando sesión...',
+                        html: '<i class="fas fa-spinner fa-spin fa-3x"></i>',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        timer: 1000
+                    });
+                    
+                    // Redirigir después de 1 segundo
+                    setTimeout(() => {
+                        window.location.href = '/Api/Auth/Logout';
+                    }, 1000);
+                }
+            });
+        }
+        window.confirmLogout = confirmLogout;
+
+        function openModal() {
+            document.getElementById('modal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+  </script>
 </body>
-<script src="/Styles/dashboard.js"></script>
 
 </html>
