@@ -31,10 +31,10 @@
       <form th:action="@{/Api/Auth/register}" method="post">
         <img src="/Imagenes/icono.png" class="logo" alt="Logo del gimnasio">         
         <h1>Register</h1>
-        <input type="text" name="username" placeholder="Username" required>
+        <input type="text" name="username" placeholder="Usuario" required>
         <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <input type="password" name="confirmPassword" placeholder="Confirmar contraseña" required>
         <button type="submit" class="btn">Registrar</button>
       </form>
     </div>
@@ -44,8 +44,8 @@
       <form th:action="@{/Api/Auth/login}" method="post">
         <img src="/Imagenes/icono.png" class="logo" alt="Logo del gimnasio">
         <h1>Login</h1>
-        <input type="text" name="username" placeholder="username" required>
-        <input type="password" name="password" placeholder="Password" required>
+        <input type="text" name="username" placeholder="Usuario" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
         <button type="submit" class="btn">Iniciar Sesion</button>
       </form>
     </div>
