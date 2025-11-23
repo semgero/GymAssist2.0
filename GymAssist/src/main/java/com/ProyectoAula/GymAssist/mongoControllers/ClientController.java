@@ -136,14 +136,24 @@ public class ClientController {
     }
 
     @PostMapping("/registrar-asistencia")
-    public String registrarAsistencia(@RequestParam("fecha") String fechaStr,
-            @RequestParam("musculos") List<String> musculos,
-            Principal principal) {
-        ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
-        LocalDate fecha = LocalDate.parse(fechaStr);
-        clienteService.registrarAsistencia(cliente.getId(), fecha, musculos);
+public String registrarAsistencia(@RequestParam("fecha") String fechaStr,
+                                  @RequestParam(value = "musculos", required = false) List<String> musculos,
+                                  Principal principal,
+                                  RedirectAttributes redirectAttributes) {
+
+    // Validación: si no seleccionó nada → error
+    if (musculos == null || musculos.isEmpty()) {
+        redirectAttributes.addFlashAttribute("error", "Debes seleccionar al menos un músculo trabajado.");
         return "redirect:/Api/Cliente/ClienteAsistencia";
     }
+
+    ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
+    LocalDate fecha = LocalDate.parse(fechaStr);
+
+    clienteService.registrarAsistencia(cliente.getId(), fecha, musculos);
+    return "redirect:/Api/Cliente/ClienteAsistencia";
+}
+
 
     @GetMapping("/Clienteimc")
     public String mostrarFormularioIMC(Model model, Principal principal) {
