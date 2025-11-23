@@ -10,16 +10,23 @@ public class DashboardDTO {
     private int suscripcionesPorVencer;
     private Map<String, Long> distribucionEstados;
     private List<IngresoMensualDTO> tendenciaIngresos;
+    private long clientesActivos;
+    private BigDecimal ingresosTotales;
+    private BigDecimal ingresosSemanales;
 
     // Constructores, getters y setters
     public DashboardDTO() {
     }
 
     public DashboardDTO(BigDecimal ingresosMesActual, int clientesNuevosEsteMes,
+            long clientesActivos, BigDecimal ingresosTotales, BigDecimal ingresosSemanales,
             int suscripcionesPorVencer, Map<String, Long> distribucionEstados,
             List<IngresoMensualDTO> tendenciaIngresos) {
         this.ingresosMesActual = ingresosMesActual;
         this.clientesNuevosEsteMes = clientesNuevosEsteMes;
+        this.clientesActivos = clientesActivos;
+        this.ingresosTotales = ingresosTotales;
+        this.ingresosSemanales = ingresosSemanales;
         this.suscripcionesPorVencer = suscripcionesPorVencer;
         this.distribucionEstados = distribucionEstados;
         this.tendenciaIngresos = tendenciaIngresos;
@@ -40,6 +47,30 @@ public class DashboardDTO {
 
     public void setClientesNuevosEsteMes(int clientesNuevosEsteMes) {
         this.clientesNuevosEsteMes = clientesNuevosEsteMes;
+    }
+
+    public long getClientesActivos() {
+        return clientesActivos;
+    }
+
+    public void setClientesActivos(long clientesActivos) {
+        this.clientesActivos = clientesActivos;
+    }
+
+    public BigDecimal getIngresosTotales() {
+        return ingresosTotales;
+    }
+
+    public void setIngresosTotales(BigDecimal ingresosTotales) {
+        this.ingresosTotales = ingresosTotales;
+    }
+
+    public BigDecimal getIngresosSemanales() {
+        return ingresosSemanales;
+    }
+
+    public void setIngresosSemanales(BigDecimal ingresosSemanales) {
+        this.ingresosSemanales = ingresosSemanales;
     }
 
     public int getSuscripcionesPorVencer() {
