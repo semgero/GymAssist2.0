@@ -93,6 +93,32 @@
                 </div>
             </div>
 
+            <div class="metric-card card-primary">
+                <div class="metric-header">
+                    <div>
+                        <div class="metric-label">Ingresos Totales</div>
+                        <div class="metric-value" id="ingresosTotales">$0</div>
+                        <div class="metric-desc">Total histórico recaudado</div>
+                    </div>
+                    <div class="metric-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card card-info">
+                <div class="metric-header">
+                    <div>
+                        <div class="metric-label">Ingresos Semanales</div>
+                        <div class="metric-value" id="ingresosSemanales">$0</div>
+                        <div class="metric-desc">Recaudado esta semana</div>
+                    </div>
+                    <div class="metric-icon">
+                        <i class="fas fa-calendar-week"></i>
+                    </div>
+                </div>
+            </div>
+
             <div class="metric-card card-info">
                 <div class="metric-header">
                     <div>
@@ -204,6 +230,10 @@
 
             document.getElementById('ingresosMes').textContent =
                 formatter.format(data.ingresosMesActual || 0);
+            document.getElementById('ingresosTotales').textContent =
+                formatter.format(data.ingresosTotales || 0);
+            document.getElementById('ingresosSemanales').textContent =
+                formatter.format(data.ingresosSemanales || 0);
             document.getElementById('clientesNuevos').textContent =
                 data.clientesNuevosEsteMes || 0;
             document.getElementById('suscripcionesVencer').textContent =
@@ -225,6 +255,16 @@
             const labels = Object.keys(estadosData);
             const values = Object.values(estadosData);
 
+            // Asignar colores fijos según el estado
+            const backgroundColors = labels.map(label => {
+                switch (label) {
+                    case 'ACTIVO': return '#10b981'; // Verde
+                    case 'PENDIENTE': return '#f59e0b'; // Naranja
+                    case 'SUSPENDIDO': return '#ef4444'; // Rojo
+                    default: return '#6b7280'; // Gris
+                }
+            });
+
             // Plugin para texto central
             const centerTextPlugin = {
                 id: 'centerText',
@@ -236,7 +276,10 @@
                     const ctx = chart.ctx;
 
                     ctx.restore();
-                    const active = chart.data.datasets[0].data[0] || 0;
+                    // Buscar el valor de ACTIVO
+                    const activeIndex = chart.data.labels.indexOf('ACTIVO');
+                    const active = activeIndex !== -1 ? chart.data.datasets[0].data[activeIndex] : 0;
+
                     const fontSize = (height / 114).toFixed(2);
 
                     ctx.font = `bold ${fontSize}em sans-serif`;
@@ -269,12 +312,7 @@
                     labels: labels,
                     datasets: [{
                         data: values,
-                        backgroundColor: [
-                            '#10b981', // Verde - ACTIVO
-                            '#f59e0b', // Amarillo - PENDIENTE
-                            '#ef4444', // Rojo - VENCIDO
-                            '#6b7280'  // Gris - INACTIVO
-                        ],
+                        backgroundColor: backgroundColors,
                         borderWidth: 0,
                         borderRadius: 8,
                         hoverOffset: 10,
@@ -337,7 +375,7 @@
                         backgroundColor: gradient,
                         fill: true,
                         tension: 0.4,
-                        pointRadius: 0,
+                        pointRadius: 4, // Puntos visibles
                         pointHoverRadius: 6,
                         pointBackgroundColor: '#2563eb',
                         pointBorderColor: '#fff',
@@ -443,7 +481,7 @@
 
         function confirmLogout(event) {
             event.preventDefault();
-            
+
             Swal.fire({
                 title: '¿Seguro que quieres cerrar sesión?',
                 text: "Tu sesión actual será cerrada",
@@ -469,7 +507,7 @@
                         allowOutsideClick: false,
                         timer: 1000
                     });
-                    
+
                     // Redirigir después de 1 segundo
                     setTimeout(() => {
                         window.location.href = '/Api/Auth/Logout';
@@ -489,7 +527,7 @@
             modal.classList.remove('show');
             document.body.style.overflow = '';
         }
-        
+
     </script>
 </body>
 
