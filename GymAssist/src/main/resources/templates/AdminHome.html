@@ -110,6 +110,31 @@
       if (saved === 'dark') {
         document.body.classList.add('theme-dark');
       }
+
+      // ===== SWEETALERT PARA LOGIN EXITOSO =====
+      const urlParams = new URLSearchParams(window.location.search);
+      const success = urlParams.get('success');
+      
+      if (success === 'true') {
+        Swal.fire({
+          icon: 'success',
+          title: '¡Bienvenido Administrador!',
+          text: 'Has iniciado sesión exitosamente',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          customClass: {
+            popup: 'animated-popup'
+          },
+          backdrop: 'rgba(0,0,0,0.7)',
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        }).then(() => {
+          // Limpiar URL después de mostrar el alert
+          window.history.replaceState({}, document.title, window.location.pathname);
+        });
+      }
     });
 
     // Función única para alternar tema y guardarlo
@@ -121,52 +146,6 @@
     window.btnTheme = btnTheme;
 
     // ===== FUNCIÓN DE CERRAR SESIÓN CON SWEETALERT (PREMIUM) =====
-    function confirmLogout(event) {
-      event.preventDefault();
-      
-      Swal.fire({
-        title: '¿Seguro que quieres cerrar sesión?',
-        text: "Tu sesión actual será cerrada",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#2563eb',
-        cancelButtonColor: '#ef4444',
-        confirmButtonText: '<i class="fas fa-check"></i> Sí, cerrar sesión',
-        cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
-        backdrop: 'rgba(0,0,0,0.7)',
-        reverseButtons: false,
-        focusCancel: false,
-        customClass: {
-          popup: 'animated-popup',
-          confirmButton: 'btn-confirm-logout',
-          cancelButton: 'btn-cancel-logout'
-        },
-        buttonsStyling: false // ⚠️ CRUCIAL: Usar estilos personalizados
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Mostrar loading mientras cierra sesión
-          Swal.fire({
-            title: 'Cerrando sesión...',
-            html: '<i class="fas fa-spinner fa-spin fa-3x"></i>',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            timer: 1500,
-            didOpen: () => {
-              Swal.showLoading();
-            }
-          });
-          
-          // Redirigir después de 1.5 segundos
-          setTimeout(() => {
-            window.location.href = '/Api/Auth/Logout';
-          }, 1500);
-        }
-      });
-    }
-
-    window.confirmLogout = confirmLogout;
-
     function confirmLogout(event) {
             event.preventDefault();
             

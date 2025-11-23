@@ -101,7 +101,6 @@ nav {
 .nav__header {
   padding: 1rem;
   display: flex;
-  margin-left: 2rem;
   align-items: center;
   justify-content: space-between;
 }
@@ -116,19 +115,20 @@ nav {
 }
 
 .nav__logo img {
-  width: 200px;
-  position: absolute;
+  width: 180px;
+  height: auto;
 }
 
 .nav__menu__btn {
   font-size: 1.5rem;
   color: var(--text-dark);
   cursor: pointer;
+  display: block;
 }
 
 .nav__links {
   position: absolute;
-  top: 68px;
+  top: 100%;
   left: 0;
   width: 100%;
   padding: 2rem;
@@ -136,16 +136,20 @@ nav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 10rem;
-  justify-content: end;
   gap: 2rem;
   background-color: var(--secondary-color);
   transform: translateY(-100%);
   transition: 0.4s;
+  z-index: 999;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
 }
 
 .nav__links.open {
   transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
 }
 
 .nav__links .btn {
@@ -155,6 +159,7 @@ nav {
 .link a {
   color: var(--text-dark);
   transition: 0.3s;
+  font-size: 1.1rem;
 }
 
 .link a:hover {
@@ -352,9 +357,8 @@ nav {
 
 .footer__logo img {
   width: 250px;
-  position: absolute;
-  margin-bottom: 2rem;
-  margin-left: 0.1rem;
+  height: auto;
+  margin-bottom: 1rem;
 }
 
 .footer__col p {
@@ -407,24 +411,48 @@ nav {
   text-align: center;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .nav__links {
-    flex-direction: column;
+/* RESPONSIVE MOBILE FIRST */
+@media (max-width: 767px) {
+  .nav__logo img {
+    width: 150px;
+  }
+
+  .nav__menu__btn {
+    display: block;
+  }
+
+  .header__content h4 {
+    font-size: 1.8rem;
+  }
+
+  .header__content .section__header {
+    font-size: 2.5rem;
   }
 
   .card-container {
     flex-direction: column;
     padding: 20px;
   }
+
+  .card {
+    width: 100%;
+    max-width: 350px;
+  }
 }
 
+/* TABLET Y DESKTOP */
 @media (min-width: 768px) {
   nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1.5rem 2rem;
+  }
+
+  .nav__header {
+    width: auto;
+    padding: 0;
+    margin: 0;
   }
 
   .nav__menu__btn {
@@ -437,6 +465,16 @@ nav {
     gap: 2rem;
     transform: none;
     padding: 0;
+    background: transparent;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    width: auto;
+    margin: 0;
+  }
+
+  .nav__logo img {
+    width: 200px;
   }
 
   .header__container {
@@ -451,5 +489,24 @@ nav {
 
   .footer__container {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* DESKTOP GRANDE */
+@media (min-width: 1024px) {
+  .nav__logo img {
+    width: 220px;
+  }
+
+  .section__header {
+    font-size: 2.5rem;
+  }
+
+  .header__content h4 {
+    font-size: 2.8rem;
+  }
+
+  .header__content .section__header {
+    font-size: 4rem;
   }
 }

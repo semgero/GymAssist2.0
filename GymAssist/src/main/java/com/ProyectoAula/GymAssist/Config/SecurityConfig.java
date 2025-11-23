@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.config.Customizer;
 
 import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
@@ -48,14 +49,6 @@ public class SecurityConfig {
         this.clientRepository = clientRepository;
     }
 
-    /**
-     * Configura las reglas de seguridad de la aplicación.
-     * 
-     * @param http La configuración de seguridad HTTP.
-     * @return El filtro de seguridad configurado.
-     * @throws Exception Si ocurre un error al configurar la seguridad.
-     */
-
     @Bean
     public SecurityFilterChain securedFilterChain(final HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
@@ -77,6 +70,7 @@ public class SecurityConfig {
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .successHandler(authenticationSuccessHandler())
+                        .failureHandler(authenticationFailureHandler()) // ← AGREGADO PARA SWEETALERT
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/Api/Auth/Logout")
@@ -89,43 +83,22 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .invalidSessionUrl("/Api/Auth/Login")
                         .sessionFixation().newSession())
-                .authenticationProvider(authenticationProvider(userDetailsService(userRepository), passwordEncoder())) // SOLO
-                // ESTA
-                // LÍNEA
-                // AQUÍ
+                .authenticationProvider(authenticationProvider(userDetailsService(userRepository), passwordEncoder()))
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
 
-    /**
-     * Configura el servicio de usuarios personalizados.
-     * 
-     * @param userRepository El repositorio de usuarios.
-     * @return El servicio de usuarios para autenticación.
-     */
     @Bean
     public CustomUserDetailsService userDetailsService(UserRepository userRepository) {
         return new CustomUserDetailsService(userRepository);
     }
 
-    /**
-     * Configura el codificador de contraseñas.
-     * 
-     * @return Codificador BCrypt para contraseñas.
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * Configura el proveedor de autenticación.
-     * 
-     * @param userDetailsService El servicio de usuarios.
-     * @param passwordEncoder    El codificador de contraseñas.
-     * @return El proveedor de autenticación.
-     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService,
             PasswordEncoder passwordEncoder) {
@@ -135,13 +108,6 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    /**
-     * Configura el manejador de autenticación.
-     * 
-     * @param authenticationConfiguration La configuración de autenticación.
-     * @return El manejador de autenticación.
-     * @throws Exception Si ocurre un error al configurar.
-     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
@@ -149,10 +115,7 @@ public class SecurityConfig {
     }
 
     /**
-     * Configura el manejador de éxito al autenticarse.
-     * Redirige al usuario según su rol.
-     * 
-     * @return El manejador de éxito personalizado.
+     * ✅ HANDLER DE ÉXITO - Redirige con ?success=true
      */
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
@@ -175,7 +138,8 @@ public class SecurityConfig {
                         if (!tieneGym) {
                             redirectUrl = "/gimnasios/register";
                         } else {
-                            redirectUrl = "/Api/Admin/AdminHome";
+                            // ← AGREGADO ?success=true PARA SWEETALERT
+                            redirectUrl = "/Api/Admin/AdminHome?success=true";
                             ObjectId gymId = gimnasiosRepository.findByAdminId(admin.getId())
                                     .map(GimnasiosEntity::getId)
                                     .orElse(null);
@@ -194,13 +158,15 @@ public class SecurityConfig {
 
                         switch (cliente.getEstado()) {
                             case SUSPENDIDO:
-                                redirectUrl = "/Api/Auth/login?error=accesoDenegado";
+                                // ← CAMBIADO A ?error=true PARA SWEETALERT
+                                redirectUrl = "/Api/Auth/login?error=true";
                                 break;
                             case PENDIENTE:
                                 redirectUrl = "/Api/Cliente/ClientePago";
                                 break;
                             case ACTIVO:
-                                redirectUrl = "/Api/Cliente/ClienteHome";
+                                // ← AGREGADO ?success=true PARA SWEETALERT
+                                redirectUrl = "/Api/Cliente/ClienteHome?success=true";
                                 break;
                         }
                     }
@@ -208,6 +174,17 @@ public class SecurityConfig {
             }
 
             response.sendRedirect(redirectUrl);
+        };
+    }
+
+    /**
+     * ❌ HANDLER DE ERROR - Redirige con ?error=true (NUEVO)
+     */
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return (request, response, exception) -> {
+            // Cuando falla el login (credenciales incorrectas, usuario no encontrado, etc.)
+            response.sendRedirect("/Api/Auth/login?error=true");
         };
     }
 }

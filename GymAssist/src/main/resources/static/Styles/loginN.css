@@ -12,7 +12,72 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: #fff;
+    background: linear-gradient(135deg, #2563eb , #3b82f6 );
+    position: relative;
+    overflow: hidden;
+}
+
+/* ===== Animated Background ===== */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  animation: float 20s infinite ease-in-out;
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  right: -50px;
+  animation-delay: 5s;
+}
+
+.circle-3 {
+  width: 250px;
+  height: 250px;
+  top: 50%;
+  left: 50%;
+  animation-delay: 10s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(50px, -50px) scale(1.1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(0, -100px) scale(0.9);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(-50px, -50px) scale(1.05);
+    opacity: 0.45;
+  }
 }
 
 h1 {
@@ -23,7 +88,7 @@ h1 {
   position: fixed;
   top: 20px;
   left: 1rem;
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
   color: #fff;
   border: none;
   width: 50px;
@@ -35,12 +100,12 @@ h1 {
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 50;
+  z-index: 1001;
   font-size: 1.2rem;
 }
 
 .back-button:hover {
-  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+  background: linear-gradient(135deg, #1e40af, #2563eb);
   transform: translateX(-4px) scale(1.05);
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
 }
@@ -66,10 +131,10 @@ body.theme-dark .back-button:hover {
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.7);
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== RESPONSIVE BACK BUTTON ===== */
 @media (max-width: 768px) {
   .back-button {
-    top: 80px;
+    top: 20px;
     left: 1rem;
     width: 45px;
     height: 45px;
@@ -79,7 +144,7 @@ body.theme-dark .back-button:hover {
 
 @media (max-width: 480px) {
   .back-button {
-    top: 75px;
+    top: 20px;
     left: 0.75rem;
     width: 42px;
     height: 42px;
@@ -87,36 +152,17 @@ body.theme-dark .back-button:hover {
   }
 }
 
-/* Si el sidebar está colapsado, ajusta la posición */
-body.sidebar-collapsed .back-button {
-  left: calc(var(--sidebar-collapsed-width) + 2rem);
-}
-
-@media (max-width: 768px) {
-  body.sidebar-collapsed .back-button {
-    left: 1rem;
-  }
-}
-
-/* Fondo dividido diagonalmente */
-body::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #2563eb , #fff );
-    z-index: -1;
-}
-
+/* Container del formulario con z-index correcto */
 .container{
     background-color: #fff;
     border-radius: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
     width: 768px;
     max-width: 100%;
     min-height: 480px;
+    z-index: 1;
 }
 
 .container p{
@@ -156,6 +202,7 @@ body::before {
     background-color: #1e3a8a;
     transition: 0.5s;
 }
+
 .container button.hidden{
     background-color: transparent;
     border-color: #fff;
@@ -304,4 +351,130 @@ body::before {
     border-color: #000;
     color: #000;
     transition: 0.4s;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .container {
+    width: 90%;
+    min-height: 420px;
+  }
+  
+  .circle-1,
+  .circle-2,
+  .circle-3 {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 95%;
+    border-radius: 20px;
+  }
+}
+
+/* ===== SWEETALERT2 PREMIUM STYLES ===== */
+.swal2-popup {
+  border-radius: 24px !important;
+  padding: 2.5rem !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.swal2-title {
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  margin-bottom: 1rem !important;
+  letter-spacing: -0.5px !important;
+}
+
+.swal2-html-container {
+  font-size: 1.05rem !important;
+  color: #64748b !important;
+  opacity: 0.9 !important;
+  margin: 1rem 0 !important;
+  line-height: 1.6 !important;
+}
+
+.swal2-icon.swal2-error {
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+.swal2-icon.swal2-success {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+}
+
+.animated-popup {
+  animation: zoomIn 0.3s ease !important;
+}
+
+@keyframes zoomIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.9); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+.btn-confirm-premium {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+  color: white !important;
+  padding: 14px 32px !important;
+  border-radius: 14px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4) !important;
+  border: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.btn-confirm-premium:hover {
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5) !important;
+}
+
+.swal2-timer-progress-bar {
+  background: linear-gradient(90deg, #2563eb, #3b82f6) !important;
+}
+
+.swal2-container.swal2-backdrop-show {
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+@keyframes swal2-show {
+  0% { 
+    transform: scale(0.7) translateY(30px); 
+    opacity: 0; 
+  }
+  45% { 
+    transform: scale(1.05); 
+    opacity: 1; 
+  }
+  80% { 
+    transform: scale(0.95); 
+  }
+  100% { 
+    transform: scale(1) translateY(0); 
+    opacity: 1; 
+  }
+}
+
+.swal2-show {
+  animation: swal2-show 0.5s !important;
+}
+
+.swal2-icon {
+  margin: 1.5rem auto !important;
 }

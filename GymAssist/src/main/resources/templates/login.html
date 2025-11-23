@@ -3,56 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-      <link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:1024/quality:100/uri:ifs%3A%2F%2FM%2F6293492d-90de-4ff2-8521-44571fe13397/watermark:F/width:1024?csig=AAAAAAAAAAAAAAAAAAAAAOLV6xCRNfqeXx4kabpivLv81cm2L12Fl0_78GK7TPjt&exp=1761598823&osig=AAAAAAAAAAAAAAAAAAAAAO_rfXfN2kovLoSwAcy-QVMbV69lhfqYhD4qPePG-u0-&signer=media-rpc&x-canva-quality=screen_2x" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:1024/quality:100/uri:ifs%3A%2F%2FM%2F6293492d-90de-4ff2-8521-44571fe13397/watermark:F/width:1024?csig=AAAAAAAAAAAAAAAAAAAAAOLV6xCRNfqeXx4kabpivLv81cm2L12Fl0_78GK7TPjt&exp=1761598823&osig=AAAAAAAAAAAAAAAAAAAAAO_rfXfN2kovLoSwAcy-QVMbV69lhfqYhD4qPePG-u0-&signer=media-rpc&x-canva-quality=screen_2x" type="image/png">
     <title>GymAssist - Iniciar Sesión</title>
     <link rel="stylesheet" href="/Styles/loginN.css">
 </head>
 <body>
-  <a th:href="@{/}"><button class="back-button"><i class="fa-solid fa-arrow-left"></i></button></a>
-    <div class="container" id="container">
-        <div class="form-container sign-up">
-          <form th:action="@{/Api/Auth/register}" method="post">
-            <img src="/Imagenes/icono.png" class="logo" alt="Logo del gimnasio">         
-              <h1>Register</h1>
-              <input type="text" name="username" placeholder="Username" required>
-              <input type="email" name="email" placeholder="Email" required>
-              <input type="password" name="password" placeholder="Password" required>
-              <input type="password" name="confirmPassword" placeholder="Confirm Password" required>                
-               <p th:if="${error}" th:text="${error}" style="color: red;"></p>
-              <button type="submit" class="btn">Registrar</button>
-          </form>
+  <!-- Fondo animado con círculos flotantes -->
+  <div class="background-animation">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+  </div>
+
+  <!-- Botón de regreso -->
+  <a th:href="@{/}">
+    <button class="back-button">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+  </a>
+
+  <!-- Container del login/register -->
+  <div class="container" id="container">
+    <!-- FORMULARIO DE REGISTRO -->
+    <div class="form-container sign-up">
+      <form th:action="@{/Api/Auth/register}" method="post">
+        <img src="/Imagenes/icono.png" class="logo" alt="Logo del gimnasio">         
+        <h1>Register</h1>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+        <button type="submit" class="btn">Registrar</button>
+      </form>
+    </div>
+
+    <!-- FORMULARIO DE LOGIN -->
+    <div class="form-container sign-in">
+      <form th:action="@{/Api/Auth/login}" method="post">
+        <img src="/Imagenes/icono.png" class="logo" alt="Logo del gimnasio">
+        <h1>Login</h1>
+        <input type="text" name="username" placeholder="username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit" class="btn">Iniciar Sesion</button>
+      </form>
+    </div>
+
+    <!-- PANEL TOGGLE -->
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class="toggle-panel toggle-left">
+          <h1>¡Bienvenido de nuevo!</h1>
+          <p>Introduzca sus datos personales para utilizar todas las funciones del sitio</p>
+          <button class="hidden" id="login">Iniciar sesion</button>
         </div>
-        <div class="form-container sign-in">
-          <form th:action="@{/Api/Auth/login}" method="post">
-            <img src="/Imagenes/icono.png" class="logo" alt="Logo del gimnasio">
-            <h1>Login</h1>
-              <input type="text" name="username" placeholder="username" required>
-              <input type="password" name="password" placeholder="Password" required>
-              <button type="submit" class="btn">Iniciar Sesion</button>
-              <p th:if="${error}" th:text="${error}" style="color: red;"></p>
-          </form>
-        </div>
-        <div class="toggle-container">
-          <div class="toggle">
-            <div class="toggle-panel toggle-left">
-              <h1>¡Bienvenido de nuevo!</h1>
-              <p>Introduzca sus datos personales para utilizar todas las funciones del sitio</p>
-              <button class="hidden" id="login">Iniciar sesion</button>
-            </div>
-            <div class="toggle-panel toggle-right">
-              <h1>Bienvenido a GymAssist!</h1>
-              <p>
-                ¿Aún no estás registrado? Ingresa aquí y forma parte de nuestro equipo
-              </p>
-              <button class="hidden" id="register">Registrar</button>
-            </div>
-          </div>
+        <div class="toggle-panel toggle-right">
+          <h1>Bienvenido a GymAssist!</h1>
+          <p>
+            ¿Aún no estás registrado? Ingresa aquí y forma parte de nuestro equipo
+          </p>
+          <button class="hidden" id="register">Registrar</button>
         </div>
       </div>
+    </div>
+  </div>
   
-      <script src="/Styles/loginN.js"></script>
+  <script>
+    // ==========================================
+    // TOGGLE ENTRE LOGIN Y REGISTER
+    // ==========================================
+    const container = document.getElementById("container");
+    const registerBtn = document.getElementById("register");
+    const loginBtn = document.getElementById("login");
+
+    registerBtn.addEventListener("click", () => {
+      container.classList.add("active");
+    });
+
+    loginBtn.addEventListener("click", () => {
+      container.classList.remove("active");
+    });
+    
+    // ==========================================
+    // SWEETALERT PARA LOGIN Y REGISTER
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function() {
+      // Obtener parámetros de URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const error = urlParams.get('error');
+      const success = urlParams.get('success');
+      const registered = urlParams.get('registered');
+      
+      // ❌ ERROR en LOGIN o REGISTER
+      if (error === 'true') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de Autenticación',
+          text: 'El usuario o la contraseña son incorrectos. Por favor, verifica tus datos.',
+          confirmButtonColor: '#2563eb',
+          confirmButtonText: '<i class="fas fa-times"></i> Intentar de nuevo',
+          customClass: {
+            popup: 'animated-popup',
+            confirmButton: 'btn-confirm-premium'
+          },
+          buttonsStyling: false,
+          backdrop: 'rgba(0,0,0,0.7)'
+        });
+      }
+      
+      // ✅ ÉXITO en LOGIN
+      if (success === 'true') {
+        Swal.fire({
+          icon: 'success',
+          title: '¡Inicio de Sesión Exitoso!',
+          text: 'Bienvenido a GymAssist',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          customClass: {
+            popup: 'animated-popup'
+          },
+          backdrop: 'rgba(0,0,0,0.7)',
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+      }
+      
+      // ✅ REGISTRO EXITOSO
+      if (registered === 'true') {
+        // Mostrar el panel de login automáticamente
+        container.classList.remove("active");
+        
+        Swal.fire({
+          icon: 'success',
+          title: '¡Registro Exitoso!',
+          text: 'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.',
+          confirmButtonColor: '#2563eb',
+          confirmButtonText: '<i class="fas fa-check"></i> Iniciar Sesión',
+          customClass: {
+            popup: 'animated-popup',
+            confirmButton: 'btn-confirm-premium'
+          },
+          buttonsStyling: false,
+          backdrop: 'rgba(0,0,0,0.7)'
+        });
+      }
+    });
+  </script>
 </body>
 </html>
