@@ -9,7 +9,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.annotation.Generated;
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 
 @JsonTypeName("mediciones")
 @Generated(value = "com.mongodb.migrator.application.codegen.config.java.JavaSpringCodegenConfig", date = "2025-04-25T16:37:23.491826100-05:00[America/Bogota]", comments = "Generator version: 7.10.0")@Document("mediciones")

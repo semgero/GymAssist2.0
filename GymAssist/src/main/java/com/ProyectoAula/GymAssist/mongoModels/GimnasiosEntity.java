@@ -8,7 +8,7 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.annotation.Generated;
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 
 @JsonTypeName("gimnasios")
 @Generated(value = "com.mongodb.migrator.application.codegen.config.java.JavaSpringCodegenConfig", date = "2025-04-23T20:27:33.022640-05:00[America/Bogota]", comments = "Generator version: 7.10.0")@Document("gimnasios")

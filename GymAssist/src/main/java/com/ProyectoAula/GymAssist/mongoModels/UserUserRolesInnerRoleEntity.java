@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.annotation.Generated;
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 
 @JsonTypeName("user_userRoles_inner_role")
 @Generated(value = "com.mongodb.migrator.application.codegen.config.java.JavaSpringCodegenConfig", date = "2025-04-23T20:32:34.385757600-05:00[America/Bogota]", comments = "Generator version: 7.10.0")@Document("user_userRoles_inner_role")

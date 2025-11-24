@@ -29,12 +29,12 @@ public class AuthController {
 
     @GetMapping("/index")
     public String index() {
-        return "redirect:index"; 
+        return "redirect:index";
     }
 
     @GetMapping("/login")
     public String mostrarLoginForm() {
-        return "login"; 
+        return "login";
     }
 
     // ==========================================
@@ -50,13 +50,17 @@ public class AuthController {
     public String registrarUsuario(@RequestParam String username,
             @RequestParam String email,
             @RequestParam String password) {
-        
+
         // Verifica que el usuario no exista previamente
         if (userRepository.findByUsername(username).isPresent()) {
             // ❌ Usuario ya existe - Mostrar error con SweetAlert
             return "redirect:/Api/Auth/login?error=true";
         }
-        
+
+        if (userRepository.findByEmail(email).isPresent()) {
+            return "redirect:/Api/Auth/login?emailExists=true";
+        }
+
         // Crear nuevo usuario
         UserEntity user = new UserEntity();
         user.setUsername(username);
@@ -68,8 +72,8 @@ public class AuthController {
         // Crear admin asociado
         AdminEntity admin = new AdminEntity();
         admin.setId(new org.bson.types.ObjectId());
-        admin.setUserId(user.getId()); 
-        adminService.save(admin); 
+        admin.setUserId(user.getId());
+        adminService.save(admin);
 
         // ✅ Registro exitoso - Redirigir a login con mensaje de éxito
         return "redirect:/Api/Auth/login?registered=true";
