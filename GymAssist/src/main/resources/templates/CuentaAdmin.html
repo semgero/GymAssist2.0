@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="/Styles/CuentaAdmin.css" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:1024/quality:100/uri:ifs%3A%2F%2FM%2F6293492d-90de-4ff2-8521-44571fe13397/watermark:F/width:1024?csig=AAAAAAAAAAAAAAAAAAAAAOLV6xCRNfqeXx4kabpivLv81cm2L12Fl0_78GK7TPjt&exp=1761598823&osig=AAAAAAAAAAAAAAAAAAAAAO_rfXfN2kovLoSwAcy-QVMbV69lhfqYhD4qPePG-u0-&signer=media-rpc&x-canva-quality=screen_2x" type="image/png">
+  <link rel="icon" href="/Imagenes/icono.png" type="image/png">
 </head>
 
 <body>
@@ -68,7 +68,7 @@
   <main class="main-content">
     <h1>Cuenta</h1>
     <div class="card">
-      <form class="info-update-form fancy-form" action="/Api/Admin/actualizar-admin" method="post">
+      <form id="updateForm" class="info-update-form fancy-form" action="/Api/Admin/actualizar-admin" method="post">
         <h1 class="form-title">Cambio de Información</h1>
         <div class="form-cam">
           <label for="correo">Correo Electrónico</label>
@@ -82,7 +82,7 @@
           <label for="password">Contraseña</label>
           <div class="input-icon">
             <i class="fas fa-lock"></i>
-            <input type="password" id="password" name="password" placeholder="Contraseña" required />
+            <input type="password" id="password" name="password" placeholder="Contraseña" />
           </div>
         </div>
 
@@ -90,8 +90,7 @@
           <label for="confirm-password">Confirmar Contraseña</label>
           <div class="input-icon">
             <i class="fas fa-lock"></i>
-            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirmar Contraseña"
-              required />
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirmar Contraseña" />
           </div>
         </div>
 
@@ -124,6 +123,38 @@
       if (saved === 'dark') {
         document.body.classList.add('theme-dark');
       }
+
+      // ===== SWEETALERTS PARA MENSAJES =====
+      const urlParams = new URLSearchParams(window.location.search);
+      const success = urlParams.get('success');
+      const error = urlParams.get('error');
+      
+      if (success === 'true') {
+        Swal.fire({
+          icon: 'success',
+          title: '¡Actualización Exitosa!',
+          text: 'Tus datos se han actualizado correctamente',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          backdrop: 'rgba(0,0,0,0.7)'
+        }).then(() => {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        });
+      }
+
+      if (error === 'true') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al Actualizar',
+          text: 'Hubo un problema al actualizar tus datos',
+          confirmButtonColor: '#2563eb',
+          confirmButtonText: 'Entendido',
+          backdrop: 'rgba(0,0,0,0.7)'
+        }).then(() => {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        });
+      }
     });
 
     // Función única para alternar tema y guardarlo
@@ -136,56 +167,89 @@
     window.btnTheme = btnTheme;
 
     function confirmLogout(event) {
-            event.preventDefault();
-            
-            Swal.fire({
-                title: '¿Seguro que quieres cerrar sesión?',
-                text: "Tu sesión actual será cerrada",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#2563eb',
-                cancelButtonColor: '#ef4444',
-                confirmButtonText: '<i class="fas fa-check"></i> Sí, cerrar sesión',
-                cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
-                backdrop: 'rgba(0,0,0,0.7)',
-                customClass: {
-                    popup: 'animated-popup',
-                    confirmButton: 'btn-confirm-logout',
-                    cancelButton: 'btn-cancel-logout'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Mostrar loading
-                    Swal.fire({
-                        title: 'Cerrando sesión...',
-                        html: '<i class="fas fa-spinner fa-spin fa-3x"></i>',
-                        showConfirmButton: false,
-                        allowOutsideClick: false,
-                        timer: 1000
-                    });
-                    
-                    // Redirigir después de 1 segundo
-                    setTimeout(() => {
-                        window.location.href = '/Api/Auth/Logout';
-                    }, 1000);
-                }
-            });
+      event.preventDefault();
+      
+      Swal.fire({
+        title: '¿Seguro que quieres cerrar sesión?',
+        text: "Tu sesión actual será cerrada",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#2563eb',
+        cancelButtonColor: '#ef4444',
+        confirmButtonText: '<i class="fas fa-check"></i> Sí, cerrar sesión',
+        cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+        backdrop: 'rgba(0,0,0,0.7)',
+        customClass: {
+          popup: 'animated-popup',
+          confirmButton: 'btn-confirm-logout',
+          cancelButton: 'btn-cancel-logout'
         }
-        window.confirmLogout = confirmLogout;
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Mostrar loading
+          Swal.fire({
+            title: 'Cerrando sesión...',
+            html: '<i class="fas fa-spinner fa-spin fa-3x"></i>',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            timer: 1000
+          });
+          
+          // Redirigir después de 1 segundo
+          setTimeout(() => {
+            window.location.href = '/Api/Auth/Logout';
+          }, 1000);
+        }
+      });
+    }
+    window.confirmLogout = confirmLogout;
 
-        function openModal() {
-            document.getElementById('modal').classList.add('show');
-            document.body.style.overflow = 'hidden';
+    // ===== VALIDACIÓN DE FORMULARIO =====
+    document.getElementById('updateForm')?.addEventListener('submit', (e) => {
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      
+      // Solo validar si hay contraseña
+      if (password) {
+        if (password !== confirmPassword) {
+          e.preventDefault();
+          Swal.fire({
+            icon: 'error',
+            title: 'Las contraseñas no coinciden',
+            text: 'Verifica que ambas contraseñas sean idénticas',
+            confirmButtonColor: '#2563eb',
+            confirmButtonText: 'Entendido'
+          });
+          return false;
         }
+        
+        if (password.length < 6) {
+          e.preventDefault();
+          Swal.fire({
+            icon: 'warning',
+            title: 'Contraseña muy corta',
+            text: 'La contraseña debe tener al menos 6 caracteres',
+            confirmButtonColor: '#2563eb',
+            confirmButtonText: 'Entendido'
+          });
+          return false;
+        }
+      }
+    });
 
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
-        }
+    function openModal() {
+      document.getElementById('modal').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      modal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
         
   </script>
 </body>
 <script src="cuenta.js"></script>
 
-</html> 
+</html>

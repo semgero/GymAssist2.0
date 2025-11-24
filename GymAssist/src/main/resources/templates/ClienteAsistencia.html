@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="/Styles/asistencia.css"/>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:1024/quality:100/uri:ifs%3A%2F%2FM%2F6293492d-90de-4ff2-8521-44571fe13397/watermark:F/width:1024?csig=AAAAAAAAAAAAAAAAAAAAAOLV6xCRNfqeXx4kabpivLv81cm2L12Fl0_78GK7TPjt&exp=1761598823&osig=AAAAAAAAAAAAAAAAAAAAAO_rfXfN2kovLoSwAcy-QVMbV69lhfqYhD4qPePG-u0-&signer=media-rpc&x-canva-quality=screen_2x" type="image/png">
+  <link rel="icon" href="/Imagenes/icono.png" type="image/png">
 </head>
 <body>
   <!-- Navbar -->
@@ -55,13 +55,10 @@
   <!-- Main -->
  <main class="main-content">
     <h1>Asistencia</h1>
-
-    <!-- 🔴 MENSAJE DE ERROR AÑADIDO AQUÍ -->
     <div th:if="${error}" 
          style="background:#ffdddd; border-left:5px solid #d8000c; padding:12px; margin-top:15px; margin-bottom:15px; border-radius:6px;">
         <p th:text="${error}" style="color:#d8000c; font-weight:bold; margin:0;"></p>
     </div>
-    <!-- 🔴 FIN BLOQUE ERROR -->
 
     <div class="header-grid">
       <div class="card">
@@ -79,7 +76,7 @@
         <form th:action="@{/Api/Cliente/registrar-asistencia}" method="post" class="registro">
           <div>
             <label for="fecha">Fecha</label>
-            <input type="date" id="fecha" name="fecha" required th:value="${T(java.time.LocalDate).now()}"/>
+            <input type="text" id="fecha" name="fecha" required th:value="${T(java.time.LocalDate).now()}" readonly/>
           </div>
           <div>
             <label class="form-label">Músculos trabajados</label>

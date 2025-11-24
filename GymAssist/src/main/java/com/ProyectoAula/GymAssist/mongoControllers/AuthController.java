@@ -53,8 +53,11 @@ public class AuthController {
 
         // Verifica que el usuario no exista previamente
         if (userRepository.findByUsername(username).isPresent()) {
-            // ❌ Usuario ya existe - Mostrar error con SweetAlert
-            return "redirect:/Api/Auth/login?error=true";
+            return "redirect:/Api/Auth/login?usernameExists=true";
+        }
+
+        if (userRepository.findByEmail(email).isPresent()) {
+            return "redirect:/Api/Auth/login?emailExists=true";
         }
 
         if (userRepository.findByEmail(email).isPresent()) {
@@ -66,16 +69,16 @@ public class AuthController {
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        user.setRole("ADMIN"); // Al registrarse es administrador
+        user.setRole("ADMIN");
         userRepository.save(user);
 
-        // Crear admin asociado
         AdminEntity admin = new AdminEntity();
         admin.setId(new org.bson.types.ObjectId());
         admin.setUserId(user.getId());
         adminService.save(admin);
+        admin.setUserId(user.getId());
+        adminService.save(admin);
 
-        // ✅ Registro exitoso - Redirigir a login con mensaje de éxito
         return "redirect:/Api/Auth/login?registered=true";
     }
 }

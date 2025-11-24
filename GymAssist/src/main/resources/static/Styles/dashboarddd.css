@@ -530,6 +530,60 @@ body.sidebar-collapsed .icon {
   transform: scale(1.05);
 }
 
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: var(--accent-light);
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+.plan-list tbody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.plan-list tbody::-webkit-scrollbar-track {
+  background: var(--input-bg);
+  border-radius: 4px;
+}
+
+.plan-list tbody::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.plan-list tbody::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
+}
+
+body.sidebar-collapsed .sidebar {
+  padding: 2rem 0.5rem;
+  align-items: center;
+}
+
 /* ===== CHARTS GRID ===== */
 .charts-grid {
   display: grid;
