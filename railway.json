@@ -6,7 +6,7 @@
     },
     "deploy": {
         "numReplicas": 1,
-        "startCommand": "java -jar target/*.jar",
+        "startCommand": "java -jar target/GymAssist-0.0.1-SNAPSHOT.jar --server.port=$PORT",
         "healthcheckPath": "/",
         "restartPolicyType": "ON_FAILURE"
     }
