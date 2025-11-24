@@ -1,8 +1,10 @@
 {
     "build": {
-        "builder": "NIXPACKS"
+        "builder": "NIXPACKS",
+        "buildCommand": "cd GymAssist && mvn clean package -DskipTests",
+        "buildPath": "GymAssist"
     },
     "deploy": {
-        "startCommand": "java -jar target/*.jar"
+        "startCommand": "cd GymAssist && java -jar target/*.jar"
     }
 }
