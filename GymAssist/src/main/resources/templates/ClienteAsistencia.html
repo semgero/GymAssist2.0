@@ -55,13 +55,10 @@
   <!-- Main -->
  <main class="main-content">
     <h1>Asistencia</h1>
-
-    <!-- 🔴 MENSAJE DE ERROR AÑADIDO AQUÍ -->
     <div th:if="${error}" 
          style="background:#ffdddd; border-left:5px solid #d8000c; padding:12px; margin-top:15px; margin-bottom:15px; border-radius:6px;">
         <p th:text="${error}" style="color:#d8000c; font-weight:bold; margin:0;"></p>
     </div>
-    <!-- 🔴 FIN BLOQUE ERROR -->
 
     <div class="header-grid">
       <div class="card">
@@ -79,7 +76,7 @@
         <form th:action="@{/Api/Cliente/registrar-asistencia}" method="post" class="registro">
           <div>
             <label for="fecha">Fecha</label>
-            <input type="date" id="fecha" name="fecha" required th:value="${T(java.time.LocalDate).now()}"/>
+            <input type="text" id="fecha" name="fecha" required th:value="${T(java.time.LocalDate).now()}" readonly/>
           </div>
           <div>
             <label class="form-label">Músculos trabajados</label>

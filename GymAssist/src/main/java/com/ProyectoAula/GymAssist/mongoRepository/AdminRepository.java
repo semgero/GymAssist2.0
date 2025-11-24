@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
+import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
+
 import org.bson.types.ObjectId;
 
 public interface AdminRepository extends MongoRepository<AdminEntity, ObjectId> {
