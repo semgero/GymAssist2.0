@@ -11,13 +11,17 @@ import java.io.File;
 @Service
 public class ClientePredictionService {
 
-    private static final String MODEL_PATH = "C:/Users/pes20/OneDrive/Documentos/GymAssist2.0/GymAssist/src/main/resources/modeloEntrenado.model";
-    private static final String DATASET_PATH = "C:/Users/pes20/OneDrive/Documentos/GymAssist2.0/GymAssist/src/main/resources/dataset.arff";
+    private static final String MODEL_PATH = "/modeloEntrenado.model";
+    private static final String DATASET_PATH = "/dataset.arff";
 
     public String predecirRenovacion(ClienteFeaturesDTO features) {
         try {
-            // Cargar dataset base para estructura de atributos
-            DataSource source = new DataSource(DATASET_PATH);
+            // Cargar dataset base para estructura de atributos desde el classpath
+            java.io.InputStream datasetStream = getClass().getResourceAsStream(DATASET_PATH);
+            if (datasetStream == null) {
+                throw new RuntimeException("No se encontró el archivo de dataset: " + DATASET_PATH);
+            }
+            DataSource source = new DataSource(datasetStream);
             Instances dataset = source.getDataSet();
             dataset.setClassIndex(dataset.numAttributes() - 1);
 
@@ -35,8 +39,12 @@ public class ClientePredictionService {
             DenseInstance instance = new DenseInstance(1.0, vals);
             instance.setDataset(dataset);
 
-            // Cargar modelo entrenado
-            Classifier model = (Classifier) weka.core.SerializationHelper.read(new File(MODEL_PATH).getAbsolutePath());
+            // Cargar modelo entrenado desde el classpath
+            java.io.InputStream modelStream = getClass().getResourceAsStream(MODEL_PATH);
+            if (modelStream == null) {
+                throw new RuntimeException("No se encontró el archivo del modelo: " + MODEL_PATH);
+            }
+            Classifier model = (Classifier) weka.core.SerializationHelper.read(modelStream);
 
             // Obtener predicción
             double resultado = model.classifyInstance(instance);

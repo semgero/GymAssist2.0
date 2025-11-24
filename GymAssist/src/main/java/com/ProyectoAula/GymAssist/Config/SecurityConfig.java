@@ -54,7 +54,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/Api/Auth/index", "/Api/Auth/login", "/Api/Auth/logout",
-                                "/Api/Auth/register", "/api/features/**", "/api/gym-predicciones/**")
+                                "/Api/Auth/register", "/api/features/**", "/api/gym-predicciones/**", "/actuator/**")
                         .permitAll()
                         .requestMatchers("/Styles/**", "/Imagenes/**", "/Js/**", "/uploads/**", "/content/**")
                         .permitAll()
@@ -126,7 +126,7 @@ public class SecurityConfig {
                     .findFirst()
                     .orElse("");
 
-            HttpSession session = request.getSession(); 
+            HttpSession session = request.getSession();
             String redirectUrl = "/Api/Auth/login";
 
             if ("ROLE_ADMIN".equals(role)) {
