@@ -1,16 +1,25 @@
+/* ================================
+   PREDICCIONES IA - PREMIUM CSS
+   ================================ */
+
+/* Variables de colores premium */
 :root {
-    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --primary-gradient: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
+    --secondary-gradient: linear-gradient(135deg, #2563eb , #3b82f6 );
     --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
     --danger-gradient: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
     --warning-gradient: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
-    --info-gradient: linear-gradient(135deg, #667eea 0%, #00c6ff 100%);
+    --info-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
     
+    --border: #e2e8f0;
+    --bg: #f8fafc;
     --bg-primary: #ffffff;
     --bg-secondary: #f8f9fa;
     --bg-card: #ffffff;
     --text-primary: #2d3748;
-    --text-secondary: #718096;
+    
     --border-color: #e2e8f0;
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -258,7 +267,7 @@ body.theme-dark {
 }
 
 .filter-btn:hover {
-    border-color: #667eea;
+    border-color: #2563eb;
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
@@ -655,23 +664,133 @@ body.theme-dark .recomendacion p {
 .cliente-card:nth-child(4) { animation-delay: 0.2s; }
 .cliente-card:nth-child(5) { animation-delay: 0.25s; }
 
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: var(--accent-light);
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+.plan-list tbody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.plan-list tbody::-webkit-scrollbar-track {
+  background: var(--input-bg);
+  border-radius: 4px;
+}
+
+.plan-list tbody::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.plan-list tbody::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
+}
 /* ================================
-   SCROLLBAR PERSONALIZADA
+   SWEETALERT CUSTOM STYLES
    ================================ */
-.clientes-grid::-webkit-scrollbar {
-    width: 8px;
+.swal-custom-popup {
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
 }
 
-.clientes-grid::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
-    border-radius: 10px;
+.swal-custom-title {
+    font-size: 1.8em !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 10px !important;
 }
 
-.clientes-grid::-webkit-scrollbar-thumb {
-    background: var(--primary-gradient);
-    border-radius: 10px;
+.swal-custom-html {
+    margin: 15px 0 !important;
 }
 
-.clientes-grid::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, #5568d3 0%, #6a3a92 100%);
+.swal-custom-confirm {
+    background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 25px !important;
+    padding: 12px 30px !important;
+    font-size: 1em !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+}
+
+.swal-custom-confirm:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6) !important;
+}
+
+.swal-custom-cancel {
+    background: #e2e8f0 !important;
+    color: #4a5568 !important;
+    border: none !important;
+    border-radius: 25px !important;
+    padding: 12px 30px !important;
+    font-size: 1em !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.swal-custom-cancel:hover {
+    background: #cbd5e0 !important;
+    transform: translateY(-2px) !important;
+}
+
+/* SweetAlert en modo oscuro */
+body.theme-dark .swal2-popup {
+    background: #2d3748 !important;
+    color: #f7fafc !important;
+}
+
+body.theme-dark .swal-custom-title {
+    color: #f7fafc !important;
+}
+
+body.theme-dark .swal-custom-cancel {
+    background: #4a5568 !important;
+    color: #e2e8f0 !important;
+}
+
+body.theme-dark .swal-custom-cancel:hover {
+    background: #5a6778 !important;
+}
+
+/* Animación del icono */
+.swal2-icon {
+    border-width: 3px !important;
+}
+
+.swal2-timer-progress-bar {
+    background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%) !important;
 }
