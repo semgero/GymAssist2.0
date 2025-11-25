@@ -76,16 +76,16 @@ public class MercadoPagoService {
                     .build();
 
             PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                    .success("https://pseudoliberally-unshimmering-stefan.ngrok-free.dev/Api/Payment/success")
-                    .failure("https://pseudoliberally-unshimmering-stefan.ngrok-free.dev/Api/Payment/failure")
-                    .pending("https://pseudoliberally-unshimmering-stefan.ngrok-free.dev/Api/Payment/pending")
+                    .success("https://gymassist.co/Api/Payment/success")
+                    .failure("https://gymassist.co/Api/Payment/failure")
+                    .pending("https://gymassist.co/Api/Payment/pending")
                     .build();
 
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     .payer(payerRequest)
                     .backUrls(backUrls)
-                    .notificationUrl("https://pseudoliberally-unshimmering-stefan.ngrok-free.dev/Api/Payment/webhook")
+                    .notificationUrl("https://gymassist.co/Api/Payment/webhook")
                     .externalReference(cliente.getId().toString()) // ✅ ESTA ES LA CLAVE
                     .metadata(Map.of(
                             "user_id", cliente.getId().toString(),
