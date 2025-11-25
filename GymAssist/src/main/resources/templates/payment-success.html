@@ -4,111 +4,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pago Exitoso - GymAssist</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <link rel="icon" href="/Imagenes/icono.png" type="image/png">
+    <link rel="stylesheet" href="/Styles/payment-success.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .success-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .success-icon {
-            font-size: 80px;
-            color: #28a745;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        p {
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .client-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            text-align: left;
-        }
-
-        .btn-home {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-        }
-
-        .btn-home:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
-    </style>
 </head>
 <body>
+    <!-- Loading Overlay (se oculta después de 2s) -->
+    <div class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Procesando tu pago...</h2>
+        </div>
+    </div>
+
+    <!-- Fondo animado con círculos flotantes -->
+    <div class="background-animation">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+        
+        <!-- Confetti -->
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+    </div>
+
     <div class="success-container">
-        <div class="success-icon">✅</div>
+        <!-- Success Icon -->
+        <div class="success-icon-wrapper">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+        </div>
+
+        <!-- Title & Subtitle -->
         <h1>¡Pago Exitoso!</h1>
-        <p>Tu suscripción ha sido activada correctamente. Ahora tienes acceso completo al gimnasio.</p>
-        
+        <p class="subtitle">
+            Tu suscripción ha sido activada correctamente. Ahora tienes acceso completo al gimnasio y todas sus instalaciones.
+        </p>
+
+        <!-- Client Info Card -->
         <div th:if="${cliente}" class="client-info">
-            <p><strong>Cliente:</strong> <span th:text="${cliente.nombre}"></span></p>
-            <p><strong>Estado:</strong> <span style="color: #28a745; font-weight: bold;">ACTIVO</span></p>
-            <p><strong>Inicio membresía:</strong> <span th:text="${cliente.fechaInicioMembresia}"></span></p>
-            <p><strong>Fin membresía:</strong> <span th:text="${cliente.fechaFinMembresia}"></span></p>
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-user"></i>
+                    Cliente
+                </span>
+                <span class="info-value" th:text="${cliente.nombre}">Nombre del Cliente</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-check-circle"></i>
+                    Estado
+                </span>
+                <span class="status-active">ACTIVO</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-calendar-check"></i>
+                    Inicio
+                </span>
+                <span class="info-value" th:text="${cliente.fechaInicioMembresia}">01/01/2025</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">
+                    <i class="fas fa-calendar-times"></i>
+                    Vencimiento
+                </span>
+                <span class="info-value" th:text="${cliente.fechaFinMembresia}">01/02/2025</span>
+            </div>
         </div>
-        
-        <div th:if="${paymentId}">
-            <p style="font-size: 12px; color: #888;">ID de transacción: <span th:text="${paymentId}"></span></p>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-item">
+                <i class="fas fa-dumbbell"></i>
+                <p>Acceso Total</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-user-friends"></i>
+                <p>Entrenamientos</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-calendar-alt"></i>
+                <p>Sin Límites</p>
+            </div>
         </div>
-        
-        <p><strong>Gracias por confiar en nosotros.</strong></p>
-        
-        <!-- ✅ BOTÓN CORREGIDO - Usa el ID del cliente que acaba de pagar -->
-        <a th:href="@{/Api/Cliente/ClienteHome}" class="btn-home">Ir al Inicio</a>
-        
-        <!-- ✅ OPCIÓN ALTERNATIVA: Forzar logout y login -->
-        <!-- <a th:href="@{/logout}" class="btn-home">Cerrar Sesión y Volver a Entrar</a> -->
+
+        <!-- Transaction ID -->
+        <div th:if="${paymentId}" class="transaction-info">
+            <i class="fas fa-receipt"></i>
+            <span>ID: <span th:text="${paymentId}">MP-12345678</span></span>
+        </div>
+
+        <!-- Thank You Message -->
+        <div class="thank-you">
+            <i class="fas fa-heart"></i>
+            <p>¡Gracias por confiar en nosotros!</p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+            <a th:href="@{/Api/Cliente/ClienteHome}" class="btn-home">
+                <i class="fas fa-home"></i>
+                Ir al Dashboard
+            </a>
+            
+            <!-- Botón opcional para ver rutinas -->
+            <!--
+            <a th:href="@{/Api/Cliente/rutinas}" class="btn-home btn-secondary">
+                <i class="fas fa-running"></i>
+                Ver Mis Rutinas
+            </a>
+            -->
+        </div>
     </div>
 
     <script>
-        // ✅ OPCIONAL: Forzar recarga de sesión después de 2 segundos
+        // Auto-reload después de 3 segundos para actualizar sesión
         setTimeout(() => {
-            console.log('Recargando para actualizar sesión...');
+            console.log('✅ Sesión actualizada correctamente');
+            // Descomenta si necesitas forzar recarga
             // window.location.reload();
-        }, 2000);
+        }, 3000);
+
+        // Reproducir sonido de éxito (opcional)
+        // const successSound = new Audio('/sounds/success.mp3');
+        // successSound.play().catch(e => console.log('No se pudo reproducir el sonido'));
     </script>
 </body>
 </html>
