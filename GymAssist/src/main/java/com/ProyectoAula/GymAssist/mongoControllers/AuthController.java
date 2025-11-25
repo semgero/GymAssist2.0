@@ -29,12 +29,12 @@ public class AuthController {
 
     @GetMapping("/index")
     public String index() {
-        return "redirect:index"; 
+        return "redirect:index";
     }
 
     @GetMapping("/login")
     public String mostrarLoginForm() {
-        return "login"; 
+        return "login";
     }
 
     // ==========================================
@@ -48,9 +48,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registrarUsuario(@RequestParam String username,
-                                @RequestParam String email,
-                                @RequestParam String password) {
+            @RequestParam String email,
+            @RequestParam String password) {
 
+        // Verifica que el usuario no exista previamente
         if (userRepository.findByUsername(username).isPresent()) {
             return "redirect:/Api/Auth/login?usernameExists=true";
         }
@@ -59,6 +60,11 @@ public class AuthController {
             return "redirect:/Api/Auth/login?emailExists=true";
         }
 
+        if (userRepository.findByEmail(email).isPresent()) {
+            return "redirect:/Api/Auth/login?emailExists=true";
+        }
+
+        // Crear nuevo usuario
         UserEntity user = new UserEntity();
         user.setUsername(username);
         user.setEmail(email);
@@ -68,6 +74,8 @@ public class AuthController {
 
         AdminEntity admin = new AdminEntity();
         admin.setId(new org.bson.types.ObjectId());
+        admin.setUserId(user.getId());
+        adminService.save(admin);
         admin.setUserId(user.getId());
         adminService.save(admin);
 

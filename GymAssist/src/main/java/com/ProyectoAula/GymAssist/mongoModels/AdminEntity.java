@@ -3,7 +3,7 @@ package com.ProyectoAula.GymAssist.mongoModels;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
