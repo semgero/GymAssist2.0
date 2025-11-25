@@ -1,4 +1,4 @@
-package com.ProyectoAula.GymAssist.Config;
+/*package com.ProyectoAula.GymAssist.Config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
@@ -7,4 +7,4 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableRedisHttpSession()
 public class RedisSessionConfig {
     
-}
+}*/

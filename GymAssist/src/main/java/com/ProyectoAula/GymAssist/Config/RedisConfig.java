@@ -1,4 +1,4 @@
-package com.ProyectoAula.GymAssist.Config;
+/*package com.ProyectoAula.GymAssist.Config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -43,4 +43,4 @@ public class RedisConfig {
                 .cacheDefaults(config)
                 .build();
     }
-}
+}*/
