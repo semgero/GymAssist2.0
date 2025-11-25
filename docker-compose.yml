@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   gymassist-app:
     image: gymassist2.0:latest
@@ -11,15 +13,13 @@ services:
       - mongo
       - redis
     environment:
-      MONGO_URL: mongodb://mongo:27017/gymassist_nosql
-      REDIS_URL: redis://redis:6379
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/gymassist_nosql
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_REGION: us-east-2
       AWS_BUCKET: ${AWS_BUCKET}
-      MP_ACCESS_TOKEN: ${MP_ACCESS_TOKEN}
-      MP_PUBLIC_KEY: ${MP_PUBLIC_KEY}
-      RAILWAY_PUBLIC_DOMAIN: ${RAILWAY_PUBLIC_DOMAIN:-localhost:8080}
     networks:
       - gymassist-net
 
