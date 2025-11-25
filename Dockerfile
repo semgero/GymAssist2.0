@@ -19,4 +19,5 @@ COPY --from=builder /workspace/GymAssist/target/*.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# ⭐ IMPORTANTE PARA RAILWAY ⭐
+ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT}"]

@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "PoblarBD",
+            "request": "launch",
+            "mainClass": "PoblarBD",
+            "projectName": "GymAssist"
+        },
+        {
+            "type": "java",
+            "name": "PoblarBD",
+            "request": "launch",
+            "mainClass": "com.ProyectoAula.GymAssist.PoblarBD",
+            "projectName": "GymAssist"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-GymAssistApplication<GymAssist>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ProyectoAula.GymAssist.GymAssistApplication",
+            "projectName": "GymAssist",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
