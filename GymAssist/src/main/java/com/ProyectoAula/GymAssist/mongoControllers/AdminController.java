@@ -32,7 +32,6 @@ import com.ProyectoAula.GymAssist.mongoServices.PlanService;
 
 import jakarta.servlet.http.HttpSession;
 
-
 @Controller
 @RequestMapping("/Api/Admin")
 public class AdminController {
