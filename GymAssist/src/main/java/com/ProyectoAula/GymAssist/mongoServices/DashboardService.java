@@ -22,8 +22,12 @@ public class DashboardService {
         private PlanService planService;
 
         public DashboardDTO obtenerDatosDashboard(ObjectId gymId) {
-                // Obtener todos los clientes del gym
-                List<ClientEntity> clientes = clientRepository.findByGymId(gymId);
+                // Obtener todos los planes del gym
+                List<PlanEntity> planes = planService.getPlanesByGimnasioId(gymId);
+                List<ObjectId> planIds = planes.stream().map(PlanEntity::getId).toList();
+                
+                // Obtener todos los clientes del gym a través de los planes
+                List<ClientEntity> clientes = planIds.isEmpty() ? new ArrayList<>() : clientRepository.findByPlanIdIn(planIds);
 
                 // 1. Ingresos del mes actual
                 BigDecimal ingresosMesActual = calcularIngresosMesActual(clientes);

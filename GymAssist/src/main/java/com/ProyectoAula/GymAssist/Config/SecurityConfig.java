@@ -40,13 +40,16 @@ public class SecurityConfig {
     private final AdminRepository adminRepository;
     private final GimnasiosRepository gimnasiosRepository;
     private final ClientRepository clientRepository;
+    private final com.ProyectoAula.GymAssist.mongoRepository.PlanRepository planRepository;
 
     public SecurityConfig(UserRepository userRepository, AdminRepository adminRepository,
-            GimnasiosRepository gimnasiosRepository, ClientRepository clientRepository) {
+            GimnasiosRepository gimnasiosRepository, ClientRepository clientRepository,
+            com.ProyectoAula.GymAssist.mongoRepository.PlanRepository planRepository) {
         this.gimnasiosRepository = gimnasiosRepository;
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
         this.clientRepository = clientRepository;
+        this.planRepository = planRepository;
     }
 
     @Bean
@@ -153,7 +156,10 @@ public class SecurityConfig {
                     Optional<ClientEntity> clienteOpt = clientRepository.findByUsername(username);
                     if (clienteOpt.isPresent()) {
                         ClientEntity cliente = clienteOpt.get();
-                        ObjectId gymId = cliente.getGymId();
+                        ObjectId gymId = null;
+                        if (cliente.getPlanId() != null) {
+                            gymId = planRepository.findById(cliente.getPlanId()).map(com.ProyectoAula.GymAssist.mongoModels.PlanEntity::getGymId).orElse(null);
+                        }
                         session.setAttribute("gymId", gymId);
 
                         switch (cliente.getEstado()) {

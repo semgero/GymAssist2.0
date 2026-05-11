@@ -1,4 +1,4 @@
-/*package com.ProyectoAula.GymAssist.mongoServices;
+package com.ProyectoAula.GymAssist.mongoServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,4 +22,4 @@ public class RedisService {
     public RutinaEntity obtenerRutina(String clave) {
         return (RutinaEntity) redisTemplate.opsForValue().get(clave);
     }
-}*/
+}

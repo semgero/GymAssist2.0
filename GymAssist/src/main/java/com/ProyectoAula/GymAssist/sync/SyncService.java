@@ -144,6 +144,14 @@ public class SyncService {
         entityManager.createNativeQuery("TRUNCATE TABLE fact_asistencia, fact_cliente").executeUpdate();
         entityManager.flush();
 
+        List<PlanEntity> todosLosPlanes = mongoTemplate.findAll(PlanEntity.class);
+        Map<String, String> gymIdPorPlanId = new HashMap<>();
+        for (PlanEntity plan : todosLosPlanes) {
+            if (plan.getId() != null && plan.getGymId() != null) {
+                gymIdPorPlanId.put(plan.getId().toHexString(), plan.getGymId().toHexString());
+            }
+        }
+
         int pagina = 0;
         int tamano = 2000;
         int totalClientes = 0;
@@ -175,7 +183,7 @@ public class SyncService {
                         c.getFechaFinMembresia(),
                         c.getInasistencias(),
                         c.getPlanId() != null ? c.getPlanId().toHexString() : null,
-                        c.getGymId() != null ? c.getGymId().toHexString() : null
+                        c.getPlanId() != null ? gymIdPorPlanId.get(c.getPlanId().toHexString()) : null
                 });
 
                 if (c.getAsistencias() != null) {
@@ -184,7 +192,7 @@ public class SyncService {
                                 c.getId().toHexString(),
                                 a.getFecha(),
                                 a.getMusculos() != null ? limpiar(String.join(", ", a.getMusculos())) : null,
-                                c.getGymId() != null ? c.getGymId().toHexString() : null
+                                c.getPlanId() != null ? gymIdPorPlanId.get(c.getPlanId().toHexString()) : null
                         });
                     }
                 }
@@ -208,13 +216,22 @@ public class SyncService {
 
     @org.springframework.transaction.annotation.Transactional
     private void syncMediciones() {
+        List<PlanEntity> todosLosPlanes = mongoTemplate.findAll(PlanEntity.class);
+        Map<String, String> gymIdPorPlanId = new HashMap<>();
+        for (PlanEntity plan : todosLosPlanes) {
+            if (plan.getId() != null && plan.getGymId() != null) {
+                gymIdPorPlanId.put(plan.getId().toHexString(), plan.getGymId().toHexString());
+            }
+        }
+
         org.springframework.data.mongodb.core.query.Query q = new org.springframework.data.mongodb.core.query.Query();
-        q.fields().include("_id").include("gymId");
+        q.fields().include("_id").include("planId");
         List<ClientEntity> clientes = mongoTemplate.find(q, ClientEntity.class);
         Map<String, String> gymPorCliente = new HashMap<>();
         for (ClientEntity c : clientes) {
-            if (c.getId() != null && c.getGymId() != null) {
-                gymPorCliente.put(c.getId().toHexString(), c.getGymId().toHexString());
+            if (c.getId() != null && c.getPlanId() != null) {
+                String gymIdStr = gymIdPorPlanId.get(c.getPlanId().toHexString());
+                gymPorCliente.put(c.getId().toHexString(), gymIdStr);
             }
         }
 

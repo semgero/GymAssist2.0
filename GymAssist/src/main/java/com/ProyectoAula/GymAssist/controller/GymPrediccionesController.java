@@ -3,6 +3,7 @@ package com.ProyectoAula.GymAssist.controller;
 import com.ProyectoAula.GymAssist.Weka.ClienteFeaturesDTO;
 import com.ProyectoAula.GymAssist.Weka.ClienteFeaturesService;
 import com.ProyectoAula.GymAssist.Weka.ClientePredictionService;
+import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoRepository.ClientRepository;
 import org.bson.types.ObjectId;
@@ -24,6 +25,9 @@ public class GymPrediccionesController {
     private ClientRepository clientRepository;
 
     @Autowired
+    private ClienteService clienteService;
+
+    @Autowired
     private ClienteFeaturesService featuresService;
 
     @Autowired
@@ -39,7 +43,7 @@ public class GymPrediccionesController {
             ObjectId gymObjectId = new ObjectId(gymId);
             
             // Obtener todos los clientes del gimnasio
-            List<ClientEntity> clientes = clientRepository.findByGymId(gymObjectId);
+            List<ClientEntity> clientes = clienteService.listarClientesPorGym(gymObjectId);
             
             if (clientes.isEmpty()) {
                 return ResponseEntity.ok(Map.of(
@@ -221,7 +225,7 @@ public class GymPrediccionesController {
     public ResponseEntity<?> obtenerEstadisticas(@PathVariable String gymId) {
         try {
             ObjectId gymObjectId = new ObjectId(gymId);
-            List<ClientEntity> clientes = clientRepository.findByGymId(gymObjectId);
+            List<ClientEntity> clientes = clienteService.listarClientesPorGym(gymObjectId);
             
             int activos = 0, pendientes = 0, suspendidos = 0;
             int conPagoAlDia = 0;

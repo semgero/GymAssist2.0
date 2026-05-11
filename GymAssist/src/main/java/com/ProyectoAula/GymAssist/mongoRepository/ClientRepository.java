@@ -12,7 +12,7 @@ public interface ClientRepository extends MongoRepository<ClientEntity, ObjectId
 
     ClientEntity findUsernameById(Long id);
 
-    List<ClientEntity> findByGymId(ObjectId gymId);
+    List<ClientEntity> findByPlanIdIn(List<ObjectId> planIds);
 
     Optional<ClientEntity> findByUsername(String username);
 

@@ -120,7 +120,8 @@ public class AdminController {
 
         model.addAttribute("dashboard", dashboardData);
         model.addAttribute("resumen", clienteService.obtenerResumenPorGym(gym.getId()));
-        model.addAttribute("adminId", admin.getId());
+        model.addAttribute("adminId", admin.getId().toHexString());
+        System.out.println("AdminId enviado: " + admin.getId().toHexString());
         model.addAttribute("gymId", gym.getId());
         model.addAttribute("nombreGym", gym.getNombreGymnasio());
 
@@ -185,8 +186,7 @@ public class AdminController {
             @RequestParam Integer telefono,
             @RequestParam String username,
             @RequestParam String password,
-            @RequestParam ObjectId planId,
-            @RequestParam ObjectId gymId) {
+            @RequestParam ObjectId planId) {
 
         PlanEntity plan = planService.getPlanById(planId).orElse(null);
         String mensualidad = plan != null ? plan.getNombre() : "Desconocido";
@@ -195,8 +195,7 @@ public class AdminController {
         nuevoCliente.setFechaIngresoCliente(LocalDate.now()); // solo al crear
 
         // Crear el cliente con el servicio
-        clienteService.crearCliente(nombre, correo, idDocumento, telefono, mensualidad, username, password, gymId,
-                planId);
+        clienteService.crearCliente(nombre, correo, idDocumento, telefono, mensualidad, username, password, planId);
         return "redirect:/Api/Admin/AdminRegister"; // Regresar a AdminHome
     }
 

@@ -47,13 +47,11 @@ public class ClientEntity {
     @BsonProperty("planId")
     private ObjectId planId;
 
-    @BsonProperty("gymId")
-    private ObjectId gymId;
-
     @BsonProperty("username")
     private String username;
 
-    @BsonProperty("password")
+    @org.springframework.data.annotation.Transient
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @BsonProperty("asistencias")
@@ -158,14 +156,6 @@ public class ClientEntity {
 
     public void setPlanId(ObjectId planId) {
         this.planId = planId;
-    }
-
-    public ObjectId getGymId() {
-        return gymId;
-    }
-
-    public void setGymId(ObjectId gymId) {
-        this.gymId = gymId;
     }
 
     public String getUsername() {
@@ -279,7 +269,6 @@ public class ClientEntity {
                 Objects.equals(mensualidad, that.mensualidad) &&
                 Objects.equals(estado, that.estado) &&
                 Objects.equals(planId, that.planId) &&
-                Objects.equals(gymId, that.gymId) &&
                 Objects.equals(password, that.password) &&
                 Objects.equals(asistencias, that.asistencias) &&
                 Objects.equals(inasistencias, that.inasistencias) &&
@@ -290,7 +279,7 @@ public class ClientEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, correo, username, nombre, telefono, idDocumento, mensualidad, estado, planId, gymId,
+        return Objects.hash(id, correo, username, nombre, telefono, idDocumento, mensualidad, estado, planId,
                 password, asistencias, inasistencias, fechaIngresoCliente, fechaInicioMembresia, fechaFinMembresia);
     }
 
@@ -306,7 +295,6 @@ public class ClientEntity {
                 ", mensualidad='" + mensualidad + '\'' +
                 ", activo=" + estado +
                 ", planId=" + planId +
-                ", gymId=" + gymId +
                 ", password='" + password + '\'' +
                 ", asistencias=" + asistencias +
                 ", inasistencias=" + inasistencias +

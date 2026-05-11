@@ -122,8 +122,11 @@ public class ClientController {
         String username = principal.getName(); // El usuario logueado
         ClientEntity cliente = clienteService.buscarPorUsername(username);
 
-        ObjectId gymId = cliente.getGymId();
-        Optional<GimnasiosEntity> gymOpt = gimnasiosServices.getGymById(gymId);
+        ObjectId gymId = null;
+        if (cliente.getPlanId() != null) {
+            gymId = planService.getPlanById(cliente.getPlanId()).map(PlanEntity::getGymId).orElse(null);
+        }
+        Optional<GimnasiosEntity> gymOpt = gymId != null ? gimnasiosServices.getGymById(gymId) : Optional.empty();
 
         String nombreGimnasio = gymOpt.map(GimnasiosEntity::getNombreGymnasio)
                 .orElse("Gimnasio no encontrado");

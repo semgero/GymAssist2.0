@@ -43,7 +43,7 @@ public class ClienteService {
     }
 
     public void crearCliente(String nombre, String correo, String idDocumento, Integer telefono, String mensualidad,
-            String username, String password, ObjectId gymId, ObjectId planId) {
+            String username, String password, ObjectId planId) {
 
         if (userRepository.existsByEmail(correo)) {
             throw new RuntimeException("El correo electrónico ya está en uso.");
@@ -69,7 +69,6 @@ public class ClienteService {
         cliente.setPassword(encodedPassword);
         cliente.setPlanId(planId);
         cliente.setEstado(EstadoCliente.PENDIENTE);
-        cliente.setGymId(gymId);
         LocalDate fechaIngreso = LocalDate.now();
         cliente.setFechaIngresoCliente(fechaIngreso);
         LocalDate fechaInicio = LocalDate.now();
@@ -88,7 +87,10 @@ public class ClienteService {
     }
 
     public List<ClientEntity> listarClientesPorGym(ObjectId gymId) {
-        return clientRepository.findByGymId(gymId);
+        List<PlanEntity> planes = planRepository.findByGymId(gymId);
+        if (planes.isEmpty()) return List.of();
+        List<ObjectId> planIds = planes.stream().map(PlanEntity::getId).toList();
+        return clientRepository.findByPlanIdIn(planIds);
     }
 
     public ClientEntity buscarClientePorId(ObjectId id) {
@@ -161,7 +163,7 @@ public class ClienteService {
     }
 
     public ClienteResumenDTO obtenerResumenPorGym(ObjectId gymId) {
-        List<ClientEntity> clientes = clientRepository.findByGymId(gymId);
+        List<ClientEntity> clientes = listarClientesPorGym(gymId);
 
         long activosYPendientes = clientes.stream()
                 .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.ACTIVO

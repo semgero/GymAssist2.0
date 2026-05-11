@@ -6,16 +6,11 @@ import com.ProyectoAula.GymAssist.mongoModels.MedicionesEntity;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.ProyectoAula.GymAssist.mongoModels.Intent;
-import java.util.Random;
-
-
-
 @Service
 public class ChatbotService {
 
     @Autowired
-    private IntentService intentService;
+    private GroqApiClient groqApiClient;
 
     @Autowired
     private ClienteService clienteService;
@@ -28,56 +23,46 @@ public class ChatbotService {
 
     public String generateResponse(String message, String username) {
 
-        Intent intent = intentService.detectIntent(message);
         ClientEntity cliente = clienteService.buscarPorUsername(username);
-
-        if (intent == null) {
-            return "🤔 No entendí. Prueba con: plan, imc, estado";
+        
+        String planNombre = "Ninguno";
+        if (cliente.getPlanId() != null) {
+            planNombre = planService.obtenerNombreDelPlan(cliente.getPlanId());
         }
 
-        String tag = intent.getTag();
+        String estadoFisico = obtenerEstadoFisico(cliente);
+        int numeroAsistencias = (cliente.getAsistencias() != null) ? cliente.getAsistencias().size() : 0;
 
-        switch (tag) {
+        String systemPrompt = String.format(
+            "Eres un asistente de inteligencia artificial amigable, útil y experto llamado GymAssistBot. " +
+            "Estás diseñado para ayudar a los clientes del gimnasio GymAssist. " +
+            "Actualmente estás hablando con el cliente: %s. " +
+            "Información del cliente:\n" +
+            "- Plan actual: %s\n" +
+            "- %s\n" +
+            "- Total de asistencias al gimnasio: %d\n\n" +
+            "Instrucciones:\n" +
+            "1. Puedes tener conversaciones generales y resolver dudas de cualquier tipo.\n" +
+            "2. Sin embargo, si te preguntan sobre su cuenta, plan, asistencias, estado físico o gimnasio, utiliza la información proporcionada.\n" +
+            "3. Mantén tus respuestas concisas, amigables y motivadoras (usa emojis apropiados).\n" +
+            "4. Habla siempre en español.",
+            cliente.getNombre(), planNombre, estadoFisico, numeroAsistencias
+        );
 
-            case "SALUDO":
-                return getRandom(intent.getResponses()) +
-                       "\n👤 " + cliente.getNombre();
-
-            case "PLAN":
-                return "💳 Tu plan es: " +
-                        planService.obtenerNombreDelPlan(cliente.getPlanId());
-
-            case "IMC":
-                return obtenerIMC(cliente);
-
-            default:
-                return getRandom(intent.getResponses());
-        }
+        return groqApiClient.getChatCompletion(systemPrompt, message);
     }
 
-    private String getRandom(List<String> responses) {
-        return responses.get(new Random().nextInt(responses.size()));
-    }
-
-    private String obtenerIMC(ClientEntity cliente) {
-
-        Optional<MedicionesEntity> ultima =
-                medicionesService.obtenerUltimaMedicion(cliente.getId());
+    private String obtenerEstadoFisico(ClientEntity cliente) {
+        Optional<MedicionesEntity> ultima = medicionesService.obtenerUltimaMedicion(cliente.getId());
 
         if (ultima.isEmpty()) {
-            return "⚠️ No tienes mediciones registradas.";
+            return "El cliente no tiene mediciones registradas actualmente.";
         }
 
         MedicionesEntity m = ultima.get();
-
-        double imc = medicionesService.calcularIMC(
-                m.getPeso(),
-                m.getEstatura()
-        );
-
+        double imc = medicionesService.calcularIMC(m.getPeso(), m.getEstatura());
         String resultado = medicionesService.interpretarIMC(imc);
 
-        return "📊 IMC: " + String.format("%.2f", imc) +
-               "\n📌 Estado: " + resultado;
+        return String.format("Último IMC registrado: %.2f (Estado: %s).", imc, resultado);
     }
 }
