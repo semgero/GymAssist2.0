@@ -4,6 +4,8 @@ import org.bson.types.ObjectId;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.context.event.EventListener;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity.Asistencia;
@@ -46,11 +48,11 @@ public class ClienteService {
             String username, String password, ObjectId planId) {
 
         if (userRepository.existsByEmail(correo)) {
-            throw new RuntimeException("El correo electrónico ya está en uso.");
+            throw new RuntimeException("El correo electronico ya esta en uso.");
         }
 
         if (userRepository.existsByUsername(username)) {
-            throw new RuntimeException("El nombre de usuario ya está en uso.");
+            throw new RuntimeException("El nombre de usuario ya esta en uso.");
         }
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -165,9 +167,12 @@ public class ClienteService {
     public ClienteResumenDTO obtenerResumenPorGym(ObjectId gymId) {
         List<ClientEntity> clientes = listarClientesPorGym(gymId);
 
-        long activosYPendientes = clientes.stream()
-                .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.ACTIVO
-                        || c.getEstado() == ClientEntity.EstadoCliente.PENDIENTE)
+        long activos = clientes.stream()
+                .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.ACTIVO)
+                .count();
+
+        long pendientes = clientes.stream()
+                .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.PENDIENTE)
                 .count();
 
         long suspendidos = clientes.stream()
@@ -176,7 +181,7 @@ public class ClienteService {
 
         long total = clientes.size();
 
-        return new ClienteResumenDTO(activosYPendientes, suspendidos, total);
+        return new ClienteResumenDTO(activos, pendientes, suspendidos, total);
     }
 
     public void actualizarCliente(ClientEntity clienteActualizado) {
@@ -192,11 +197,11 @@ public class ClienteService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         if (!nuevoCorreo.equalsIgnoreCase(cliente.getCorreo()) && userRepository.existsByEmail(nuevoCorreo)) {
-            throw new RuntimeException("El correo ya está registrado.");
+            throw new RuntimeException("El correo ya esta registrado.");
         }
 
         if (!nuevoUsername.equalsIgnoreCase(cliente.getUsername()) && userRepository.existsByUsername(nuevoUsername)) {
-            throw new RuntimeException("El nombre de usuario ya está en uso.");
+            throw new RuntimeException("El nombre de usuario ya esta en uso.");
         }
 
         cliente.setCorreo(nuevoCorreo);
@@ -215,6 +220,7 @@ public class ClienteService {
         clientRepository.save(cliente);
     }
 
+    @EventListener(ApplicationReadyEvent.class)
     @Scheduled(cron = "0 0 6 * * ?")
     public void verificarSuscripcionesExpiradas() {
         try {
@@ -225,22 +231,22 @@ public class ClienteService {
 
             for (ClientEntity cliente : clientesActivos) {
                 if (cliente.getFechaFinMembresia() != null &&
-                        cliente.getFechaFinMembresia().isBefore(hoy)) {
+                        !cliente.getFechaFinMembresia().isAfter(hoy)) {
 
                     cliente.setEstado(ClientEntity.EstadoCliente.PENDIENTE);
                     cliente.setSubscriptionStatus("PENDING");
                     clientRepository.save(cliente);
 
                     expiradosCount++;
-                    logger.info("⚠️ Suscripción expirada para: {} (Fecha fin: {})",
+                    logger.info("Suscripcion expirada para: {} (Fecha fin: {})",
                             cliente.getNombre(), cliente.getFechaFinMembresia());
                 }
             }
 
             if (expiradosCount > 0) {
-                logger.info("✅ {} suscripciones expiradas actualizadas a PENDIENTE", expiradosCount);
+                logger.info("{} suscripciones expiradas actualizadas a PENDIENTE", expiradosCount);
             } else {
-                logger.info("✅ No hay suscripciones expiradas hoy");
+                logger.info("No hay suscripciones expiradas hoy");
             }
 
         } catch (Exception e) {
@@ -251,7 +257,7 @@ public class ClienteService {
     public String verificarExpiracionesManualmente() {
         try {
             verificarSuscripcionesExpiradas();
-            return "Verificación ejecutada exitosamente";
+            return "Verificacion ejecutada exitosamente";
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }

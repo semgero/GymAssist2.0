@@ -79,7 +79,7 @@
         <!-- Power BI Dashboard -->
         <div class="powerbi-container" style="width: 100%; display: flex; justify-content: center; padding: 20px 0;">
             <iframe title="GymAssistBI" width="100%" height="800"
-                th:src="@{'https://app.powerbi.com/reportEmbed?reportId=3c12af2b-7a75-40a8-bb30-323965fb1ff4&autoAuth=true&ctid=9d12bf3f-e4f6-47ab-912f-1a2f0fc48aa4&filter=dim_gimnasio/id_admin eq \'' + adminId + '\''}"
+                th:src="${'https://app.powerbi.com/reportEmbed?reportId=3c12af2b-7a75-40a8-bb30-323965fb1ff4&autoAuth=true&ctid=9d12bf3f-e4f6-47ab-912f-1a2f0fc48aa4&filter=dim_gimnasio%2Fid_gimnasio%20eq%20%27' + gymId + '%27'}"
                 frameborder="0" allowFullScreen="true"
                 style="border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
             </iframe>

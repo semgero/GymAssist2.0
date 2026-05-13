@@ -125,6 +125,9 @@ public class AdminController {
         model.addAttribute("gymId", gym.getId());
         model.addAttribute("nombreGym", gym.getNombreGymnasio());
 
+        System.out.println("GymId enviado: " + gym.getId().toHexString());
+        System.out.println("AdminId: " + admin.getId().toHexString());
+
         return "Dashboard";
     }
 

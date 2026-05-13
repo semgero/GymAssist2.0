@@ -156,6 +156,16 @@ public class SecurityConfig {
                     Optional<ClientEntity> clienteOpt = clientRepository.findByUsername(username);
                     if (clienteOpt.isPresent()) {
                         ClientEntity cliente = clienteOpt.get();
+                        
+                        // Verificación de expiración al momento de iniciar sesión
+                        if (cliente.getEstado() == ClientEntity.EstadoCliente.ACTIVO && 
+                            cliente.getFechaFinMembresia() != null && 
+                            !cliente.getFechaFinMembresia().isAfter(java.time.LocalDate.now())) {
+                                cliente.setEstado(ClientEntity.EstadoCliente.PENDIENTE);
+                                cliente.setSubscriptionStatus("PENDING");
+                                clientRepository.save(cliente);
+                        }
+
                         ObjectId gymId = null;
                         if (cliente.getPlanId() != null) {
                             gymId = planRepository.findById(cliente.getPlanId()).map(com.ProyectoAula.GymAssist.mongoModels.PlanEntity::getGymId).orElse(null);

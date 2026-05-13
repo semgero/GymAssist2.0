@@ -53,7 +53,11 @@ public class ClientController {
     @GetMapping("/ClienteHome")
     public String ClienteHome(Model model, Principal principal) {
         String username = principal.getName();
-        ClientEntity cliente = clienteService.buscarPorUsername(username); // tu método para encontrar al cliente
+        ClientEntity cliente = clienteService.buscarPorUsername(username);
+
+        if (cliente.getEstado() == ClientEntity.EstadoCliente.PENDIENTE) {
+            return "redirect:/Api/Cliente/ClientePago";
+        }
 
         LocalDate ultimaFecha = cliente.getAsistencias().isEmpty()
                 ? null
@@ -66,7 +70,11 @@ public class ClientController {
     }
 
     @GetMapping("/ClienteRutinas")
-    public String ClienteRutinas() {
+    public String ClienteRutinas(Principal principal) {
+        ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
+        if (cliente.getEstado() == ClientEntity.EstadoCliente.PENDIENTE) {
+            return "redirect:/Api/Cliente/ClientePago";
+        }
         return "ClienteRutinas";
     }
 
@@ -74,6 +82,10 @@ public class ClientController {
     public String ClienteCuenta(Model model, Principal principal) {
         String username = principal.getName(); // obtiene el username del usuario logueado
         ClientEntity cliente = clienteService.buscarPorUsername(username); // tu método para encontrar al cliente
+
+        if (cliente.getEstado() == ClientEntity.EstadoCliente.PENDIENTE) {
+            return "redirect:/Api/Cliente/ClientePago";
+        }
 
         // Obtiene el nombre del plan (si tiene uno)
         String nombrePlan = planService.obtenerNombreDelPlan(cliente.getPlanId());
@@ -92,12 +104,15 @@ public class ClientController {
         String nombrePlan = planService.obtenerNombreDelPlan(cliente.getPlanId());
         String planPrecio = planService.obtenerPrecioDelPlan(cliente.getPlanId());
         PlanEntity plan = planService.getPlanById(cliente.getPlanId())
-                .orElseThrow(() -> new RuntimeException("Plan not found for client")); 
+                .orElseThrow(() -> new RuntimeException("Plan not found for client"));
+
+        List<PlanEntity> planesDisponibles = planService.getPlanesByGimnasioId(plan.getGymId());
 
         model.addAttribute("cliente", cliente);
         model.addAttribute("nombrePlan", nombrePlan);
         model.addAttribute("planPrecio", planPrecio);
         model.addAttribute("plan", plan);
+        model.addAttribute("planesDisponibles", planesDisponibles);
         return "ClientePago"; // plantilla ClienteCuenta.html
     }
 
@@ -117,10 +132,29 @@ public class ClientController {
         }
     }
 
+    @PostMapping("/cambiar-plan")
+    public String cambiarPlan(@RequestParam String nuevoPlanId, Principal principal,
+            RedirectAttributes redirectAttributes) {
+        try {
+            ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
+            cliente.setPlanId(new ObjectId(nuevoPlanId));
+            clienteService.actualizarCliente(cliente);
+            redirectAttributes.addFlashAttribute("exitoPlan",
+                    "Plan actualizado correctamente. Ya puedes proceder con el pago.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorPlan", "Hubo un error al actualizar el plan.");
+        }
+        return "redirect:/Api/Cliente/ClientePago";
+    }
+
     @GetMapping("/ClienteAsistencia")
     public String asistencia(Model model, Principal principal) {
         String username = principal.getName(); // El usuario logueado
         ClientEntity cliente = clienteService.buscarPorUsername(username);
+
+        if (cliente.getEstado() == ClientEntity.EstadoCliente.PENDIENTE) {
+            return "redirect:/Api/Cliente/ClientePago";
+        }
 
         ObjectId gymId = null;
         if (cliente.getPlanId() != null) {
@@ -139,28 +173,32 @@ public class ClientController {
     }
 
     @PostMapping("/registrar-asistencia")
-public String registrarAsistencia(@RequestParam("fecha") String fechaStr,
-                                  @RequestParam(value = "musculos", required = false) List<String> musculos,
-                                  Principal principal,
-                                  RedirectAttributes redirectAttributes) {
+    public String registrarAsistencia(@RequestParam("fecha") String fechaStr,
+            @RequestParam(value = "musculos", required = false) List<String> musculos,
+            Principal principal,
+            RedirectAttributes redirectAttributes) {
 
-    // Validación: si no seleccionó nada → error
-    if (musculos == null || musculos.isEmpty()) {
-        redirectAttributes.addFlashAttribute("error", "Debes seleccionar al menos un músculo trabajado.");
+        // Validación: si no seleccionó nada → error
+        if (musculos == null || musculos.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Debes seleccionar al menos un músculo trabajado.");
+            return "redirect:/Api/Cliente/ClienteAsistencia";
+        }
+
+        ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
+        LocalDate fecha = LocalDate.parse(fechaStr);
+
+        clienteService.registrarAsistencia(cliente.getId(), fecha, musculos);
         return "redirect:/Api/Cliente/ClienteAsistencia";
     }
-
-    ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
-    LocalDate fecha = LocalDate.parse(fechaStr);
-
-    clienteService.registrarAsistencia(cliente.getId(), fecha, musculos);
-    return "redirect:/Api/Cliente/ClienteAsistencia";
-}
-
 
     @GetMapping("/Clienteimc")
     public String mostrarFormularioIMC(Model model, Principal principal) {
         ClientEntity cliente = clienteService.buscarPorUsername(principal.getName());
+
+        if (cliente.getEstado() == ClientEntity.EstadoCliente.PENDIENTE) {
+            return "redirect:/Api/Cliente/ClientePago";
+        }
+
         ObjectId clienteId = cliente.getId();
 
         Optional<MedicionesEntity> ultimaMedicion = medicionesService.obtenerUltimaMedicion(clienteId);

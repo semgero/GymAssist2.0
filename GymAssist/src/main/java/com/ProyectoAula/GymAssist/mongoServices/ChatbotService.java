@@ -34,7 +34,7 @@ public class ChatbotService {
         int numeroAsistencias = (cliente.getAsistencias() != null) ? cliente.getAsistencias().size() : 0;
 
         String systemPrompt = String.format(
-            "Eres un asistente de inteligencia artificial amigable, útil y experto llamado GymAssistBot. " +
+            "Eres un asistente de inteligencia artificial amigable, servicial y experto llamado GymAssistBot. " +
             "Estás diseñado para ayudar a los clientes del gimnasio GymAssist. " +
             "Actualmente estás hablando con el cliente: %s. " +
             "Información del cliente:\n" +

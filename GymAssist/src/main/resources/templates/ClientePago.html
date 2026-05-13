@@ -134,6 +134,24 @@
                     <a th:href="@{/Api/Payment/checkout}" class="btn-pay-button">
                         <i class="fas fa-shopping-cart"></i> Realizar Pago
                     </a>
+
+                    <!-- Sección para cambiar de plan -->
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+                        <h4><i class="fas fa-exchange-alt"></i> ¿Deseas cambiar de plan?</h4>
+                        <form action="/Api/Cliente/cambiar-plan" method="post" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+                            <select name="nuevoPlanId" class="form-group" style="padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--fg); width: 100%;" required>
+                                <option value="" disabled selected>Selecciona un nuevo plan...</option>
+                                <option th:each="p : ${planesDisponibles}" 
+                                        th:value="${p.id}" 
+                                        th:text="${p.nombre} + ' - $' + ${p.precio} + ' / ' + ${p.duracion} + ' meses'"
+                                        th:if="${p.id != cliente.planId}">
+                                </option>
+                            </select>
+                            <button type="submit" class="btn-pay-button" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 0.95rem; padding: 0.8rem;">
+                                <i class="fas fa-sync-alt"></i> Actualizar Plan
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
                  <div id="history">
@@ -277,6 +295,30 @@
                 }).then(() => {
                     // Limpiar URL después de mostrar el alert
                     window.history.replaceState({}, document.title, window.location.pathname);
+                });
+            }
+
+            // ===== SWEETALERT PARA CAMBIO DE PLAN =====
+            const exitoPlan = "[[${exitoPlan}]]";
+            const errorPlan = "[[${errorPlan}]]";
+
+            if (exitoPlan && exitoPlan !== 'null' && exitoPlan !== '') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Plan Actualizado',
+                    text: exitoPlan,
+                    confirmButtonColor: '#2563eb',
+                    customClass: { popup: 'animated-popup' }
+                });
+            }
+
+            if (errorPlan && errorPlan !== 'null' && errorPlan !== '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorPlan,
+                    confirmButtonColor: '#2563eb',
+                    customClass: { popup: 'animated-popup' }
                 });
             }
         });
