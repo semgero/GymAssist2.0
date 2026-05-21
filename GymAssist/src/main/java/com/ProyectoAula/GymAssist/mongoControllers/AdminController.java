@@ -38,8 +38,10 @@ public class AdminController {
 
     @Autowired
     private HttpSession httpSession;
+
     @Autowired
     private DashboardService dashboardService;
+    
     private final ClienteService clienteService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
