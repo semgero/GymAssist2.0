@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="/Imagenes/icono.png" type="image/png">
+    <title>GymAssist - Iniciar Sesión</title>
+    <link rel="stylesheet" href="/Styles/loginN.css">
+</head>
+<body>
+  <!-- Fondo animado con círculos flotantes -->
+  <div class="background-animation">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+  </div>
+
+  <!-- Botón de regreso -->
+  <a th:href="@{/}">
+    <button class="back-button">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+  </a>
+
+  <!-- Container del login/register -->
+  <div class="container" id="container">
+    <!-- FORMULARIO DE REGISTRO -->
+    <div class="form-container sign-up">
+      <form th:action="@{/Api/Auth/register}" method="post">
+        <img src="/Imagenes/icono.png" class="logo" alt="Logo del gimnasio">         
+        <h1>Register</h1>
+        <input type="text" name="username" placeholder="Usuario" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <input type="password" name="confirmPassword" placeholder="Confirmar contraseña" required>
+        <button type="submit" class="btn">Registrar</button>
+      </form>
+    </div>
+
+    <!-- FORMULARIO DE LOGIN -->
+    <div class="form-container sign-in">
+      <form th:action="@{/Api/Auth/login}" method="post">
+        <img src="/Imagenes/icono.png" class="logo" alt="Logo del gimnasio">
+        <h1>Login</h1>
+        <input type="text" name="username" placeholder="Usuario" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <button type="submit" class="btn">Iniciar Sesion</button>
+      </form>
+    </div>
+
+    <!-- PANEL TOGGLE -->
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class="toggle-panel toggle-left">
+          <h1>¡Bienvenido de nuevo!</h1>
+          <p>Introduzca sus datos personales para utilizar todas las funciones del sitio</p>
+          <button class="hidden" id="login">Iniciar sesion</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h1>Bienvenido a GymAssist!</h1>
+          <p>
+            ¿Aún no estás registrado? Ingresa aquí y forma parte de nuestro equipo
+          </p>
+          <button class="hidden" id="register">Registrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    
+    const container = document.getElementById("container");
+    const registerBtn = document.getElementById("register");
+    const loginBtn = document.getElementById("login");
+
+    registerBtn.addEventListener("click", () => {
+      container.classList.add("active");
+    });
+
+    loginBtn.addEventListener("click", () => {
+      container.classList.remove("active");
+    });
+    
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      // Obtener parámetros de URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const error = urlParams.get('error');
+      const success = urlParams.get('success');
+      const registered = urlParams.get('registered');
+      
+      // ❌ ERROR en LOGIN o REGISTER
+      if (error === 'true') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de Autenticación',
+          text: 'El usuario o la contraseña son incorrectos. Por favor, verifica tus datos.',
+          confirmButtonColor: '#2563eb',
+          confirmButtonText: '<i class="fas fa-times"></i> Intentar de nuevo',
+          customClass: {
+            popup: 'animated-popup',
+            confirmButton: 'btn-confirm-premium'
+          },
+          buttonsStyling: false,
+          backdrop: 'rgba(0,0,0,0.7)'
+        });
+      }
+      
+      // ✅ ÉXITO en LOGIN
+      if (success === 'true') {
+        Swal.fire({
+          icon: 'success',
+          title: '¡Inicio de Sesión Exitoso!',
+          text: 'Bienvenido a GymAssist',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          customClass: {
+            popup: 'animated-popup'
+          },
+          backdrop: 'rgba(0,0,0,0.7)',
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+      }
+      
+      // ✅ REGISTRO EXITOSO
+      if (registered === 'true') {
+        // Mostrar el panel de login automáticamente
+        container.classList.remove("active");
+        
+        Swal.fire({
+          icon: 'success',
+          title: '¡Registro Exitoso!',
+          text: 'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.',
+          confirmButtonColor: '#2563eb',
+          confirmButtonText: '<i class="fas fa-check"></i> Iniciar Sesión',
+          customClass: {
+            popup: 'animated-popup',
+            confirmButton: 'btn-confirm-premium'
+          },
+          buttonsStyling: false,
+          backdrop: 'rgba(0,0,0,0.7)'
+        });
+      }
+    });
+  </script>
+</body>
+</html>

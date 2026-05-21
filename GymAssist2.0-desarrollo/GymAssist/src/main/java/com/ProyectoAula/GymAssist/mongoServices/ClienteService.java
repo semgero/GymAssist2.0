@@ -1,0 +1,265 @@
+package com.ProyectoAula.GymAssist.mongoServices;
+
+import org.bson.types.ObjectId;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.context.event.EventListener;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
+import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
+import com.ProyectoAula.GymAssist.mongoModels.ClientEntity.Asistencia;
+import com.ProyectoAula.GymAssist.mongoModels.ClientEntity.EstadoCliente;
+import com.ProyectoAula.GymAssist.mongoModels.ClienteResumenDTO;
+import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
+import com.ProyectoAula.GymAssist.mongoRepository.AdminRepository;
+import com.ProyectoAula.GymAssist.mongoRepository.ClientRepository;
+import com.ProyectoAula.GymAssist.mongoRepository.PlanRepository;
+import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ClienteService {
+
+    private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final PlanRepository planRepository;
+    private final AdminRepository adminRepository;
+    private static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
+
+    public ClienteService(ClientRepository clientRepository, UserRepository userRepository,
+            PasswordEncoder passwordEncoder, PlanRepository planRepository, AdminRepository adminRepository) {
+        this.clientRepository = clientRepository;
+        this.planRepository = planRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.adminRepository = adminRepository;
+    }
+
+    public void crearCliente(String nombre, String correo, String idDocumento, Integer telefono, String mensualidad,
+            String username, String password, ObjectId planId) {
+
+        if (userRepository.existsByEmail(correo)) {
+            throw new RuntimeException("El correo electronico ya esta en uso.");
+        }
+
+        if (userRepository.existsByUsername(username)) {
+            throw new RuntimeException("El nombre de usuario ya esta en uso.");
+        }
+
+        String encodedPassword = passwordEncoder.encode(password);
+
+        PlanEntity plan = planRepository.findById(planId)
+                .orElseThrow(() -> new RuntimeException("El plan no existe."));
+
+        int duracionMeses = plan.getDuracion();
+        ClientEntity cliente = new ClientEntity();
+        cliente.setNombre(nombre);
+        cliente.setCorreo(correo);
+        cliente.setIdDocumento(idDocumento);
+        cliente.setTelefono(telefono);
+        cliente.setMensualidad(mensualidad);
+        cliente.setUsername(username);
+        cliente.setPassword(encodedPassword);
+        cliente.setPlanId(planId);
+        cliente.setEstado(EstadoCliente.PENDIENTE);
+        LocalDate fechaIngreso = LocalDate.now();
+        cliente.setFechaIngresoCliente(fechaIngreso);
+        LocalDate fechaInicio = LocalDate.now();
+        LocalDate fechaFin = fechaInicio.plusMonths(duracionMeses);
+        cliente.setFechaInicioMembresia(fechaInicio);
+        cliente.setFechaFinMembresia(fechaFin);
+
+        clientRepository.save(cliente);
+
+        UserEntity user = new UserEntity();
+        user.setUsername(username);
+        user.setEmail(correo);
+        user.setPassword(encodedPassword);
+        user.setRole("CLIENTE");
+        userRepository.save(user);
+    }
+
+    public List<ClientEntity> listarClientesPorGym(ObjectId gymId) {
+        List<PlanEntity> planes = planRepository.findByGymId(gymId);
+        if (planes.isEmpty()) return List.of();
+        List<ObjectId> planIds = planes.stream().map(PlanEntity::getId).toList();
+        return clientRepository.findByPlanIdIn(planIds);
+    }
+
+    public ClientEntity buscarClientePorId(ObjectId id) {
+        return clientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + id));
+    }
+
+    public void actualizarCliente(ObjectId id, String nombre, String correo, String telefono, String mensualidad,
+            String username, String password) {
+        ClientEntity cliente = buscarClientePorId(id);
+
+        UserEntity existingUser = userRepository.findByUsername(cliente.getUsername())
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado con el nombre de usuario: " + cliente.getUsername()));
+
+        cliente.setCorreo(correo);
+        cliente.setTelefono(Integer.valueOf(telefono));
+        cliente.setMensualidad(mensualidad);
+        cliente.setUsername(username);
+        clientRepository.save(cliente);
+
+        existingUser.setEmail(correo);
+        existingUser.setUsername(username);
+        if (password != null && !password.isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(password));
+        }
+        userRepository.save(existingUser);
+    }
+
+    public void cambiarEstadoCliente(ObjectId id, EstadoCliente nuevoEstado) {
+        ClientEntity cliente = buscarClientePorId(id);
+        cliente.setEstado(nuevoEstado);
+        clientRepository.save(cliente);
+    }
+
+    public void registrarAsistencia(ObjectId clienteId, LocalDate fecha, List<String> musculos) {
+        ClientEntity cliente = buscarClientePorId(clienteId);
+
+        Optional<LocalDate> ultimaFechaOptional = cliente.getAsistencias().stream()
+                .map(Asistencia::getFecha)
+                .max(Comparator.naturalOrder());
+
+        if (ultimaFechaOptional.isPresent()) {
+            LocalDate ultimaFecha = ultimaFechaOptional.get();
+            long diasEntre = ChronoUnit.DAYS.between(ultimaFecha, fecha);
+
+            if (diasEntre > 1) {
+                int inasistenciasNuevas = (int) (diasEntre - 1); // no se cuenta el día actual
+                cliente.setInasistencias(cliente.getInasistencias() + inasistenciasNuevas);
+            }
+        }
+
+        Asistencia asistencia = new Asistencia();
+        asistencia.setFecha(fecha);
+        asistencia.setMusculos(musculos);
+        cliente.getAsistencias().add(asistencia);
+
+        clientRepository.save(cliente);
+    }
+
+    public void contarInasistencia(ObjectId clienteId) {
+        ClientEntity cliente = buscarClientePorId(clienteId);
+        cliente.setInasistencias(cliente.getInasistencias() + 1);
+        clientRepository.save(cliente);
+    }
+
+    public ClientEntity buscarPorUsername(String username) {
+        return clientRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con username: " + username));
+    }
+
+    public ClienteResumenDTO obtenerResumenPorGym(ObjectId gymId) {
+        List<ClientEntity> clientes = listarClientesPorGym(gymId);
+
+        long activos = clientes.stream()
+                .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.ACTIVO)
+                .count();
+
+        long pendientes = clientes.stream()
+                .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.PENDIENTE)
+                .count();
+
+        long suspendidos = clientes.stream()
+                .filter(c -> c.getEstado() == ClientEntity.EstadoCliente.SUSPENDIDO)
+                .count();
+
+        long total = clientes.size();
+
+        return new ClienteResumenDTO(activos, pendientes, suspendidos, total);
+    }
+
+    public void actualizarCliente(ClientEntity clienteActualizado) {
+        clientRepository.save(clienteActualizado);
+    }
+
+    public void actualizarDatosPersonales(String nuevoCorreo, String nuevoUsername, String nuevaPassword,
+            String usernameActual) {
+        ClientEntity cliente = clientRepository.findByUsername(usernameActual)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
+        UserEntity user = userRepository.findByUsername(usernameActual)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (!nuevoCorreo.equalsIgnoreCase(cliente.getCorreo()) && userRepository.existsByEmail(nuevoCorreo)) {
+            throw new RuntimeException("El correo ya esta registrado.");
+        }
+
+        if (!nuevoUsername.equalsIgnoreCase(cliente.getUsername()) && userRepository.existsByUsername(nuevoUsername)) {
+            throw new RuntimeException("El nombre de usuario ya esta en uso.");
+        }
+
+        cliente.setCorreo(nuevoCorreo);
+        cliente.setUsername(nuevoUsername);
+        clientRepository.save(cliente);
+
+        user.setEmail(nuevoCorreo);
+        user.setUsername(nuevoUsername);
+
+        if (nuevaPassword != null && !nuevaPassword.isBlank()) {
+            user.setPassword(passwordEncoder.encode(nuevaPassword));
+            cliente.setPassword(passwordEncoder.encode(nuevaPassword));
+        }
+
+        userRepository.save(user);
+        clientRepository.save(cliente);
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    @Scheduled(cron = "0 0 6 * * ?")
+    public void verificarSuscripcionesExpiradas() {
+        try {
+            LocalDate hoy = LocalDate.now();
+            List<ClientEntity> clientesActivos = clientRepository.findByEstado(ClientEntity.EstadoCliente.ACTIVO);
+
+            int expiradosCount = 0;
+
+            for (ClientEntity cliente : clientesActivos) {
+                if (cliente.getFechaFinMembresia() != null &&
+                        !cliente.getFechaFinMembresia().isAfter(hoy)) {
+
+                    cliente.setEstado(ClientEntity.EstadoCliente.PENDIENTE);
+                    cliente.setSubscriptionStatus("PENDING");
+                    clientRepository.save(cliente);
+
+                    expiradosCount++;
+                    logger.info("Suscripcion expirada para: {} (Fecha fin: {})",
+                            cliente.getNombre(), cliente.getFechaFinMembresia());
+                }
+            }
+
+            if (expiradosCount > 0) {
+                logger.info("{} suscripciones expiradas actualizadas a PENDIENTE", expiradosCount);
+            } else {
+                logger.info("No hay suscripciones expiradas hoy");
+            }
+
+        } catch (Exception e) {
+            logger.error("❌ Error verificando suscripciones expiradas: {}", e.getMessage());
+        }
+    }
+
+    public String verificarExpiracionesManualmente() {
+        try {
+            verificarSuscripcionesExpiradas();
+            return "Verificacion ejecutada exitosamente";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+}

@@ -1,0 +1,285 @@
+package com.ProyectoAula.GymAssist.mongoControllers;
+
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.ui.Model;
+import com.ProyectoAula.GymAssist.mongoModels.AdminEntity;
+import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
+import com.ProyectoAula.GymAssist.mongoModels.ClienteResumenDTO;
+import com.ProyectoAula.GymAssist.mongoModels.DashboardDTO;
+import com.ProyectoAula.GymAssist.mongoModels.GimnasiosEntity;
+import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
+import com.ProyectoAula.GymAssist.mongoModels.UserEntity;
+import com.ProyectoAula.GymAssist.mongoServices.AdminService;
+import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
+import com.ProyectoAula.GymAssist.mongoServices.DashboardService;
+import com.ProyectoAula.GymAssist.mongoRepository.AdminRepository;
+import com.ProyectoAula.GymAssist.mongoRepository.GimnasiosRepository;
+import com.ProyectoAula.GymAssist.mongoRepository.UserRepository;
+import java.security.Principal;
+import java.time.LocalDate;
+import java.util.List;
+import com.ProyectoAula.GymAssist.mongoServices.PlanService;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+@RequestMapping("/Api/Admin")
+public class AdminController {
+
+    @Autowired
+    private HttpSession httpSession;
+
+    @Autowired
+    private DashboardService dashboardService;
+
+    private final ClienteService clienteService;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final AdminRepository adminRepository;
+    private final GimnasiosRepository gimnasiosRepository;
+    private final PlanService planService;
+    private final AdminService adminService;
+
+    // Inyección de dependencias para ClienteService y BCryptPasswordEncoder
+    public AdminController(ClienteService clienteService,
+            BCryptPasswordEncoder passwordEncoder,
+            UserRepository userRepository, AdminRepository adminRepository,
+            GimnasiosRepository gimnasiosRepository,
+            PlanService planService, AdminService adminService) {
+        this.planService = planService;
+        this.adminService = adminService;
+        this.userRepository = userRepository;
+        this.adminRepository = adminRepository;
+        this.gimnasiosRepository = gimnasiosRepository;
+        this.clienteService = clienteService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @GetMapping("/check-session")
+    public String checkSession() {
+        return "ID de sesión: " + httpSession.getId();
+    }
+
+    @GetMapping("/AdminHome")
+    public String mostrarAdminHome(Model model, Principal principal) {
+
+        UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+
+        model.addAttribute("nombreUsuario", user.getUsername());
+
+        GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+        ClienteResumenDTO resumen = clienteService.obtenerResumenPorGym(gym.getId());
+        model.addAttribute("resumen", resumen);
+        model.addAttribute("adminId", admin != null ? admin.getId() : null);
+        model.addAttribute("gymId", gym != null ? gym.getId() : null);
+
+        if (gym != null) {
+            List<PlanEntity> planes = planService.getPlanesByGimnasioId(gym.getId());
+            model.addAttribute("planes", planes);
+        }
+
+        return "AdminHome";
+    }
+
+    @GetMapping("/Dashboard")
+    public String mostrarDashboard(Model model, Principal principal) {
+        UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+        if (admin == null) {
+            return "redirect:/login";
+        }
+
+        GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+        if (gym == null) {
+            model.addAttribute("error", "No se encontró gimnasio asociado");
+            return "error";
+        }
+
+        // Obtener datos del dashboard
+        DashboardDTO dashboardData = dashboardService.obtenerDatosDashboard(gym.getId());
+
+        model.addAttribute("dashboard", dashboardData);
+        model.addAttribute("resumen", clienteService.obtenerResumenPorGym(gym.getId()));
+        model.addAttribute("adminId", admin.getId().toHexString());
+        System.out.println("AdminId enviado: " + admin.getId().toHexString());
+        model.addAttribute("gymId", gym.getId());
+        model.addAttribute("nombreGym", gym.getNombreGymnasio());
+
+        System.out.println("GymId enviado: " + gym.getId().toHexString());
+        System.out.println("AdminId: " + admin.getId().toHexString());
+
+        return "Dashboard";
+    }
+
+    // ✅ ENDPOINT PARA DATOS EN TIEMPO REAL (JSON)
+    @GetMapping("/dashboard-data")
+    @ResponseBody
+    public DashboardDTO obtenerDatosDashboardJson(Principal principal) {
+        UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+        AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+        GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+
+        if (gym == null) {
+            throw new RuntimeException("No se encontró gimnasio asociado");
+        }
+
+        return dashboardService.obtenerDatosDashboard(gym.getId());
+    }
+
+    @PostMapping("/actualizar-admin")
+    public String actualizarCorreoYPasswordAdmin(@RequestParam String correo,
+            @RequestParam(required = false) String password,
+            Principal principal,
+            RedirectAttributes redirectAttributes) {
+        try {
+            adminService.actualizarCorreoYPasswordAdmin(correo, password, principal.getName());
+            redirectAttributes.addFlashAttribute("exito", "Datos actualizados correctamente.");
+            return "redirect:/Api/Auth/Logout";
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/Api/Admin/CuentaAdmin"; // ✅ Volver a la página de cuenta si hay error
+        }
+    }
+
+    // Mostrar la lista de clientes en AdminHome
+    @GetMapping("/AdminRegister")
+    public String mostrarAdminRegister(Model model, Principal principal) {
+        UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+        AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+        GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+        ClienteResumenDTO resumen = clienteService.obtenerResumenPorGym(gym.getId());
+        model.addAttribute("resumen", resumen);
+        model.addAttribute("adminId", admin != null ? admin.getId() : null);
+        model.addAttribute("gymId", gym != null ? gym.getId() : null);
+
+        // Pasar la lista de clientes
+        model.addAttribute("AdminRegister", clienteService.listarClientesPorGym(gym.getId()));
+        if (gym != null) {
+            List<PlanEntity> planes = planService.getPlanesByGimnasioId(gym.getId());
+            model.addAttribute("planes", planes);
+        }
+        return "AdminRegister"; // Página de AdminHome
+    }
+
+    // Agregar nuevo cliente
+    @PostMapping("/Register")
+    public String agregarCliente(@RequestParam String nombre,
+            @RequestParam String correo,
+            @RequestParam String idDocumento,
+            @RequestParam Integer telefono,
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam ObjectId planId) {
+
+        PlanEntity plan = planService.getPlanById(planId).orElse(null);
+        String mensualidad = plan != null ? plan.getNombre() : "Desconocido";
+
+        ClientEntity nuevoCliente = new ClientEntity();
+        nuevoCliente.setFechaIngresoCliente(LocalDate.now()); // solo al crear
+
+        // Crear el cliente con el servicio
+        clienteService.crearCliente(nombre, correo, idDocumento, telefono, mensualidad, username, password, planId);
+        return "redirect:/Api/Admin/AdminRegister"; // Regresar a AdminHome
+    }
+
+    @GetMapping("/CuentaAdmin")
+    public String CuentaAdmin(Model model, Principal principal) {
+        UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+        AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+        GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+        ClienteResumenDTO resumen = clienteService.obtenerResumenPorGym(gym.getId());
+        model.addAttribute("resumen", resumen);
+        model.addAttribute("adminId", admin != null ? admin.getId() : null);
+        model.addAttribute("gymId", gym != null ? gym.getId() : null);
+        return "CuentaAdmin"; // <-- tu vista de CuentaAdmin
+    }
+
+    @GetMapping("/pagar/{id}")
+    public String pagarCliente(@PathVariable ObjectId id) {
+        ClientEntity cliente = clienteService.buscarClientePorId(id);
+        if (cliente.getEstado() == ClientEntity.EstadoCliente.PENDIENTE) {
+            clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.ACTIVO);
+        }
+        return "redirect:/Api/Admin/AdminRegister";
+    }
+
+    @GetMapping("/detener/{id}")
+    public String detenerCliente(@PathVariable ObjectId id) {
+        ClientEntity cliente = clienteService.buscarClientePorId(id);
+        if (cliente.getEstado() == ClientEntity.EstadoCliente.ACTIVO) {
+            clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.PENDIENTE);
+        }
+        return "redirect:/Api/Admin/AdminRegister";
+    }
+
+    // Eliminar cliente
+    @GetMapping("/suspender/{id}")
+    public String suspenderCliente(@PathVariable ObjectId id) {
+        clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.SUSPENDIDO);
+        return "redirect:/Api/Admin/AdminRegister";
+    }
+
+    @GetMapping("/activar/{id}")
+    public String activarCliente(@PathVariable ObjectId id) {
+        clienteService.cambiarEstadoCliente(id, ClientEntity.EstadoCliente.ACTIVO);
+        return "redirect:/Api/Admin/AdminRegister";
+    }
+
+    @GetMapping("/Predicciones")
+    public String mostrarPredicciones(Model model, Principal principal) {
+        // Obtener el usuario actual
+        UserEntity user = userRepository.findByUsername(principal.getName()).orElse(null);
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        // Obtener el admin
+        AdminEntity admin = adminRepository.findByUserId(user.getId()).orElse(null);
+
+        if (admin == null) {
+            return "redirect:/login";
+        }
+
+        // Obtener el gimnasio del admin
+        GimnasiosEntity gym = gimnasiosRepository.findByAdminId(admin.getId()).orElse(null);
+
+        if (gym == null) {
+            model.addAttribute("error", "No se encontró gimnasio asociado");
+            return "error";
+        }
+
+        // Pasar datos al modelo
+        model.addAttribute("gymId", gym.getId().toHexString());
+        model.addAttribute("nombreUsuario", user.getUsername());
+        model.addAttribute("nombreGym", gym.getNombreGymnasio()); // Si tienes el campo nombre
+        model.addAttribute("adminId", admin.getId());
+
+        // Obtener resumen (si lo necesitas en la vista)
+        ClienteResumenDTO resumen = clienteService.obtenerResumenPorGym(gym.getId());
+        model.addAttribute("resumen", resumen);
+
+        return "Predicciones"; // Retorna la vista Predicciones.html
+    }
+    
+}

@@ -1,0 +1,26 @@
+{
+  "intents": [
+    {
+      "tag": "SALUDO",
+      "patterns": ["hola", "buenas", "hey"],
+      "responses": [
+        "👋 Hola! Soy tu asistente GymAssist 💪",
+        "¡Hola! ¿En qué puedo ayudarte hoy?"
+      ]
+    },
+    {
+      "tag": "PLAN",
+      "patterns": ["plan", "mi plan"],
+      "responses": [
+        "💳 Estoy revisando tu plan..."
+      ]
+    },
+    {
+      "tag": "IMC",
+      "patterns": ["imc", "peso", "estado fisico"],
+      "responses": [
+        "📊 Déjame calcular tu IMC..."
+      ]
+    }
+  ]
+}

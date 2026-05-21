@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GymAssist Admin - Registro</title>
+  <!-- FontAwesome para los iconos -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/Styles/DashboardAdmin.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="icon" href="/Imagenes/icono.png" type="image/png">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="navbar-brand">GymAssist Admin</div>
+    </div>
+    <div class="navbar-right">
+      <!-- Selector de tema -->
+      <button class="btn-theme" onclick="btnTheme()"><i class="fas fa-moon"></i></button>
+      <!-- Perfil -->
+      <div class="profile">
+        <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
+        <div id="dropdown" class="dropdown">
+          <a href="/Api/Admin/CuentaAdmin"><i class="fas fa-user-cog"></i> Cuenta</a>
+          <a href="#" onclick="confirmLogout(event)" class="danger">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <a th:href="@{/Api/Admin/AdminHome}" title="Dashboard">
+        <i class="fas fa-home icon"></i>
+        <span class="text">Home</span>
+      </a>
+      <a th:href="@{/Api/Admin/AdminRegister}" class="active" title="Usuarios">
+        <i class="fas fa-users icon"></i>
+        <span class="text">Clientes</span>
+      </a>
+      <a th:href="@{/planes/gimnasio/{gymId}(gymId=${gymId})}" title="Membresías">
+        <i class="fas fa-credit-card icon"></i>
+        <span class="text">Membresías</span>
+      </a>
+      <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" title="musculos">
+        <i class="fas fa-calendar-alt icon"></i>
+        <span class="text">Rutinas</span>
+      </a>
+      <a th:href="@{/Api/Admin/Dashboard}" title="Reportes">
+        <i class="fas fa-chart-pie icon"></i>
+        <span class="text">Dashboard</span>
+      </a>
+      <a th:href="@{/Api/Admin/Predicciones}" title="Predicciones IA">
+        <i class="fas fa-brain icon"></i>
+        <span class="text">Predicciones IA</span>
+      </a>
+       <a th:href="@{/modelo}" class="active" title="Modelo">
+                <i class="fas fa-calculator icon"></i>
+                <span class="text">Modelo</span>
+        </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <h1>Dashboard</h1>
+    <div class="card">
+      <div class="tarjetas_contenedor">
+
+        <div class="tarjetas_usuarios">
+          <i class="fas fa-user-check"></i>
+          <h2>Usuarios Activos</h2>
+          <div class="count" th:text="${resumen.activos}">0</div>
+          <p>Actualmente registrados y en actividad.</p>
+        </div>
+
+        <div class="tarjetas_usuarios">
+          <i class="fas fa-user-slash"></i>
+          <h2>Usuarios Suspendidos</h2>
+          <div class="count" th:text="${resumen.suspendidos}">0</div>
+          <p>Usuarios suspendidos en el sistema.</p>
+        </div>
+
+        <div class="tarjetas_usuarios">
+          <i class="fas fa-users"></i>
+          <h2>Usuarios Totales</h2>
+          <div class="count" th:text="${resumen.total}">0</div>
+          <p>Todos los usuarios registrados.</p>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- Botón para abrir el modal -->
+    <button id="abrirModal" class="btn-agregar-cliente">Agregar Cliente</button>
+
+    <!-- Modal -->
+    <div id="modalCliente" class="modal">
+      <div class="modal-contenido">
+        <span class="cerrar" id="cerrarModal">&times;</span>
+        <div class="form-container">
+          <h2>Agregar Cliente</h2>
+          <form class="formulario-cliente" th:action="@{/Api/Admin/Register}" method="post">
+            <div class="form-group">
+              <label for="nombre">Nombre completo</label>
+              <input type="text" th:name="nombre" placeholder="Nombre Completo" id="clientName" required>
+            </div>
+            <div class="form-group">
+              <label for="correo">Correo electrónico</label>
+              <input type="email" th:name="correo" placeholder="Correo Electrónico" id="clientEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="idDocumento">Numero de Documento</label>
+              <input type="tel" id="idDocumento" name="idDocumento" placeholder="Documento" required>
+            </div>
+            <div class="form-group">
+              <label for="telefono">Número telefónico</label>
+              <input type="tel" th:name="telefono" placeholder="Número de Teléfono" id="clientPhone" required>
+            </div>
+            <div class="form-group">
+              <label for="plan">Tipo de plan</label>
+              <select name="planId" required>
+                <option value="">Selecciona un plan</option>
+                <option th:each="plan : ${planes}" th:value="${plan.id}"
+                  th:text="${plan.nombre} + ' - $' + ${plan.precio} + ' / ' + ${plan.duracion} + ' meses'">
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="username">Nombre de usuario</label>
+              <input type="text" th:name="username" placeholder="Usuario" id="clientUsername" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Contraseña</label>
+              <input type="password" th:name="password" placeholder="Contraseña" id="clientPassword" required>
+              <input type="hidden" name="adminId" th:value="${adminId}" />
+              <input type="hidden" name="gymId" th:value="${gymId}" />
+            </div>
+            <button type="submit" class="btn-agregar">Agregar Cliente</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- tabla de clientes -->
+    <div class="tabla-container">
+      <div class="tabla-scroll">
+        <table class="tabla-usuarios">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo Electrónico</th>
+              <th>Numero de Documento</th>
+              <th>Teléfono</th>
+              <th>Tipo de Plan</th>
+              <th>Nombre de Usuario</th>
+              <th>Estado de Cuenta</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="cliente : ${AdminRegister}">
+              <td th:text="${cliente.nombre}"></td>
+              <td th:text="${cliente.correo}"></td>
+              <td th:text="${cliente.idDocumento}"></td>
+              <td th:text="${cliente.telefono}"></td>
+              <td th:text="${cliente.mensualidad}"></td>
+              <td th:text="${cliente.username}"></td>
+              <td>
+                <span th:if="${cliente.estado.name() == 'ACTIVO'}" class="badge badge-success">Activo</span>
+                <span th:if="${cliente.estado.name() == 'PENDIENTE'}" class="badge badge-warning">Pendiente</span>
+                <span th:if="${cliente.estado.name() == 'SUSPENDIDO'}" class="badge badge-danger">Suspendido</span>
+              </td>
+              <td>
+                <a th:if="${cliente.estado.name() == 'PENDIENTE'}" class="btn-pagar"
+                  th:href="@{/Api/Admin/pagar/{id}(id=${cliente.id})}"><i class="fas fa-money-bill-wave"></i> Pagar</a>
+                <a th:if="${cliente.estado.name() == 'ACTIVO'}" class="btn-detener"
+                  th:href="@{/Api/Admin/detener/{id}(id=${cliente.id})}"><i class="fas fa-pause-circle"></i> Detener</a>
+                <a th:if="${cliente.estado.name() != 'SUSPENDIDO'}" class="btn-suspender"
+                  th:href="@{/Api/Admin/suspender/{id}(id=${cliente.id})}"><i class="fas fa-ban"></i> Suspender</a>
+                <a th:if="${cliente.estado.name() == 'SUSPENDIDO'}" class="btn-activar"
+                  th:href="@{/Api/Admin/activar/{id}(id=${cliente.id})}"><i class="fas fa-check-circle"></i> Activar</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    &copy; 2025 GymAssist. Todos los derechos reservados.
+  </footer>
+
+  <script>
+    // ===== FUNCIONES BÁSICAS =====
+    function toggleSidebar() {
+      document.body.classList.toggle('sidebar-collapsed');
+    }
+
+    function toggleDropdown(e) {
+      e.stopPropagation();
+      document.getElementById('dropdown').classList.toggle('show');
+    }
+
+    document.addEventListener('click', () => {
+      document.getElementById('dropdown').classList.remove('show');
+    });
+
+    // Al cargar la página, aplica el tema guardado
+    document.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        document.body.classList.add('theme-dark');
+      }
+    });
+
+    // Función única para alternar tema y guardarlo
+    function btnTheme() {
+      const isDark = document.body.classList.toggle('theme-dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    window.btnTheme = btnTheme;
+
+    // ===== FUNCIÓN DE CERRAR SESIÓN CON SWEETALERT (PREMIUM) =====
+    function confirmLogout(event) {
+      event.preventDefault();
+      
+      Swal.fire({
+        title: '¿Seguro que quieres cerrar sesión?',
+        text: "Tu sesión actual será cerrada",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#2563eb',
+        cancelButtonColor: '#ef4444',
+        confirmButtonText: '<i class="fas fa-check"></i> Sí, cerrar sesión',
+        cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+        backdrop: 'rgba(0,0,0,0.7)',
+        reverseButtons: false,
+        focusCancel: false,
+        customClass: {
+          popup: 'animated-popup',
+          confirmButton: 'btn-confirm-logout',
+          cancelButton: 'btn-cancel-logout'
+        },
+        buttonsStyling: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Cerrando sesión...',
+            html: '<i class="fas fa-spinner fa-spin fa-3x"></i>',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            timer: 1500,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
+          
+          setTimeout(() => {
+            window.location.href = '/Api/Auth/Logout';
+          }, 1500);
+        }
+      });
+    }
+
+    window.confirmLogout = confirmLogout;
+
+    // ===== FUNCIONES DEL MODAL =====
+    const abrirBtn = document.getElementById("abrirModal");
+    const modal = document.getElementById("modalCliente");
+    const cerrarBtn = document.getElementById("cerrarModal");
+
+    abrirBtn.onclick = () => {
+      modal.style.display = "flex";
+    };
+
+    cerrarBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+
+    window.onclick = (e) => {
+      if (e.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    function confirmLogout(event) {
+            event.preventDefault();
+            
+            Swal.fire({
+                title: '¿Seguro que quieres cerrar sesión?',
+                text: "Tu sesión actual será cerrada",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: '<i class="fas fa-check"></i> Sí, cerrar sesión',
+                cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+                backdrop: 'rgba(0,0,0,0.7)',
+                customClass: {
+                    popup: 'animated-popup',
+                    confirmButton: 'btn-confirm-logout',
+                    cancelButton: 'btn-cancel-logout'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mostrar loading
+                    Swal.fire({
+                        title: 'Cerrando sesión...',
+                        html: '<i class="fas fa-spinner fa-spin fa-3x"></i>',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        timer: 1000
+                    });
+                    
+                    // Redirigir después de 1 segundo
+                    setTimeout(() => {
+                        window.location.href = '/Api/Auth/Logout';
+                    }, 1000);
+                }
+            });
+        }
+        window.confirmLogout = confirmLogout;
+
+        function openModal() {
+            document.getElementById('modal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+  </script>
+</body>
+
+</html>

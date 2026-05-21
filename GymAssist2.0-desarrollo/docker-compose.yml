@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  gymassist-app:
+    image: gymassist2.0:latest
+    container_name: gymassist-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb+srv://serioussam:assc1010@cluster0.4pveejv.mongodb.net/gymassist_nosql?tls=true
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: us-east-2
+      AWS_BUCKET: ${AWS_BUCKET}
+    networks:
+      - gymassist-net
+
+  mongo:
+    image: mongo:7
+    container_name: gymassist-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - gymassist-net
+
+  redis:
+    image: redis:7
+    container_name: gymassist-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - gymassist-net
+
+volumes:
+  mongo-data:
+  redis-data:
+
+networks:
+  gymassist-net:
+    driver: bridge

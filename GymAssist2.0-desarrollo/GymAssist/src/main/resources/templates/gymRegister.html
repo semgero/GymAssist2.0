@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear Gimnasio - GymAssist</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/Styles/crearGimnasio.css" />
+  <link rel="icon" href="/Imagenes/icono.png" type="image/png">
+</head>
+<body>
+  <div class="background-animation">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+  </div>
+
+  <div class="container">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="logo-container">
+          <i class="fas fa-dumbbell"></i>
+        </div>
+        <h1>Bienvenido a <span>GymAssist</span></h1>
+        <p>Antes de comenzar, cuéntanos sobre tu gimnasio</p>
+      </div>
+
+      <form th:action="@{/gimnasios/register}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="nombreGymnasio">
+            <i class="fas fa-dumbbell"></i> Nombre del Gimnasio
+          </label>
+          <input 
+            type="text" 
+            id="nombreGymnasio" 
+            name="nombreGymnasio" 
+            th:value="*{nombreGymnasio}" 
+            placeholder="Ej: FitLife Gym"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="nit">
+            <i class="fas fa-id-card"></i> NIT
+          </label>
+          <input 
+            type="number" 
+            id="nit" 
+            name="nit" 
+            th:value="*{nit}" 
+            placeholder="Ingresa el NIT del gimnasio"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="direccion">
+            <i class="fas fa-map-marker-alt"></i> Dirección
+          </label>
+          <input 
+            type="text" 
+            id="direccion" 
+            name="direccion" 
+            th:value="*{direccion}" 
+            placeholder="Ej: Calle 123 #45-67"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">
+            <i class="fas fa-align-left"></i> Descripción
+          </label>
+          <textarea 
+            id="descripcion" 
+            name="descripcion" 
+            th:text="*{descripcion}" 
+            rows="4"
+            placeholder="Cuéntanos sobre tu gimnasio, servicios, horarios..."
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="numeroCuenta">
+            <i class="fas fa-credit-card"></i> Número de Cuenta
+          </label>
+          <input 
+            type="number" 
+            id="numeroCuenta" 
+            name="numeroCuenta" 
+            placeholder="Ingresa el número de cuenta bancaria"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn-submit">
+          <i class="fas fa-check-circle"></i> Registrar Gimnasio
+        </button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

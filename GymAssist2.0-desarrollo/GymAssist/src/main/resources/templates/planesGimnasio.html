@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GymAssist Admin - Membresías</title>
+    <!-- FontAwesome para los iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="/Styles/planes.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="/Imagenes/icono.png" type="image/png">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <button class="btn-hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="navbar-brand">GymAssist Admin</div>
+        </div>
+        <div class="navbar-right">
+            <!-- Selector de tema -->
+            <button class="btn-theme" onclick="btnTheme()"><i class="fas fa-moon"></i></button>
+            <!-- Perfil -->
+            <div class="profile">
+                <i class="fas fa-user-circle profile-img" onclick="toggleDropdown(event)"></i>
+                <div id="dropdown" class="dropdown">
+                    <a href="/Api/Admin/CuentaAdmin"><i class="fas fa-user-cog"></i> Cuenta</a>
+                    <a href="#" onclick="confirmLogout(event)" class="danger">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <nav>
+            <a th:href="@{/Api/Admin/AdminHome}" title="Dashboard">
+                <i class="fas fa-home icon"></i>
+                <span class="text">Home</span>
+            </a>
+            <a th:href="@{/Api/Admin/AdminRegister}" title="Usuarios">
+                <i class="fas fa-users icon"></i>
+                <span class="text">Clientes</span>
+            </a>
+            <a th:href="@{/planes/gimnasio/{gymId}(gymId=${gymId})}" class="active" title="Membresías">
+                <i class="fas fa-credit-card icon"></i>
+                <span class="text">Membresías</span>
+            </a>
+            <a th:href="@{/rutinas/gym/{gymId}(gymId=${gymId})}" title="musculos">
+                <i class="fas fa-calendar-alt icon"></i>
+                <span class="text">Rutinas</span>
+            </a>
+            <a th:href="@{/Api/Admin/Dashboard}" title="Reportes">
+                <i class="fas fa-chart-pie icon"></i>
+                <span class="text">Dashboard</span>
+            </a>
+            <a th:href="@{/Api/Admin/Predicciones}" title="Predicciones IA">
+                <i class="fas fa-brain icon"></i>
+                <span class="text">Predicciones IA</span>
+            </a>
+             <a th:href="@{/modelo}" class="active" title="Modelo">
+                <i class="fas fa-calculator icon"></i>
+                <span class="text">Modelo</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+        <h1>Membresías</h1>
+        <div class="card">
+            <form class="plan__form" th:action="@{/planes/gimnasio/{gymId}/guardar(gymId=${gymId})}" method="post">
+                <h2 class="form-title">Registro de membresías del gimnasio</h2>
+
+                <div class="form__group">
+                    <label for="planName">Nombre del Plan</label>
+                    <input type="text" id="planName" name="nombre" required />
+                </div>
+
+                <div class="form__group">
+                    <label for="price">Precio</label>
+                    <input type="number" id="price" name="precio" required />
+                </div>
+
+                <div class="form__group">
+                    <label for="duration">Duración (en meses)</label>
+                    <input type="number" id="duration" name="duracion" required />
+                </div>
+
+                <div class="form__group">
+                    <label for="description">Descripción</label>
+                    <textarea id="description" name="descripcion" rows="4" required></textarea>
+                </div>
+
+                <div class="form__group">
+                    <button class="btn" type="submit">Registrar Plan</button>
+                </div>
+                <input type="hidden" name="gymId" th:value="${gymId}" />
+            </form>
+        </div>
+
+        <div class="plan-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Duración</th>
+                        <th>Acciones</th>
+                        <th>Suscriptores</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="plan : ${planes}">
+                        <td th:text="${plan.nombre != null ? plan.nombre : 'Sin plan'}"></td>
+                        <td th:text="${plan.descripcion}"></td>
+                        <td th:text="${plan.precio}"></td>
+                        <td th:text="${plan.duracion} + ' meses'"></td>
+                        <td>
+                            <button class="action-btn open-modal-btn botones" th:data-id="${plan.id}">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <form th:action="@{/planes/{id}/eliminar(id=${plan.id})}" method="post"
+                                style="display:inline;">
+                                <input type="hidden" name="gymId" th:value="${plan.gymId != null ? plan.gymId : ''}" />
+                                <button type="submit" class="action-btn delete-btn botones">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            </form>
+                        </td>
+                        <td th:text="${suscriptoresPorPlan[plan.id]}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Modales de edición de planes -->
+        <div th:each="plan : ${planes}" th:if="${plan != null}" class="modal-overlay" th:id="'editModal-' + ${plan.id}">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2><i class="fas fa-pen"></i> Editar Plan</h2>
+                    <button class="close-modal-btn" aria-label="Cerrar modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/planes/{id}/actualizar(id=${plan.id})}" method="post">
+                        <input type="hidden" name="gymId" th:value="${plan.gymId != null ? plan.gymId : ''}" />
+
+                        <div class="input-group">
+                            <i class="fas fa-tag"></i>
+                            <input type="text" name="nombre" th:value="${plan.nombre}" placeholder="Nombre del Plan"
+                                required />
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fas fa-align-left"></i>
+                            <input type="text" name="descripcion" th:value="${plan.descripcion}"
+                                placeholder="Descripción" required />
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fas fa-dollar-sign"></i>
+                            <input type="number" name="precio" th:value="${plan.precio}" placeholder="Precio" min="0"
+                                required />
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fas fa-clock"></i>
+                            <input type="number" name="duracion" th:value="${plan.duracion}"
+                                placeholder="Duración (meses)" min="1" required />
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-save"></i> Guardar Cambios
+                            </button>
+                            <button type="button" class="action_btn close-modal-action">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        &copy; 2025 GymAssist. Todos los derechos reservados.
+    </footer>
+
+    <script>
+        // ===== FUNCIONES BÁSICAS =====
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+        }
+
+        function toggleDropdown(e) {
+            e.stopPropagation();
+            document.getElementById('dropdown').classList.toggle('show');
+        }
+
+        document.addEventListener('click', () => {
+            document.getElementById('dropdown').classList.remove('show');
+        });
+
+        // Al cargar la página, aplica el tema guardado
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+                document.body.classList.add('theme-dark');
+            }
+        });
+
+        // Función única para alternar tema y guardarlo
+        function btnTheme() {
+            const isDark = document.body.classList.toggle('theme-dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        window.btnTheme = btnTheme;
+
+        // ===== FUNCIÓN DE CERRAR SESIÓN CON SWEETALERT (PREMIUM) =====
+        function confirmLogout(event) {
+            event.preventDefault();
+            
+            Swal.fire({
+                title: '¿Seguro que quieres cerrar sesión?',
+                text: "Tu sesión actual será cerrada",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: '<i class="fas fa-check"></i> Sí, cerrar sesión',
+                cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+                backdrop: 'rgba(0,0,0,0.7)',
+                reverseButtons: false,
+                focusCancel: false,
+                customClass: {
+                    popup: 'animated-popup',
+                    confirmButton: 'btn-confirm-logout',
+                    cancelButton: 'btn-cancel-logout'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Cerrando sesión...',
+                        html: '<i class="fas fa-spinner fa-spin fa-3x"></i>',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        timer: 1500,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    setTimeout(() => {
+                        window.location.href = '/Api/Auth/Logout';
+                    }, 1500);
+                }
+            });
+        }
+
+        window.confirmLogout = confirmLogout;
+
+        // ===== FUNCIONES DEL MODAL =====
+        document.querySelectorAll('.open-modal-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                let planId = btn.getAttribute("data-id");
+                let modal = document.getElementById(`editModal-${planId}`);
+
+                if (modal) {
+                    modal.style.display = 'flex';
+
+                    // Asigna dinámicamente la acción del formulario
+                    const form = modal.querySelector("form");
+                    form.action = `/planes/${planId}/actualizar`;
+                } else {
+                    console.error(`No se encontró el modal para el plan con ID: ${planId}`);
+                }
+            });
+        });
+
+        // Cerrar modal con la 'X' y con botón Cancelar
+        const closeModal = (overlay) => overlay.style.display = 'none';
+
+        // Botón de cierre (X)
+        document.querySelectorAll('.close-modal-btn').forEach(btn => btn.addEventListener('click', () => {
+            closeModal(btn.closest('.modal-overlay'));
+        }));
+
+        // Botón Cancelar dentro del footer
+        document.querySelectorAll('.close-modal-action').forEach(btn => btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeModal(btn.closest('.modal-overlay'));
+        }));
+
+        // Cerrar al clic fuera
+        document.querySelectorAll('.modal-overlay').forEach(overlay => overlay.addEventListener('click', e => {
+            if (e.target === overlay) closeModal(overlay);
+        }));
+
+        // ===== FUNCIONES ÚTILES DE SWEETALERT =====
+        function showSuccess(title = '¡Éxito!', text = 'Operación completada correctamente') {
+            Swal.fire({
+                icon: 'success',
+                title: title,
+                text: text,
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                customClass: {
+                    popup: 'animated-popup'
+                }
+            });
+        }
+
+        function showError(title = 'Error', text = 'Algo salió mal') {
+            Swal.fire({
+                icon: 'error',
+                title: title,
+                text: text,
+                confirmButtonColor: '#2563eb',
+                confirmButtonText: '<i class="fas fa-check"></i> Entendido',
+                customClass: {
+                    popup: 'animated-popup',
+                    confirmButton: 'btn-confirm-logout'
+                },
+                buttonsStyling: false
+            });
+        }
+
+        function confirmDelete(itemName = 'este plan') {
+            return Swal.fire({
+                title: '¿Estás seguro?',
+                text: `No podrás revertir la eliminación de ${itemName}`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: '<i class="fas fa-trash"></i> Sí, eliminar',
+                cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+                customClass: {
+                    popup: 'animated-popup',
+                    confirmButton: 'btn-confirm-logout',
+                    cancelButton: 'btn-cancel-logout'
+                },
+                buttonsStyling: false
+            });
+        }
+
+        function showToast(message, icon = 'success') {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+
+            Toast.fire({
+                icon: icon,
+                title: message
+            });
+        }
+    </script>
+</body>
+
+</html>
