@@ -281,4 +281,5 @@ public class AdminController {
 
         return "Predicciones"; // Retorna la vista Predicciones.html
     }
+    
 }
