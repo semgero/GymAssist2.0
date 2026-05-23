@@ -338,6 +338,141 @@
         timerProgressBar: true
       });
     };
+
+    /* ===== CHATBOT ===== */
+    let chatOpen = false;
+ 
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      const container = document.getElementById('chatbot-container');
+      const btn = document.getElementById('chatbot-btn');
+      const icon = document.getElementById('chat-btn-icon');
+ 
+      if (chatOpen) {
+        container.classList.add('chat-visible');
+        btn.classList.add('is-open');
+        icon.className = 'fas fa-times';
+        document.getElementById('user-input').focus();
+      } else {
+        container.classList.remove('chat-visible');
+        btn.classList.remove('is-open');
+        icon.className = 'fas fa-dumbbell';
+      }
+    }
+ 
+    function addBubble(text, sender) {
+      const messages = document.getElementById('chat-messages');
+      const wrap = document.createElement('div');
+      wrap.className = `chat-bubble-wrap ${sender}`;
+ 
+      const avatarIcon = sender === 'bot' ? 'fa-dumbbell' : 'fa-user';
+      wrap.innerHTML = `
+        <div class="bubble-avatar">
+          <i class="fas ${avatarIcon}"></i>
+        </div>
+        <div class="bubble-text">${text.replace(/\n/g, '<br>')}</div>
+      `;
+      messages.appendChild(wrap);
+      messages.scrollTop = messages.scrollHeight;
+      return wrap;
+    }
+ 
+    function showTyping() {
+      const messages = document.getElementById('chat-messages');
+      const wrap = document.createElement('div');
+      wrap.className = 'chat-bubble-wrap bot typing-indicator';
+      wrap.id = 'typing-bubble';
+      wrap.innerHTML = `
+        <div class="bubble-avatar"><i class="fas fa-dumbbell"></i></div>
+        <div class="bubble-text">
+          <div class="typing-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      `;
+      messages.appendChild(wrap);
+      messages.scrollTop = messages.scrollHeight;
+    }
+ 
+    function removeTyping() {
+      const t = document.getElementById('typing-bubble');
+      if (t) t.remove();
+    }
+ 
+    function sendMessage() {
+      const input = document.getElementById('user-input');
+      const message = input.value.trim();
+      if (!message) return;
+ 
+      addBubble(message, 'user');
+      input.value = '';
+      showTyping();
+ 
+      fetch('/chatbot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      })
+      .then(res => res.json())
+      .then(data => {
+        removeTyping();
+        addBubble(data.response, 'bot');
+      })
+      .catch(() => {
+        removeTyping();
+        addBubble('Ups, algo salió mal. Intenta de nuevo 🙏', 'bot');
+      });
+    }
   </script>
+
+    <!-- ===== CHATBOT ===== -->
+  <button id="chatbot-btn" onclick="toggleChat()" aria-label="Abrir GymAssist Bot">
+    <i class="fas fa-dumbbell" id="chat-btn-icon"></i>
+  </button>
+ 
+  <div id="chatbot-container" role="dialog" aria-label="GymAssist Bot">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="bot-avatar">
+          <i class="fas fa-dumbbell"></i>
+        </div>
+        <div class="bot-info">
+          <div class="bot-name">GymAssist Bot</div>
+          <div class="bot-status">
+            <span class="status-dot"></span>
+            En línea
+          </div>
+        </div>
+      </div>
+      <button class="chat-close-btn" onclick="toggleChat()" aria-label="Cerrar chat">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+ 
+    <!-- Mensajes -->
+    <div id="chat-messages">
+      <div class="chat-welcome">
+        <div class="chat-welcome-icon">
+          <i class="fas fa-dumbbell" style="color:white"></i>
+        </div>
+        <p><strong>¡Hola! Soy GymAssist Bot 💪</strong><br>Pregúntame sobre tus rutinas, dietas, progreso o cualquier duda del gimnasio.</p>
+      </div>
+    </div>
+ 
+    <!-- Input -->
+    <div class="chat-input-area">
+      <input
+        type="text"
+        id="user-input"
+        placeholder="Escribe tu mensaje..."
+        onkeydown="if(event.key==='Enter') sendMessage()"
+        autocomplete="off"
+      />
+      <button class="chat-send-btn" onclick="sendMessage()" aria-label="Enviar mensaje">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
 </body>
 </html>

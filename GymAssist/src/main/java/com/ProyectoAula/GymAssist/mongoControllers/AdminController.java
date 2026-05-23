@@ -29,6 +29,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import com.ProyectoAula.GymAssist.mongoServices.PlanService;
+import com.ProyectoAula.GymAssist.mongoServices.PythonOptimizationService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -41,6 +42,9 @@ public class AdminController {
 
     @Autowired
     private DashboardService dashboardService;
+
+    @Autowired
+    private PythonOptimizationService service;
 
     private final ClienteService clienteService;
     private final BCryptPasswordEncoder passwordEncoder;
