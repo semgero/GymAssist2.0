@@ -223,6 +223,10 @@ public class RutinaEntity {
     private String rutaImagen;
     private String contentType;
 
+    // Constructor vacío: necesario para reconstruir el objeto desde la caché de Redis
+    public FotoRutina() {
+    }
+
     public FotoRutina(String nombreArchivo, String descripcion,
         String rutaImagen, String contentType) {
       this.nombreArchivo = nombreArchivo;

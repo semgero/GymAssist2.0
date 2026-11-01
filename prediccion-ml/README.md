@@ -43,6 +43,12 @@ las métricas y gráficas en `reportes/`. Tarda entre 1 y 3 minutos.
 
 ## 3. Encender la API
 
+**Automático:** al arrancar Spring Boot, la clase `ApiPythonLauncher` enciende la API sola
+usando el Python de `.venv`, y la apaga al detener Spring Boot. La salida queda en `api.log`.
+Para desactivarlo, por ejemplo en Railway, usa la variable `ML_API_AUTOSTART=false`.
+
+**Manual** (opcional, útil para ver los mensajes de la API en vivo):
+
 ```powershell
 uvicorn app.main:app --port 8000
 ```

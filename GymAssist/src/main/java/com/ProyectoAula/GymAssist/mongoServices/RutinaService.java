@@ -7,6 +7,9 @@ import com.ProyectoAula.GymAssist.utils.LevenshteinUtils;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.slf4j.Logger;
@@ -30,11 +33,12 @@ public class RutinaService {
 
     private static final Logger logger = LoggerFactory.getLogger(RutinaService.class);
 
-    /*@Caching(evict = {
+    // Al crear una rutina se limpian las listas en caché para que aparezca de inmediato
+    @Caching(evict = {
             @CacheEvict(value = "rutinasPorGymId", allEntries = true),
             @CacheEvict(value = "rutinasPorGrupo", allEntries = true),
-            @CacheEvict(value = "rutinasPorId", allEntries = true)
-    })*/
+            @CacheEvict(value = "rutinasPorGrupoYGym", allEntries = true)
+    })
     public RutinaEntity createRutina(RutinaEntity rutina, List<MultipartFile> archivos, List<String> descripciones) {
         logger.info("📥 Creando nueva rutina para gymId: {}", rutina.getGymId());
         List<RutinaEntity.FotoRutina> fotos = new ArrayList<>();
@@ -68,21 +72,22 @@ public class RutinaService {
         return saved;
     }
 
-    //@Cacheable(value = "rutinasPorGymId", key = "#gymId")
+    // Caché Redis (30 min). Si este log no aparece, la respuesta salió de Redis.
+    @Cacheable(value = "rutinasPorGymId", key = "#gymId.toHexString()", condition = "#gymId != null")
     public List<RutinaEntity> getRutinasByGymId(ObjectId gymId) {
-        logger.info("📦 Buscando rutinas por gymId: {} (NO CACHE)", gymId);
+        logger.info("📦 Buscando rutinas por gymId: {} en MongoDB (se guardará en Redis)", gymId);
         return rutinaRepository.findByGymId(gymId);
     }
 
-    //@Cacheable(value = "rutinaPorId", key = "#id")
+    @Cacheable(value = "rutinaPorId", key = "#id.toHexString()", condition = "#id != null", unless = "#result == null")
     public Optional<RutinaEntity> getRutinaById(ObjectId id) {
-        logger.info("📦 Buscando rutina por ID: {} (NO CACHE)", id);
+        logger.info("📦 Buscando rutina por ID: {} en MongoDB (se guardará en Redis)", id);
         return rutinaRepository.findById(id);
     }
 
-    //@Cacheable(value = "rutinasPorGrupo", key = "#grupoMuscular")
+    @Cacheable(value = "rutinasPorGrupo", key = "#grupoMuscular", condition = "#grupoMuscular != null")
     public List<RutinaEntity> getRutinasPorGrupoMuscular(String grupoMuscular) {
-        logger.info("📦 Buscando rutinas por grupo muscular: {} (NO CACHE)", grupoMuscular);
+        logger.info("📦 Buscando rutinas por grupo muscular: {} en MongoDB (se guardará en Redis)", grupoMuscular);
         return rutinaRepository.findByGrupoMuscular(grupoMuscular);
     }
 
@@ -119,18 +124,18 @@ public class RutinaService {
         }
     }
 
-    //@Cacheable(value = "rutinasPorGrupoGym", key = "#grupoMuscular + '_' + #gymId")
+    @Cacheable(value = "rutinasPorGrupoYGym", key = "#grupoMuscular.toLowerCase() + '_' + #gymId.toHexString()", condition = "#grupoMuscular != null && #gymId != null")
     public List<RutinaEntity> findByGrupoMuscularAndGymId(String grupoMuscular, ObjectId gymId) {
-        logger.info("📦 Buscando rutinas por grupo: {} y gymId: {} (NO CACHE)", grupoMuscular, gymId);
+        logger.info("📦 Buscando rutinas por grupo: {} y gymId: {} en MongoDB (se guardará en Redis)", grupoMuscular, gymId);
         return rutinaRepository.findByGrupoMuscularIgnoreCaseAndGymId(grupoMuscular, gymId);
     }
 
-    /*@Caching(evict = {
-            @CacheEvict(value = "rutinasPorId", key = "#id"),
+    @Caching(evict = {
+            @CacheEvict(value = "rutinaPorId", key = "#id.toHexString()"),
             @CacheEvict(value = "rutinasPorGymId", allEntries = true),
             @CacheEvict(value = "rutinasPorGrupo", allEntries = true),
             @CacheEvict(value = "rutinasPorGrupoYGym", allEntries = true)
-    })*/
+    })
     public RutinaEntity updateRutina(ObjectId id, RutinaEntity rutinaEntity) {
         logger.info("✏️ Actualizando rutina con ID: {}", id);
         RutinaEntity existingRutina = rutinaRepository.findById(id)
@@ -155,12 +160,12 @@ public class RutinaService {
         return updated;
     }
 
-    /*@Caching(evict = {
-            @CacheEvict(value = "rutinasPorId", key = "#id"),
+    @Caching(evict = {
+            @CacheEvict(value = "rutinaPorId", key = "#id.toHexString()"),
             @CacheEvict(value = "rutinasPorGymId", allEntries = true),
             @CacheEvict(value = "rutinasPorGrupo", allEntries = true),
-            @CacheEvict(value = "rutinasPorGrupoYGym")
-    })*/
+            @CacheEvict(value = "rutinasPorGrupoYGym", allEntries = true)
+    })
     public void deleteRutinaById(ObjectId id) {
         logger.warn("🗑️ Eliminando rutina con ID: {}", id);
         RutinaEntity rutina = rutinaRepository.findById(id)
