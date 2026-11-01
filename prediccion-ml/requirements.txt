@@ -1,0 +1,10 @@
+tensorflow>=2.16
+fastapi>=0.110
+uvicorn>=0.29
+pydantic>=2.5
+numpy>=1.26
+pandas>=2.1
+scikit-learn>=1.4
+matplotlib>=3.8
+pyomo>=6.7
+highspy>=1.7

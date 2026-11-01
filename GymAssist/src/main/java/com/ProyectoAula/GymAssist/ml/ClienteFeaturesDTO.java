@@ -1,4 +1,4 @@
-package com.ProyectoAula.GymAssist.Weka;
+package com.ProyectoAula.GymAssist.ml;
 
 public class ClienteFeaturesDTO {
     private int asistencias4Semanas;

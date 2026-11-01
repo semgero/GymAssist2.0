@@ -1,4 +1,4 @@
-package com.ProyectoAula.GymAssist.Weka;
+package com.ProyectoAula.GymAssist.ml;
 
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 

@@ -217,9 +217,15 @@ function toggleChat() {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ message })
       })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("El servidor respondió " + res.status);
+        return res.json();
+      })
       .then(data => {
         addMessage("🤖 " + data.response, "bot");
+      })
+      .catch(err => {
+        addMessage("🤖 ⚠️ No pude conectarme con el asistente (" + err.message + ")", "bot");
       });
 
       input.value = "";

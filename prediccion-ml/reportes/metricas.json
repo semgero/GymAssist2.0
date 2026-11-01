@@ -1,0 +1,123 @@
+{
+  "fecha": "2026-11-01T11:10:04",
+  "datos": {
+    "clientes": 6000,
+    "reales": 0,
+    "tasa_abandono": 0.346,
+    "test": 900
+  },
+  "modelos": {
+    "Red híbrida LSTM (TensorFlow)": {
+      "accuracy": 0.8111,
+      "precision": 0.6975,
+      "recall": 0.8006,
+      "f1": 0.7455,
+      "roc_auc": 0.8809,
+      "pr_auc": 0.8175,
+      "umbral": 0.46,
+      "matriz_confusion": [
+        [
+          481,
+          108
+        ],
+        [
+          62,
+          249
+        ]
+      ]
+    },
+    "Árbol J48 (4 variables, modelo anterior)": {
+      "accuracy": 0.7911,
+      "precision": 0.6772,
+      "recall": 0.7556,
+      "f1": 0.7143,
+      "roc_auc": 0.8696,
+      "pr_auc": 0.7722,
+      "umbral": 0.3,
+      "matriz_confusion": [
+        [
+          477,
+          112
+        ],
+        [
+          76,
+          235
+        ]
+      ]
+    },
+    "Regresión logística": {
+      "accuracy": 0.8244,
+      "precision": 0.7354,
+      "recall": 0.7685,
+      "f1": 0.7516,
+      "roc_auc": 0.8855,
+      "pr_auc": 0.82,
+      "umbral": 0.4,
+      "matriz_confusion": [
+        [
+          503,
+          86
+        ],
+        [
+          72,
+          239
+        ]
+      ]
+    },
+    "Random Forest": {
+      "accuracy": 0.8156,
+      "precision": 0.6986,
+      "recall": 0.8199,
+      "f1": 0.7544,
+      "roc_auc": 0.8859,
+      "pr_auc": 0.8184,
+      "umbral": 0.32,
+      "matriz_confusion": [
+        [
+          479,
+          110
+        ],
+        [
+          56,
+          255
+        ]
+      ]
+    },
+    "Gradient Boosting": {
+      "accuracy": 0.8044,
+      "precision": 0.6934,
+      "recall": 0.7781,
+      "f1": 0.7333,
+      "roc_auc": 0.8752,
+      "pr_auc": 0.7938,
+      "umbral": 0.35,
+      "matriz_confusion": [
+        [
+          482,
+          107
+        ],
+        [
+          69,
+          242
+        ]
+      ]
+    }
+  },
+  "importancia_variables": {
+    "Asistencias últimas 4 semanas": 0.0859,
+    "Pago al día": 0.0462,
+    "Patrón de asistencia semanal": 0.0446,
+    "Días para vencer la membresía": 0.0426,
+    "Días desde la última visita": 0.0329,
+    "Precio del plan": 0.0329,
+    "Asistencias 4 semanas anteriores": 0.0313,
+    "Irregularidad en la asistencia": 0.0252,
+    "Antigüedad": 0.0231,
+    "Variedad de entrenamiento": 0.0199,
+    "Progreso físico (IMC)": 0.0198,
+    "Tipo de plan": 0.0178,
+    "Seguimiento de medidas": 0.0146,
+    "Tendencia de asistencia": 0.0127,
+    "Semanas activas (de 12)": 0.0106
+  }
+}

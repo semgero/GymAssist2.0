@@ -1,0 +1,2311 @@
+{
+  "clientes": [
+    {
+      "id": "sim-00000",
+      "nombre": "Cliente simulado 0",
+      "estado": "ACTIVO",
+      "fechaIngreso": "2024-01-10",
+      "fechaFinMembresia": "2026-11-01",
+      "tipoPlan": "Mensual",
+      "duracionPlanMeses": 1,
+      "precioPlan": 122000,
+      "asistencias": [
+        {
+          "fecha": "2026-04-17",
+          "musculos": [
+            "biceps",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-04-18",
+          "musculos": [
+            "gluteo",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-04-24",
+          "musculos": [
+            "biceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-05-02",
+          "musculos": [
+            "pecho",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-05-07",
+          "musculos": [
+            "pierna",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-05-09",
+          "musculos": [
+            "pierna",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-05-10",
+          "musculos": [
+            "abdomen",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-05-12",
+          "musculos": [
+            "espalda",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-05-13",
+          "musculos": [
+            "pecho",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-05-17",
+          "musculos": [
+            "pecho",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-05-20",
+          "musculos": [
+            "abdomen",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-05-21",
+          "musculos": [
+            "biceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-05-24",
+          "musculos": [
+            "abdomen",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-05-29",
+          "musculos": [
+            "espalda",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-05-30",
+          "musculos": [
+            "pecho",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-05-31",
+          "musculos": [
+            "abdomen",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-06-01",
+          "musculos": [
+            "espalda",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-06-02",
+          "musculos": [
+            "abdomen",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-03",
+          "musculos": [
+            "pierna",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-06-06",
+          "musculos": [
+            "gluteo",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-06-08",
+          "musculos": [
+            "gluteo",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-06-09",
+          "musculos": [
+            "pecho",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-06-11",
+          "musculos": [
+            "pecho",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-06-14",
+          "musculos": [
+            "gluteo",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-06-16",
+          "musculos": [
+            "triceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-17",
+          "musculos": [
+            "espalda",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-18",
+          "musculos": [
+            "pecho",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-19",
+          "musculos": [
+            "espalda",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-06-21",
+          "musculos": [
+            "triceps",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-06-29",
+          "musculos": [
+            "gluteo",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-07-01",
+          "musculos": [
+            "pecho",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-03",
+          "musculos": [
+            "triceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-07",
+          "musculos": [
+            "hombro",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-10",
+          "musculos": [
+            "triceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-11",
+          "musculos": [
+            "pecho",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-12",
+          "musculos": [
+            "abdomen",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-07-14",
+          "musculos": [
+            "espalda",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-15",
+          "musculos": [
+            "triceps",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-16",
+          "musculos": [
+            "abdomen",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-07-17",
+          "musculos": [
+            "pierna",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-18",
+          "musculos": [
+            "gluteo",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-07-19",
+          "musculos": [
+            "biceps",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-07-25",
+          "musculos": [
+            "gluteo",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-29",
+          "musculos": [
+            "pecho",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-07-30",
+          "musculos": [
+            "pierna",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-31",
+          "musculos": [
+            "espalda",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-08-02",
+          "musculos": [
+            "espalda",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-04",
+          "musculos": [
+            "biceps",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-08-07",
+          "musculos": [
+            "pecho",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-08-08",
+          "musculos": [
+            "hombro",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-09",
+          "musculos": [
+            "abdomen",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-08-11",
+          "musculos": [
+            "abdomen",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-12",
+          "musculos": [
+            "abdomen",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-08-14",
+          "musculos": [
+            "gluteo",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-08-15",
+          "musculos": [
+            "pecho",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-08-16",
+          "musculos": [
+            "pierna",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-08-19",
+          "musculos": [
+            "pecho",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-08-20",
+          "musculos": [
+            "pecho",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-21",
+          "musculos": [
+            "abdomen",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-08-22",
+          "musculos": [
+            "pierna",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-08-25",
+          "musculos": [
+            "triceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-08-26",
+          "musculos": [
+            "biceps",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-08-28",
+          "musculos": [
+            "triceps",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-29",
+          "musculos": [
+            "pecho",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-08-30",
+          "musculos": [
+            "gluteo",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-08-31",
+          "musculos": [
+            "biceps",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-09-02",
+          "musculos": [
+            "pierna",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-09-03",
+          "musculos": [
+            "triceps",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-09-05",
+          "musculos": [
+            "pierna",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-09-06",
+          "musculos": [
+            "biceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-09-09",
+          "musculos": [
+            "abdomen",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-09-13",
+          "musculos": [
+            "biceps",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-14",
+          "musculos": [
+            "hombro",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-17",
+          "musculos": [
+            "pecho",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-18",
+          "musculos": [
+            "triceps",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-19",
+          "musculos": [
+            "biceps",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-20",
+          "musculos": [
+            "pecho",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-21",
+          "musculos": [
+            "triceps",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-22",
+          "musculos": [
+            "abdomen",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-23",
+          "musculos": [
+            "biceps",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-09-25",
+          "musculos": [
+            "biceps",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-09-26",
+          "musculos": [
+            "espalda",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-09-27",
+          "musculos": [
+            "biceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-09-28",
+          "musculos": [
+            "hombro",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-29",
+          "musculos": [
+            "triceps",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-09-30",
+          "musculos": [
+            "biceps",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-10-02",
+          "musculos": [
+            "pecho",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-10-04",
+          "musculos": [
+            "triceps",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-10-06",
+          "musculos": [
+            "triceps",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-10-07",
+          "musculos": [
+            "triceps",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-10-08",
+          "musculos": [
+            "abdomen",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-10-10",
+          "musculos": [
+            "gluteo",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-10-11",
+          "musculos": [
+            "pecho",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-10-13",
+          "musculos": [
+            "triceps",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-10-15",
+          "musculos": [
+            "triceps",
+            "pecho"
+          ]
+        }
+      ],
+      "mediciones": [],
+      "fechaReferencia": "2026-10-15"
+    },
+    {
+      "id": "sim-00001",
+      "nombre": "Cliente simulado 1",
+      "estado": "ACTIVO",
+      "fechaIngreso": "2025-07-12",
+      "fechaFinMembresia": "2026-10-21",
+      "tipoPlan": "Mensual",
+      "duracionPlanMeses": 1,
+      "precioPlan": 127000,
+      "asistencias": [
+        {
+          "fecha": "2026-04-17",
+          "musculos": [
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-04-25",
+          "musculos": [
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-04-26",
+          "musculos": [
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-04-27",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-05-04",
+          "musculos": [
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-05-06",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-05-08",
+          "musculos": [
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-05-14",
+          "musculos": [
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-05-18",
+          "musculos": [
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-05-23",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-05-25",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-05-27",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-05-28",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-03",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-04",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-06",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-07",
+          "musculos": [
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-06-08",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-06-10",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-14",
+          "musculos": [
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-06-16",
+          "musculos": [
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-06-18",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-20",
+          "musculos": [
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-06-26",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-06-28",
+          "musculos": [
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-06-29",
+          "musculos": [
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-06-30",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-07-01",
+          "musculos": [
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-03",
+          "musculos": [
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-07",
+          "musculos": [
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-07-08",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-11",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-12",
+          "musculos": [
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-07-13",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-07-14",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-07-22",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-23",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-07-28",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-30",
+          "musculos": [
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-08-02",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-08-05",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-08-06",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-08-10",
+          "musculos": [
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-08-17",
+          "musculos": [
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-08-22",
+          "musculos": [
+            "espalda"
+          ]
+        }
+      ],
+      "mediciones": [
+        {
+          "fecha": "2026-06-27",
+          "peso": 68.9,
+          "estatura": 163
+        },
+        {
+          "fecha": "2026-10-05",
+          "peso": 71.3,
+          "estatura": 163
+        }
+      ],
+      "fechaReferencia": "2026-10-15"
+    },
+    {
+      "id": "sim-00002",
+      "nombre": "Cliente simulado 2",
+      "estado": "ACTIVO",
+      "fechaIngreso": "2025-11-14",
+      "fechaFinMembresia": "2026-11-02",
+      "tipoPlan": "Mensual",
+      "duracionPlanMeses": 1,
+      "precioPlan": 110000,
+      "asistencias": [
+        {
+          "fecha": "2026-04-17",
+          "musculos": [
+            "biceps",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-04-18",
+          "musculos": [
+            "hombro",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-04-20",
+          "musculos": [
+            "triceps",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-04-21",
+          "musculos": [
+            "triceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-04-22",
+          "musculos": [
+            "abdomen",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-04-23",
+          "musculos": [
+            "espalda",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-04-24",
+          "musculos": [
+            "pecho",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-04-25",
+          "musculos": [
+            "pecho",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-04-26",
+          "musculos": [
+            "gluteo",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-04-27",
+          "musculos": [
+            "biceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-04-29",
+          "musculos": [
+            "hombro",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-04-30",
+          "musculos": [
+            "pierna",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-05-01",
+          "musculos": [
+            "triceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-05-06",
+          "musculos": [
+            "hombro",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-05-07",
+          "musculos": [
+            "pierna",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-05-15",
+          "musculos": [
+            "pecho",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-05-16",
+          "musculos": [
+            "pierna",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-05-17",
+          "musculos": [
+            "pierna",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-05-20",
+          "musculos": [
+            "hombro",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-05-21",
+          "musculos": [
+            "hombro",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-05-22",
+          "musculos": [
+            "pierna",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-05-23",
+          "musculos": [
+            "hombro",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-05-24",
+          "musculos": [
+            "hombro",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-05-26",
+          "musculos": [
+            "espalda",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-05-27",
+          "musculos": [
+            "pecho",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-05-28",
+          "musculos": [
+            "pecho",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-05-29",
+          "musculos": [
+            "gluteo",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-12",
+          "musculos": [
+            "biceps",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-13",
+          "musculos": [
+            "pecho",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-06-15",
+          "musculos": [
+            "triceps",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-16",
+          "musculos": [
+            "hombro",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-06-17",
+          "musculos": [
+            "triceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-06-18",
+          "musculos": [
+            "gluteo",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-06-25",
+          "musculos": [
+            "hombro",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-06-30",
+          "musculos": [
+            "gluteo",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-07-05",
+          "musculos": [
+            "espalda",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-08",
+          "musculos": [
+            "triceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-11",
+          "musculos": [
+            "abdomen",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-13",
+          "musculos": [
+            "abdomen",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-15",
+          "musculos": [
+            "hombro",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-17",
+          "musculos": [
+            "biceps",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-20",
+          "musculos": [
+            "pierna",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-21",
+          "musculos": [
+            "abdomen",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-07-24",
+          "musculos": [
+            "espalda",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-25",
+          "musculos": [
+            "pecho",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-07-31",
+          "musculos": [
+            "espalda",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-08-03",
+          "musculos": [
+            "pecho",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-07",
+          "musculos": [
+            "hombro",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-08-08",
+          "musculos": [
+            "espalda",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-08-09",
+          "musculos": [
+            "pecho",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-08-11",
+          "musculos": [
+            "pierna",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-08-13",
+          "musculos": [
+            "biceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-08-14",
+          "musculos": [
+            "espalda",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-08-19",
+          "musculos": [
+            "triceps",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-08-20",
+          "musculos": [
+            "biceps",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-08-22",
+          "musculos": [
+            "hombro",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-08-23",
+          "musculos": [
+            "gluteo",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-25",
+          "musculos": [
+            "pierna",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-08-27",
+          "musculos": [
+            "pecho",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-09-02",
+          "musculos": [
+            "biceps",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-09-06",
+          "musculos": [
+            "abdomen",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-09-13",
+          "musculos": [
+            "espalda",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-09-14",
+          "musculos": [
+            "pierna",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-09-15",
+          "musculos": [
+            "biceps",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-22",
+          "musculos": [
+            "pierna",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-09-23",
+          "musculos": [
+            "triceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-09-24",
+          "musculos": [
+            "hombro",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-25",
+          "musculos": [
+            "biceps",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-28",
+          "musculos": [
+            "triceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-10-02",
+          "musculos": [
+            "gluteo",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-10-03",
+          "musculos": [
+            "triceps",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-10-05",
+          "musculos": [
+            "pecho",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-10-06",
+          "musculos": [
+            "abdomen",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-10-07",
+          "musculos": [
+            "triceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-10-13",
+          "musculos": [
+            "triceps",
+            "pierna"
+          ]
+        }
+      ],
+      "mediciones": [
+        {
+          "fecha": "2026-06-27",
+          "peso": 102.0,
+          "estatura": 176
+        },
+        {
+          "fecha": "2026-08-16",
+          "peso": 101.9,
+          "estatura": 176
+        },
+        {
+          "fecha": "2026-10-05",
+          "peso": 102.2,
+          "estatura": 176
+        }
+      ],
+      "fechaReferencia": "2026-10-15"
+    },
+    {
+      "id": "sim-00003",
+      "nombre": "Cliente simulado 3",
+      "estado": "ACTIVO",
+      "fechaIngreso": "2026-08-29",
+      "fechaFinMembresia": "2026-11-03",
+      "tipoPlan": "Trimestral",
+      "duracionPlanMeses": 3,
+      "precioPlan": 323000,
+      "asistencias": [
+        {
+          "fecha": "2026-09-24",
+          "musculos": [
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-09-30",
+          "musculos": [
+            "pecho"
+          ]
+        }
+      ],
+      "mediciones": [
+        {
+          "fecha": "2026-10-05",
+          "peso": 59.5,
+          "estatura": 186
+        }
+      ],
+      "fechaReferencia": "2026-10-15"
+    },
+    {
+      "id": "sim-00004",
+      "nombre": "Cliente simulado 4",
+      "estado": "ACTIVO",
+      "fechaIngreso": "2026-06-02",
+      "fechaFinMembresia": "2026-10-17",
+      "tipoPlan": "Mensual",
+      "duracionPlanMeses": 1,
+      "precioPlan": 121000,
+      "asistencias": [
+        {
+          "fecha": "2026-06-03",
+          "musculos": [
+            "pierna",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-04",
+          "musculos": [
+            "pierna",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-06-06",
+          "musculos": [
+            "espalda",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-07",
+          "musculos": [
+            "gluteo",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-06-08",
+          "musculos": [
+            "espalda",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-09",
+          "musculos": [
+            "pecho",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-06-10",
+          "musculos": [
+            "espalda",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-06-11",
+          "musculos": [
+            "espalda",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-19",
+          "musculos": [
+            "gluteo",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-20",
+          "musculos": [
+            "biceps",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-24",
+          "musculos": [
+            "espalda",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-06-25",
+          "musculos": [
+            "espalda",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-06-26",
+          "musculos": [
+            "biceps",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-28",
+          "musculos": [
+            "abdomen",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-06-29",
+          "musculos": [
+            "hombro",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-06-30",
+          "musculos": [
+            "hombro",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-01",
+          "musculos": [
+            "hombro",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-02",
+          "musculos": [
+            "biceps",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-07-03",
+          "musculos": [
+            "pecho",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-07-04",
+          "musculos": [
+            "gluteo",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-07-05",
+          "musculos": [
+            "triceps",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-07-06",
+          "musculos": [
+            "gluteo",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-07-08",
+          "musculos": [
+            "espalda",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-07-09",
+          "musculos": [
+            "abdomen",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-07-10",
+          "musculos": [
+            "hombro",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-11",
+          "musculos": [
+            "abdomen",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-12",
+          "musculos": [
+            "hombro",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-13",
+          "musculos": [
+            "hombro",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-14",
+          "musculos": [
+            "pierna",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-15",
+          "musculos": [
+            "pierna",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-17",
+          "musculos": [
+            "biceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-19",
+          "musculos": [
+            "pierna",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-07-20",
+          "musculos": [
+            "biceps",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-21",
+          "musculos": [
+            "pierna",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-07-22",
+          "musculos": [
+            "pecho",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-07-23",
+          "musculos": [
+            "abdomen",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-07-24",
+          "musculos": [
+            "hombro",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-07-26",
+          "musculos": [
+            "espalda",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-28",
+          "musculos": [
+            "hombro",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-07-29",
+          "musculos": [
+            "triceps",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-07-30",
+          "musculos": [
+            "gluteo",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-07-31",
+          "musculos": [
+            "espalda",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-08-01",
+          "musculos": [
+            "gluteo",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-08-02",
+          "musculos": [
+            "biceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-08-03",
+          "musculos": [
+            "pierna",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-08-04",
+          "musculos": [
+            "hombro",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-07",
+          "musculos": [
+            "pecho",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-08-09",
+          "musculos": [
+            "pecho",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-08-10",
+          "musculos": [
+            "triceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-08-11",
+          "musculos": [
+            "pecho",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-08-12",
+          "musculos": [
+            "hombro",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-08-14",
+          "musculos": [
+            "gluteo",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-16",
+          "musculos": [
+            "gluteo",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-17",
+          "musculos": [
+            "biceps",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-08-18",
+          "musculos": [
+            "pierna",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-08-19",
+          "musculos": [
+            "abdomen",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-08-20",
+          "musculos": [
+            "biceps",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-21",
+          "musculos": [
+            "abdomen",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-22",
+          "musculos": [
+            "gluteo",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-24",
+          "musculos": [
+            "hombro",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-08-27",
+          "musculos": [
+            "hombro",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-08-28",
+          "musculos": [
+            "gluteo",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-08-30",
+          "musculos": [
+            "triceps",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-08-31",
+          "musculos": [
+            "pierna",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-09-01",
+          "musculos": [
+            "pierna",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-09-02",
+          "musculos": [
+            "biceps",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-09-03",
+          "musculos": [
+            "pierna",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-05",
+          "musculos": [
+            "hombro",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-09-06",
+          "musculos": [
+            "abdomen",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-07",
+          "musculos": [
+            "pecho",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-08",
+          "musculos": [
+            "pecho",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-09",
+          "musculos": [
+            "hombro",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-10",
+          "musculos": [
+            "abdomen",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-09-11",
+          "musculos": [
+            "triceps",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-12",
+          "musculos": [
+            "hombro",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-13",
+          "musculos": [
+            "gluteo",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-09-15",
+          "musculos": [
+            "hombro",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-09-16",
+          "musculos": [
+            "pierna",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-09-17",
+          "musculos": [
+            "abdomen",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-09-18",
+          "musculos": [
+            "gluteo",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-19",
+          "musculos": [
+            "abdomen",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-09-21",
+          "musculos": [
+            "triceps",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-22",
+          "musculos": [
+            "biceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-09-23",
+          "musculos": [
+            "pierna",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-09-24",
+          "musculos": [
+            "pecho",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-09-25",
+          "musculos": [
+            "espalda",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-09-26",
+          "musculos": [
+            "pecho",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-09-27",
+          "musculos": [
+            "triceps",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-09-28",
+          "musculos": [
+            "pecho",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-09-29",
+          "musculos": [
+            "pierna",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-10-01",
+          "musculos": [
+            "pecho",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-10-03",
+          "musculos": [
+            "biceps",
+            "triceps"
+          ]
+        },
+        {
+          "fecha": "2026-10-04",
+          "musculos": [
+            "biceps",
+            "pecho"
+          ]
+        },
+        {
+          "fecha": "2026-10-05",
+          "musculos": [
+            "abdomen",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-10-06",
+          "musculos": [
+            "hombro",
+            "espalda"
+          ]
+        },
+        {
+          "fecha": "2026-10-07",
+          "musculos": [
+            "espalda",
+            "biceps"
+          ]
+        },
+        {
+          "fecha": "2026-10-08",
+          "musculos": [
+            "espalda",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-10-09",
+          "musculos": [
+            "biceps",
+            "gluteo"
+          ]
+        },
+        {
+          "fecha": "2026-10-10",
+          "musculos": [
+            "triceps",
+            "abdomen"
+          ]
+        },
+        {
+          "fecha": "2026-10-11",
+          "musculos": [
+            "espalda",
+            "hombro"
+          ]
+        },
+        {
+          "fecha": "2026-10-13",
+          "musculos": [
+            "pecho",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-10-14",
+          "musculos": [
+            "hombro",
+            "pierna"
+          ]
+        },
+        {
+          "fecha": "2026-10-15",
+          "musculos": [
+            "hombro",
+            "gluteo"
+          ]
+        }
+      ],
+      "mediciones": [
+        {
+          "fecha": "2026-06-27",
+          "peso": 57.4,
+          "estatura": 187
+        },
+        {
+          "fecha": "2026-10-05",
+          "peso": 55.0,
+          "estatura": 187
+        }
+      ],
+      "fechaReferencia": "2026-10-15"
+    }
+  ]
+}

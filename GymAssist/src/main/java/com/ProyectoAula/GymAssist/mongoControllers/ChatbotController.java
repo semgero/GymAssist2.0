@@ -20,11 +20,18 @@ public class ChatbotController {
     public ChatbotResponse chat(@RequestBody ChatbotRequest request,
                                 Principal principal) {
 
-        String response = chatbotService.generateResponse(
-                request.getMessage(),
-                principal.getName()
-        );
-
-        return new ChatbotResponse(response);
+        if (principal == null) {
+            return new ChatbotResponse("⚠️ Debes iniciar sesión como cliente para usar el chat.");
+        }
+        try {
+            String response = chatbotService.generateResponse(
+                    request.getMessage(),
+                    principal.getName()
+            );
+            return new ChatbotResponse(response);
+        } catch (Exception e) {
+            System.err.println("Error en el chatbot: " + e.getMessage());
+            return new ChatbotResponse("⚠️ No pude responder: " + e.getMessage());
+        }
     }
 }

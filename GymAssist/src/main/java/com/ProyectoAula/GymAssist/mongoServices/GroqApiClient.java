@@ -5,6 +5,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class GroqApiClient {
 
     @SuppressWarnings("unchecked")
     public String getChatCompletion(String systemPrompt, String userMessage) {
-        if (apiKey == null || apiKey.isEmpty()) {
+        if (apiKey == null || apiKey.isBlank() || apiKey.startsWith("${")) {
             return "Error: La API Key de GROQ no está configurada.";
         }
 
@@ -72,6 +74,22 @@ public class GroqApiClient {
                 }
             }
             return "Lo siento, no obtuve una respuesta válida del modelo.";
+        } catch (HttpStatusCodeException e) {
+            int codigo = e.getStatusCode().value();
+            System.err.println("Error de la API de GROQ (" + codigo + "): " + e.getResponseBodyAsString());
+            if (codigo == 401) {
+                return "⚠️ La API Key de GROQ no es válida. Revisa la variable de entorno GROQ_API_KEY.";
+            }
+            if (codigo == 429) {
+                return "⚠️ Se alcanzó el límite de uso de GROQ. Intenta de nuevo en unos minutos.";
+            }
+            if (codigo == 400 || codigo == 404) {
+                return "⚠️ El modelo '" + model + "' no está disponible en GROQ. Revisa groq.model en application.properties.";
+            }
+            return "Lo siento, el servicio de inteligencia artificial respondió con un error (" + codigo + ").";
+        } catch (ResourceAccessException e) {
+            System.err.println("No se pudo conectar con GROQ: " + e.getMessage());
+            return "⚠️ No hay conexión con el servicio de inteligencia artificial (GROQ).";
         } catch (Exception e) {
             System.err.println("Error calling GROQ API: " + e.getMessage());
             return "Lo siento, el servicio de inteligencia artificial no está disponible actualmente.";
