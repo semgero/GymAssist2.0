@@ -1,8 +1,9 @@
 """
 API de predicción de deserción — GymAssist.
 
-Spring Boot llama a esta API por HTTP. Arrancar con:
-    uvicorn app.main:app --port 8000
+Spring Boot y la app Flutter llaman a esta API por HTTP. Arrancar con:
+    uvicorn app.main:app --host 0.0.0.0 --port 8000
+(--host 0.0.0.0 permite que un celular en la misma red Wi-Fi la alcance)
 
 Documentación interactiva (para probar): http://localhost:8000/docs
 """
@@ -16,6 +17,7 @@ from typing import Any, Optional
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field
 
 from . import entrenamiento
@@ -26,6 +28,15 @@ from .optimizacion import optimizar
 app = FastAPI(title="GymAssist - Predicción de deserción",
               description="Red neuronal LSTM (TensorFlow) + optimización de ofertas (Pyomo)",
               version="2.0")
+
+# CORS: permite que la app Flutter (sobre todo en Chrome / Flutter web) llame
+# directamente a esta API. En móvil/escritorio no hace falta, pero no estorba.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 _predictor: Predictor | None = None
 _lock = threading.Lock()

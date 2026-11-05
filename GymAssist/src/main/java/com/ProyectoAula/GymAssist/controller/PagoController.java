@@ -22,7 +22,7 @@ public class PagoController {
     private final PlanRepository planRepository;
     private final ClientRepository clientRepository;
 
-    @Value("${mercadopago.access-token}")
+    @Value("${mercadopago.access.token}")
     private String accessToken;
 
     public PagoController(PlanRepository planRepository, ClientRepository clientRepository) {

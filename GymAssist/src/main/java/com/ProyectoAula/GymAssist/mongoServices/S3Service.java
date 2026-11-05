@@ -27,10 +27,10 @@ public class S3Service {
     private static final String AWS_BUCKET = "AWS_BUCKET";
 
     public S3Service(
-            @Value("${aws.access-key-id:#{null}}") String accessKey,
-            @Value("${aws.secret-access-key:#{null}}") String secretKey,
-            @Value("${aws.region:#{null}}") String region,
-            @Value("${aws.bucket:#{null}}") String bucket) {
+            @Value("${aws.access-key-id:${AWS_ACCESS_KEY_ID:#{null}}}") String accessKey,
+            @Value("${aws.secret-access-key:${AWS_SECRET_ACCESS_KEY:#{null}}}") String secretKey,
+            @Value("${aws.region:${AWS_DEFAULT_REGION:${AWS_REGION:#{null}}}}") String region,
+            @Value("${aws.bucket:${AWS_BUCKET:#{null}}}") String bucket) {
         
         // 1. Intenta obtener valores de parámetros, luego de variables de entorno
         this.bucketName = bucket != null ? bucket : getEnvVariable(AWS_BUCKET, true);
