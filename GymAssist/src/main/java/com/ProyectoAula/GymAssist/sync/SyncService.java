@@ -142,6 +142,8 @@ public class SyncService {
     @org.springframework.transaction.annotation.Transactional
     private void syncClientes() {
         entityManager.createNativeQuery("TRUNCATE TABLE fact_asistencia, fact_cliente").executeUpdate();
+        // El teléfono pasó de Integer a Long: amplía la columna si todavía es INTEGER (no hace nada si ya es BIGINT)
+        entityManager.createNativeQuery("ALTER TABLE fact_cliente ALTER COLUMN telefono TYPE BIGINT").executeUpdate();
         entityManager.flush();
 
         List<PlanEntity> todosLosPlanes = mongoTemplate.findAll(PlanEntity.class);

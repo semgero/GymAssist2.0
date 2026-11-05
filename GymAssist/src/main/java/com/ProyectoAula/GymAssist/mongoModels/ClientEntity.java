@@ -42,7 +42,7 @@ public class ClientEntity {
     private String nombre;
 
     @BsonProperty("telefono")
-    private Integer telefono;
+    private Long telefono; // Long: un celular de 10 dígitos no cabe en Integer
 
     @BsonProperty("planId")
     private ObjectId planId;
@@ -142,11 +142,11 @@ public class ClientEntity {
         this.nombre = nombre;
     }
 
-    public Integer getTelefono() {
+    public Long getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(Integer telefono) {
+    public void setTelefono(Long telefono) {
         this.telefono = telefono;
     }
 

@@ -190,7 +190,7 @@ public class AdminController {
     public String agregarCliente(@RequestParam String nombre,
             @RequestParam String correo,
             @RequestParam String idDocumento,
-            @RequestParam Integer telefono,
+            @RequestParam Long telefono,
             @RequestParam String username,
             @RequestParam String password,
             @RequestParam ObjectId planId) {

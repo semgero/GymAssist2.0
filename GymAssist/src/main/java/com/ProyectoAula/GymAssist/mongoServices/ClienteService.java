@@ -44,7 +44,7 @@ public class ClienteService {
         this.adminRepository = adminRepository;
     }
 
-    public void crearCliente(String nombre, String correo, String idDocumento, Integer telefono, String mensualidad,
+    public void crearCliente(String nombre, String correo, String idDocumento, Long telefono, String mensualidad,
             String username, String password, ObjectId planId) {
 
         if (userRepository.existsByEmail(correo)) {
@@ -109,7 +109,7 @@ public class ClienteService {
                         "Usuario no encontrado con el nombre de usuario: " + cliente.getUsername()));
 
         cliente.setCorreo(correo);
-        cliente.setTelefono(Integer.valueOf(telefono));
+        cliente.setTelefono(Long.valueOf(telefono.trim()));
         cliente.setMensualidad(mensualidad);
         cliente.setUsername(username);
         clientRepository.save(cliente);

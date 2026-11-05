@@ -21,7 +21,7 @@ public class FactCliente {
     private String idDocumento;
 
     @Column(name = "telefono")
-    private Integer telefono;
+    private Long telefono;
 
     @Column(name = "estado")
     private String estado;
@@ -56,8 +56,8 @@ public class FactCliente {
     public void setCorreo(String correo) { this.correo = correo; }
     public String getIdDocumento() { return idDocumento; }
     public void setIdDocumento(String idDocumento) { this.idDocumento = idDocumento; }
-    public Integer getTelefono() { return telefono; }
-    public void setTelefono(Integer telefono) { this.telefono = telefono; }
+    public Long getTelefono() { return telefono; }
+    public void setTelefono(Long telefono) { this.telefono = telefono; }
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
     public String getSubscriptionStatus() { return subscriptionStatus; }
