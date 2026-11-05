@@ -23,7 +23,7 @@ public class IntentService {
 
         InputStream is = getClass()
                 .getClassLoader()
-                .getResourceAsStream("intents.json");
+                .getResourceAsStream("Intents.json");
 
         JsonNode root = mapper.readTree(is);
         intents = Arrays.asList(
