@@ -31,13 +31,26 @@ public class MercadoPagoService {
 
     private final String accessToken;
     private final String publicKey;
+    private final String successUrl;
+    private final String failureUrl;
+    private final String pendingUrl;
+    private final String webhookUrl;
 
     public MercadoPagoService(
             @Value("${mercadopago.access.token}") String accessToken,
-            @Value("${mercadopago.public.key}") String publicKey) {
+            @Value("${mercadopago.public.key}") String publicKey,
+            @Value("${app.payment.success.url}") String successUrl,
+            @Value("${app.payment.failure.url}") String failureUrl,
+            @Value("${app.payment.pending.url}") String pendingUrl,
+            @Value("${app.payment.webhook.url}") String webhookUrl) {
 
         this.accessToken = accessToken;
         this.publicKey = publicKey;
+        this.successUrl = successUrl;
+        this.failureUrl = failureUrl;
+        this.pendingUrl = pendingUrl;
+        this.webhookUrl = webhookUrl;
+        logger.info("MercadoPago: webhook en {}", webhookUrl);
 
         try {
             MercadoPagoConfig.setAccessToken(this.accessToken);
@@ -76,16 +89,16 @@ public class MercadoPagoService {
                     .build();
 
             PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                    .success("https://gymassist.co/Api/Payment/success")
-                    .failure("https://gymassist.co/Api/Payment/failure")
-                    .pending("https://gymassist.co/Api/Payment/pending")
+                    .success(successUrl)
+                    .failure(failureUrl)
+                    .pending(pendingUrl)
                     .build();
 
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     .payer(payerRequest)
                     .backUrls(backUrls)
-                    .notificationUrl("https://gymassist.co/Api/Payment/webhook")
+                    .notificationUrl(webhookUrl)
                     .externalReference(cliente.getId().toString()) // ✅ ESTA ES LA CLAVE
                     .metadata(Map.of(
                             "user_id", cliente.getId().toString(),
