@@ -69,6 +69,13 @@ public class MercadoPagoService {
     }
 
     public String createSubscription(ClientEntity cliente, PlanEntity plan) {
+        return createSubscription(cliente, plan, null);
+    }
+
+    /** @param appReturnUrl si viene de Flutter, a dónde volver después de pagar (se valida en PaymentController). */
+    public String createSubscription(ClientEntity cliente, PlanEntity plan, String appReturnUrl) {
+        String extra = (appReturnUrl == null || appReturnUrl.isBlank()) ? ""
+                : "?app=" + java.net.URLEncoder.encode(appReturnUrl, java.nio.charset.StandardCharsets.UTF_8);
         try {
             logger.info("🔄 Creando suscripción para: {}", cliente.getCorreo());
 
@@ -89,9 +96,9 @@ public class MercadoPagoService {
                     .build();
 
             PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                    .success(successUrl)
-                    .failure(failureUrl)
-                    .pending(pendingUrl)
+                    .success(successUrl + extra)
+                    .failure(failureUrl + extra)
+                    .pending(pendingUrl + extra)
                     .build();
 
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()

@@ -39,10 +39,22 @@ Login → el backend devuelve un `token`. En las demás peticiones va en la cabe
 | PUT | `/api/m/cliente/cuenta` | `{correo, username, password?}` → devuelve un `token` nuevo |
 | GET | `/api/m/cliente/planes` | planes de su gimnasio |
 | PUT | `/api/m/cliente/plan` | `{planId}` |
-| POST | `/api/m/cliente/pago` | crea el cobro en Mercado Pago → `{initPoint}` (link que la app abre) |
+| POST | `/api/m/cliente/pago` | `{returnUrl?}` crea el cobro en Mercado Pago → `{initPoint}` (link que la app abre) |
+| POST | `/api/m/cliente/pago/verificar` | `{paymentId}` consulta el pago en Mercado Pago y activa si está aprobado |
+| POST | `/api/m/cliente/chatbot` | `{mensaje}` → `{respuesta}` |
 | GET | `/api/m/cliente/rutinas?grupo=Pecho` | 402 si la membresía no está activa |
 | GET/POST | `/api/m/cliente/asistencias` | POST `{musculos: ["Pecho", "Triceps"]}` (una por día) |
 | GET/POST | `/api/m/cliente/mediciones` | POST `{peso, estatura}` (estatura en metros) |
+
+## Imágenes (público)
+`GET /api/m/imagenes?key=<nombreArchivo>` sirve la foto desde S3 a través del backend (sin CORS ni bucket público).
+
+## Pagos con Mercado Pago
+1. La app pide `POST /api/m/cliente/pago` y abre `initPoint`.
+2. Mercado Pago avisa al webhook `/Api/Payment/webhook` y redirige a `/Api/Payment/success` (ambos públicos).
+3. En los dos casos el backend **consulta el pago en Mercado Pago** y activa la membresía solo si está `approved`
+   (`PagoMembresiaService`, no procesa dos veces el mismo pago). Fechas en hora de Colombia.
+4. Si vino de Flutter web (`?app=http://localhost...`), redirige a la app con `?pago=aprobado|pendiente|rechazado`.
 
 Grupos musculares válidos: `Pecho, Espalda, Cuadriceps, Femoral, Gluteos, Biceps, Triceps, Hombros`.
 

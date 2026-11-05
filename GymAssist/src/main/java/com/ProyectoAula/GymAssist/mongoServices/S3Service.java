@@ -4,7 +4,10 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +76,11 @@ public class S3Service {
                 .build(), archivo);
 
         return String.format("https://%s.s3.amazonaws.com/%s", bucketName, nombreArchivo);
+    }
+
+    /** Descarga una imagen del bucket (la app la recibe a través del backend, sin CORS ni bucket público). */
+    public ResponseBytes<GetObjectResponse> descargarImagen(String nombreArchivo) {
+        return s3Client.getObjectAsBytes(GetObjectRequest.builder().bucket(bucketName).key(nombreArchivo).build());
     }
 
     public void eliminarImagen(String nombreArchivo) {

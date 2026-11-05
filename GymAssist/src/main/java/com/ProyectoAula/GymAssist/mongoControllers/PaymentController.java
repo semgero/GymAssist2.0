@@ -12,6 +12,7 @@ import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
 import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
 import com.ProyectoAula.GymAssist.mongoServices.MercadoPagoService;
+import com.ProyectoAula.GymAssist.mongoServices.PagoMembresiaService;
 import com.ProyectoAula.GymAssist.mongoServices.PlanService;
 
 import java.security.Principal;
@@ -24,12 +25,26 @@ public class PaymentController {
     private final ClienteService clienteService;
     private final PlanService planService;
     private final MercadoPagoService mercadoPagoService;
+    private final PagoMembresiaService pagoMembresia;
 
     public PaymentController(ClienteService clienteService, PlanService planService,
-            MercadoPagoService mercadoPagoService) {
+            MercadoPagoService mercadoPagoService, PagoMembresiaService pagoMembresia) {
         this.clienteService = clienteService;
         this.planService = planService;
         this.mercadoPagoService = mercadoPagoService;
+        this.pagoMembresia = pagoMembresia;
+    }
+
+    /** Solo se permite volver a la app (Flutter) en direcciones conocidas, para evitar redirecciones abiertas. */
+    static boolean urlDeAppValida(String url) {
+        if (url == null || url.isBlank()) return false;
+        String u = url.toLowerCase();
+        return u.startsWith("http://localhost") || u.startsWith("http://127.0.0.1") || u.startsWith("gymassist://");
+    }
+
+    static String volverALaApp(String app, String estado) {
+        String sep = app.contains("?") ? "&" : "?";
+        return "redirect:" + app + sep + "pago=" + estado;
     }
 
     @GetMapping("/checkout")
@@ -68,81 +83,62 @@ public class PaymentController {
         }
     }
 
+    /**
+     * Mercado Pago redirige aquí al terminar. Antes activaba al cliente sin verificar nada; ahora consulta
+     * el pago en Mercado Pago y solo activa si está aprobado. Si el pago se hizo desde Flutter (parámetro
+     * "app"), redirige de vuelta a la app.
+     */
     @GetMapping("/success")
     public String paymentSuccess(@RequestParam(value = "external_reference", required = false) String externalReference,
             @RequestParam(value = "collection_id", required = false) String collectionId,
             @RequestParam(value = "payment_id", required = false) String paymentId,
             @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "app", required = false) String app,
             Principal principal,
             Model model) {
         try {
-            System.out.println("🔍 Parámetros recibidos:");
-            System.out.println("   - external_reference: " + externalReference);
-            System.out.println("   - payment_id: " + paymentId);
-            System.out.println("   - status: " + status);
-
-            String userId = null;
-            ClientEntity cliente = null;
-
-            if (externalReference != null && !externalReference.equals("null")) {
-                userId = externalReference;
-                ObjectId userObjectId = new ObjectId(userId);
-                cliente = clienteService.buscarClientePorId(userObjectId);
-                System.out.println("✅ Cliente encontrado por external_reference: " + userId);
+            String id = (paymentId != null && !paymentId.equals("null")) ? paymentId : collectionId;
+            PagoMembresiaService.Resultado r = pagoMembresia.procesarPago(id);
+            ClientEntity cliente = r.cliente();
+            if (cliente == null && externalReference != null && ObjectId.isValid(externalReference)) {
+                cliente = clienteService.buscarClientePorId(new ObjectId(externalReference));
             }
-
             if (cliente == null && principal != null) {
                 cliente = clienteService.buscarPorUsername(principal.getName());
-                if (cliente != null) {
-                    userId = cliente.getId().toString();
-                    System.out.println("🔄 Cliente encontrado por Principal: " + principal.getName());
-                }
             }
-
+            if (urlDeAppValida(app)) {
+                return volverALaApp(app, r.aprobado() ? "aprobado" : (r.estado() == null ? "desconocido" : r.estado()));
+            }
             if (cliente == null) {
-                System.err.println("❌ No se pudo identificar al cliente");
                 model.addAttribute("error", "No se pudo identificar tu cuenta. Contacta soporte.");
                 return "payment-success";
             }
-
-            if (cliente.getEstado() != ClientEntity.EstadoCliente.ACTIVO) {
-                cliente.setSubscriptionStatus("ACTIVE");
-                cliente.setEstado(ClientEntity.EstadoCliente.ACTIVO);
-                cliente.setFechaInicioMembresia(java.time.LocalDate.now());
-
-                PlanEntity plan = planService.getPlanById(cliente.getPlanId())
-                        .orElseThrow(() -> new RuntimeException("Plan not found for client"));
-                cliente.setFechaFinMembresia(java.time.LocalDate.now().plusMonths(plan.getDuracion()));
-
-                clienteService.actualizarCliente(cliente);
-                System.out.println("🎉 Cliente activado: " + cliente.getNombre());
-            } else {
-                System.out.println("ℹ️ Cliente ya estaba activo: " + cliente.getNombre());
+            if (!r.aprobado()) {
+                model.addAttribute("error", "Mercado Pago aún no confirma el pago (estado: " + r.estado() + "). Se activará apenas llegue la confirmación.");
             }
-
             model.addAttribute("cliente", cliente);
-            model.addAttribute("paymentId", paymentId);
+            model.addAttribute("paymentId", id);
             model.addAttribute("clienteId", cliente.getId().toString());
-
             return "payment-success";
-
         } catch (Exception e) {
             System.err.println("❌ Error en success: " + e.getMessage());
-            e.printStackTrace();
+            if (urlDeAppValida(app)) return volverALaApp(app, "error");
             model.addAttribute("error", "Error procesando el pago: " + e.getMessage());
             return "payment-success";
         }
     }
 
     @GetMapping("/failure")
-    public String paymentFailure() {
+    public String paymentFailure(@RequestParam(value = "app", required = false) String app) {
         System.out.println("❌ Pago fallido");
+        if (urlDeAppValida(app)) return volverALaApp(app, "rechazado");
         return "payment-failure";
     }
 
     @GetMapping("/pending")
-    public String paymentPending() {
+    public String paymentPending(@RequestParam(value = "app", required = false) String app) {
         System.out.println("⏳ Pago pendiente");
+        if (urlDeAppValida(app)) return volverALaApp(app, "pendiente");
         return "payment-pending";
     }
 

@@ -57,7 +57,10 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/Api/Auth/index", "/Api/Auth/login", "/Api/Auth/logout",
-                                "/Api/Auth/register", "/api/features/**", "/api/gym-predicciones/**", "/actuator/**")
+                                "/Api/Auth/register", "/api/features/**", "/api/gym-predicciones/**", "/actuator/**",
+                                // Mercado Pago llama al webhook y redirige al cliente sin sesión (p. ej. desde Flutter)
+                                "/Api/Payment/webhook", "/Api/Payment/webhook-test", "/Api/Payment/success",
+                                "/Api/Payment/failure", "/Api/Payment/pending")
                         .permitAll()
                         .requestMatchers("/Styles/**", "/Imagenes/**", "/Js/**", "/uploads/**", "/content/**")
                         .permitAll()

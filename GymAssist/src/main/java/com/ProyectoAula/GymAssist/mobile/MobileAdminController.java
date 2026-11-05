@@ -33,6 +33,7 @@ import com.ProyectoAula.GymAssist.mongoServices.AdminService;
 import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
 import com.ProyectoAula.GymAssist.mongoServices.DashboardService;
 import com.ProyectoAula.GymAssist.mongoServices.GimnasiosServices;
+import com.ProyectoAula.GymAssist.mongoServices.PagoMembresiaService;
 import com.ProyectoAula.GymAssist.mongoServices.PlanService;
 import com.ProyectoAula.GymAssist.mongoServices.RutinaService;
 import com.ProyectoAula.GymAssist.ml.PrediccionMLService;
@@ -51,10 +52,12 @@ public class MobileAdminController {
     private final PrediccionMLService ml;
     private final DashboardService dashboardService;
     private final AdminService adminService;
+    private final PagoMembresiaService pagoMembresia;
 
     public MobileAdminController(MobileContext ctx, GimnasiosServices gymService, ClienteService clienteService,
             PlanService planService, RutinaService rutinaService, ClientRepository clients, PrediccionMLService ml,
-            DashboardService dashboardService, AdminService adminService) {
+            DashboardService dashboardService, AdminService adminService, PagoMembresiaService pagoMembresia) {
+        this.pagoMembresia = pagoMembresia;
         this.ml = ml;
         this.dashboardService = dashboardService;
         this.adminService = adminService;
@@ -188,17 +191,9 @@ public class MobileAdminController {
     @PostMapping("/clientes/{id}/pago-manual")
     public Map<String, Object> pagoManual(@PathVariable String id) {
         ClientEntity c = clienteDelGym(id);
-        PlanEntity plan = ctx.planDe(c)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "El cliente no tiene plan"));
-        LocalDate hoy = LocalDate.now();
-        LocalDate base = c.getFechaFinMembresia() != null && c.getFechaFinMembresia().isAfter(hoy)
-                && c.getEstado() == ClientEntity.EstadoCliente.ACTIVO ? c.getFechaFinMembresia() : hoy;
-        if (base.equals(hoy)) c.setFechaInicioMembresia(hoy);
-        c.setFechaFinMembresia(base.plusMonths(plan.getDuracion() == null ? 1 : plan.getDuracion()));
-        c.setEstado(ClientEntity.EstadoCliente.ACTIVO);
-        c.setSubscriptionStatus("ACTIVE");
-        clienteService.actualizarCliente(c);
-        return MobileJson.cliente(c, plan);
+        if (c.getPlanId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El cliente no tiene plan");
+        ClientEntity actualizado = pagoMembresia.activar(c, "manual:" + System.currentTimeMillis());
+        return MobileJson.cliente(actualizado, ctx.planDe(actualizado).orElse(null));
     }
 
     @GetMapping("/clientes/{id}/asistencias")

@@ -94,6 +94,13 @@ final class MobileJson {
             for (RutinaEntity.FotoRutina f : r.getFotosRutina()) {
                 Map<String, Object> fm = new LinkedHashMap<>();
                 fm.put("url", f.getRutaImagen());
+                String key = f.getNombreArchivo();
+                if ((key == null || key.isBlank()) && f.getRutaImagen() != null) {
+                    key = f.getRutaImagen().substring(f.getRutaImagen().lastIndexOf('/') + 1);
+                }
+                // Ruta del proxy del backend (Flutter le antepone la URL del servidor)
+                fm.put("path", key == null ? null
+                        : "/api/m/imagenes?key=" + java.net.URLEncoder.encode(key, java.nio.charset.StandardCharsets.UTF_8));
                 fm.put("descripcion", f.getDescripcion());
                 fotos.add(fm);
             }

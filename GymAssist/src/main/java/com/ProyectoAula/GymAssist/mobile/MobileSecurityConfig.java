@@ -43,7 +43,7 @@ public class MobileSecurityConfig {
                 .logout(l -> l.disable())
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(HttpMethod.OPTIONS, "/api/m/**").permitAll()
-                        .requestMatchers("/api/m/auth/login", "/api/m/auth/register").permitAll()
+                        .requestMatchers("/api/m/auth/login", "/api/m/auth/register", "/api/m/imagenes").permitAll()
                         .requestMatchers("/api/m/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/m/cliente/**").hasRole("CLIENTE")
                         .anyRequest().authenticated())

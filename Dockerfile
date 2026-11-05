@@ -20,6 +20,8 @@ EXPOSE 8080
 
 # Memoria ajustada para el plan de Railway (512 MB). El puerto lo toma de la variable PORT
 # (server.port=${PORT:8080} en application.properties).
-ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=70 -XX:+UseSerialGC -Xss512k -XX:MaxMetaspaceSize=160m"
+# Hora de Colombia (sin esto el servidor usa UTC y después de las 7 p. m. las fechas salen con un día de más)
+ENV TZ=America/Bogota
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=70 -XX:+UseSerialGC -Xss512k -XX:MaxMetaspaceSize=160m -Duser.timezone=America/Bogota"
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

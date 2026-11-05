@@ -21,10 +21,12 @@ import org.springframework.web.server.ResponseStatusException;
 import com.ProyectoAula.GymAssist.mongoModels.ClientEntity;
 import com.ProyectoAula.GymAssist.mongoModels.MedicionesEntity;
 import com.ProyectoAula.GymAssist.mongoModels.PlanEntity;
+import com.ProyectoAula.GymAssist.mongoServices.ChatbotService;
 import com.ProyectoAula.GymAssist.mongoServices.ClienteService;
 import com.ProyectoAula.GymAssist.mongoServices.GimnasiosServices;
 import com.ProyectoAula.GymAssist.mongoServices.MedicionesService;
 import com.ProyectoAula.GymAssist.mongoServices.MercadoPagoService;
+import com.ProyectoAula.GymAssist.mongoServices.PagoMembresiaService;
 import com.ProyectoAula.GymAssist.mongoServices.PlanService;
 import com.ProyectoAula.GymAssist.mongoServices.RutinaService;
 
@@ -41,10 +43,14 @@ public class MobileClienteController {
     private final MercadoPagoService mercadoPago;
     private final GimnasiosServices gymService;
     private final JwtService jwt;
+    private final PagoMembresiaService pagoMembresia;
+    private final ChatbotService chatbot;
 
     public MobileClienteController(MobileContext ctx, ClienteService clienteService, PlanService planService,
             RutinaService rutinaService, MedicionesService medicionesService, MercadoPagoService mercadoPago,
-            GimnasiosServices gymService, JwtService jwt) {
+            GimnasiosServices gymService, JwtService jwt, PagoMembresiaService pagoMembresia, ChatbotService chatbot) {
+        this.pagoMembresia = pagoMembresia;
+        this.chatbot = chatbot;
         this.ctx = ctx;
         this.clienteService = clienteService;
         this.planService = planService;
@@ -106,15 +112,42 @@ public class MobileClienteController {
 
     /** Crea el cobro en Mercado Pago y devuelve el link (initPoint) que Flutter abre en el navegador. */
     @PostMapping("/pago")
-    public Map<String, Object> pagar() {
+    public Map<String, Object> pagar(@RequestBody(required = false) Map<String, String> b) {
         ClientEntity c = ctx.cliente();
         PlanEntity plan = ctx.planDe(c)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Primero elige un plan"));
-        String initPoint = mercadoPago.createSubscription(c, plan);
+        String returnUrl = b == null ? null : b.get("returnUrl");
+        String initPoint = mercadoPago.createSubscription(c, plan, returnUrl);
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("initPoint", initPoint);
         m.put("plan", MobileJson.plan(plan));
         return m;
+    }
+
+    /**
+     * Respaldo por si el webhook no llega: la app manda el payment_id que Mercado Pago puso en la URL de
+     * regreso; el backend lo consulta en Mercado Pago y activa solo si está aprobado y es de este cliente.
+     */
+    @PostMapping("/pago/verificar")
+    public Map<String, Object> verificarPago(@RequestBody Map<String, String> b) {
+        ClientEntity yo = ctx.cliente();
+        PagoMembresiaService.Resultado r = pagoMembresia.procesarPago(b.get("paymentId"));
+        if (r.cliente() != null && !r.cliente().getId().equals(yo.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Ese pago no es tuyo");
+        }
+        ClientEntity actual = clienteService.buscarClientePorId(yo.getId());
+        Map<String, Object> m = new LinkedHashMap<>();
+        m.put("estadoPago", r.estado());
+        m.put("cliente", MobileJson.cliente(actual, ctx.planDe(actual).orElse(null)));
+        return m;
+    }
+
+    // ------------------------------------------------------------------ chatbot
+    @PostMapping("/chatbot")
+    public Map<String, Object> chatbot(@RequestBody Map<String, String> b) {
+        String mensaje = b.getOrDefault("mensaje", "").trim();
+        if (mensaje.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Escribe un mensaje");
+        return Map.of("respuesta", chatbot.generateResponse(mensaje, ctx.username()));
     }
 
     // ------------------------------------------------------------------ rutinas
