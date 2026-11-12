@@ -60,11 +60,10 @@ public class PrediccionMLService {
 
     // ------------------------------------------------------------------ JSON del cliente
 
-    /** Convierte un cliente de MongoDB al formato que espera la API de Python. */
     /** Días de asistencias que se envían para predecir (la red usa las últimas 12 semanas). */
     private static final int DIAS_HISTORIAL = 120;
 
-    /** Versión con el historial completo (la usa MobileAdminController, no cambia su comportamiento). */
+    /** Convierte un cliente de MongoDB al formato que espera la API de Python (con todo el historial). */
     public Map<String, Object> aJson(ClientEntity c, Map<String, PlanEntity> planes) {
         return aJson(c, planes, true);
     }

@@ -212,7 +212,7 @@ public class MobileAdminController {
         for (PlanEntity p : planService.getPlanesByGimnasioId(gym.getId())) planes.put(p.getId().toHexString(), p);
         List<Map<String, Object>> out = new ArrayList<>();
         for (ClientEntity c : clienteService.listarClientesPorGym(gym.getId())) {
-            Map<String, Object> m = new LinkedHashMap<>(ml.aJson(c, planes));
+            Map<String, Object> m = new LinkedHashMap<>(ml.aJson(c, planes, false)); // solo los últimos 120 días de asistencias
             m.put("correo", c.getCorreo());
             m.put("telefono", MobileJson.txt(c.getTelefono()));
             out.add(m);

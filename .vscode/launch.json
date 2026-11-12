@@ -22,7 +22,7 @@
             "mainClass": "com.ProyectoAula.GymAssist.GymAssistApplication",
             "projectName": "GymAssist",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/GymAssist/.env"
         }
     ]
 }
