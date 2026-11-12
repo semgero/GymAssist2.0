@@ -47,6 +47,10 @@ public class ApiPythonLauncher {
             log.info("Arranque automático de la API de Python desactivado (ml.api.autostart=false)");
             return;
         }
+        if (!esLocal(urlApi)) {
+            log.info("🧠 Usando la API de predicción remota en {} (no se enciende Python local)", urlApi);
+            return;
+        }
         // En otro hilo para no retrasar el arranque de Spring Boot
         Thread hilo = new Thread(this::arrancarApi, "arranque-api-python");
         hilo.setDaemon(true);
@@ -144,5 +148,10 @@ public class ApiPythonLauncher {
         if (Files.isRegularFile(linux)) return linux.toString();
         log.warn("No se encontró prediccion-ml/.venv; se usará el Python del sistema");
         return File.separatorChar == '\\' ? "python" : "python3";
+    }
+
+    private static boolean esLocal(String url) {
+        String host = URI.create(url).getHost();
+        return host == null || host.equals("localhost") || host.equals("127.0.0.1");
     }
 }

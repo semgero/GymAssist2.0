@@ -13,6 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
+
+import java.time.LocalDate;
+import java.util.function.Supplier;
 
 import java.util.*;
 
@@ -56,7 +61,16 @@ public class PrediccionMLService {
     // ------------------------------------------------------------------ JSON del cliente
 
     /** Convierte un cliente de MongoDB al formato que espera la API de Python. */
+    /** Días de asistencias que se envían para predecir (la red usa las últimas 12 semanas). */
+    private static final int DIAS_HISTORIAL = 120;
+
+    /** Versión con el historial completo (la usa MobileAdminController, no cambia su comportamiento). */
     public Map<String, Object> aJson(ClientEntity c, Map<String, PlanEntity> planes) {
+        return aJson(c, planes, true);
+    }
+
+    public Map<String, Object> aJson(ClientEntity c, Map<String, PlanEntity> planes, boolean historialCompleto) {
+        LocalDate desde = LocalDate.now().minusDays(DIAS_HISTORIAL);
         Map<String, Object> m = new HashMap<>();
         m.put("id", c.getId().toHexString());
         m.put("nombre", c.getNombre());
@@ -78,6 +92,7 @@ public class PrediccionMLService {
         if (c.getAsistencias() != null) {
             for (ClientEntity.Asistencia a : c.getAsistencias()) {
                 if (a == null || a.getFecha() == null) continue;
+                if (!historialCompleto && a.getFecha().isBefore(desde)) continue;
                 Map<String, Object> am = new HashMap<>();
                 am.put("fecha", a.getFecha().toString());
                 am.put("musculos", a.getMusculos() != null ? a.getMusculos() : List.of());
@@ -115,11 +130,43 @@ public class PrediccionMLService {
         return planes;
     }
 
-    private List<Map<String, Object>> aJson(List<ClientEntity> clientes) {
+    private List<Map<String, Object>> aJson(List<ClientEntity> clientes, boolean historialCompleto) {
         Map<String, PlanEntity> planes = planesDe(clientes);
         List<Map<String, Object>> lista = new ArrayList<>();
-        for (ClientEntity c : clientes) lista.add(aJson(c, planes));
+        for (ClientEntity c : clientes) lista.add(aJson(c, planes, historialCompleto));
         return lista;
+    }
+
+    // ------------------------------------------------------------------ reintentos
+
+    private static final int INTENTOS = 5;
+
+    /**
+     * Repite la llamada si la API está despertando (Railway Serverless):
+     * error 502/503/504 o sin conexión. Espera 3, 6, 9 y 12 segundos entre intentos.
+     */
+    private <T> T conReintentos(Supplier<T> llamada) {
+        RuntimeException ultimo = null;
+        for (int intento = 1; intento <= INTENTOS; intento++) {
+            try {
+                return llamada.get();
+            } catch (HttpServerErrorException e) {
+                if (e.getStatusCode().value() < 502) throw e; // 500 = error real de la API, no se reintenta
+                ultimo = e;
+            } catch (ResourceAccessException e) {
+                ultimo = e;
+            }
+            if (intento < INTENTOS) {
+                log.warn("La API de predicción está despertando (intento {}/{}). Reintentando...", intento, INTENTOS);
+                try {
+                    Thread.sleep(3000L * intento);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        }
+        throw ultimo != null ? ultimo : new IllegalStateException("Llamada a la API interrumpida");
     }
 
     // ------------------------------------------------------------------ llamadas a la API
@@ -142,10 +189,11 @@ public class PrediccionMLService {
         Map<String, Map<String, Object>> salida = new LinkedHashMap<>();
         if (clientes.isEmpty()) return salida;
         try {
-            Map<String, Object> resp = api.post().uri("/predecir/lote")
+            List<Map<String, Object>> cuerpo = aJson(clientes, false);
+            Map<String, Object> resp = conReintentos(() -> api.post().uri("/predecir/lote")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(Map.of("clientes", aJson(clientes)))
-                    .retrieve().body(MAPA);
+                    .body(Map.of("clientes", cuerpo))
+                    .retrieve().body(MAPA));
             for (Object o : (List<Object>) resp.get("resultados")) {
                 Map<String, Object> r = (Map<String, Object>) o;
                 r.put("modelo", "Red híbrida LSTM (TensorFlow) v" + resp.get("modeloVersion"));
@@ -166,13 +214,13 @@ public class PrediccionMLService {
     public Map<String, Object> optimizarOfertas(List<ClientEntity> clientes, double presupuesto,
                                                 Integer maxOfertas, double mesesValor) {
         Map<String, Object> body = new HashMap<>();
-        body.put("clientes", aJson(clientes));
+        body.put("clientes", aJson(clientes, false));
         body.put("presupuesto", presupuesto);
         body.put("maxOfertas", maxOfertas);
         body.put("mesesValor", mesesValor);
         try {
-            return api.post().uri("/optimizar-ofertas").contentType(MediaType.APPLICATION_JSON)
-                    .body(body).retrieve().body(MAPA);
+            return conReintentos(() -> api.post().uri("/optimizar-ofertas").contentType(MediaType.APPLICATION_JSON)
+                    .body(body).retrieve().body(MAPA));
         } catch (Exception e) {
             throw new PrediccionNoDisponibleException(urlApi, e);
         }
@@ -182,7 +230,7 @@ public class PrediccionMLService {
     public Map<String, Object> reentrenar(List<ClientEntity> clientes) {
         try {
             return apiLenta.post().uri("/reentrenar").contentType(MediaType.APPLICATION_JSON)
-                    .body(Map.of("clientes", aJson(clientes))).retrieve().body(MAPA);
+                    .body(Map.of("clientes", aJson(clientes, true))).retrieve().body(MAPA);
         } catch (Exception e) {
             throw new PrediccionNoDisponibleException(urlApi, e);
         }
